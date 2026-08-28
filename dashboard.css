@@ -1,0 +1,679 @@
+/* =========================
+   SAFEHER DASHBOARD
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #d6295d;
+    --purple: #7b3ff2;
+    --dark: #202124;
+    --text: #292a2d;
+    --muted: #777;
+    --light: #f7f7fa;
+    --white: #ffffff;
+    --danger: #e63946;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f6f6f8;
+    color: var(--text);
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    font-family: inherit;
+}
+
+
+/* =========================
+   MAIN APP
+========================= */
+
+.dashboard {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 100vh;
+    margin: auto;
+    background: var(--white);
+    padding-bottom: 90px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.dashboard-header {
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    background: var(--white);
+    border-bottom: 1px solid #eeeeee;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.dashboard-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    text-decoration: none;
+    color: var(--dark);
+}
+
+.brand-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    font-size: 23px;
+
+    background: linear-gradient(
+        135deg,
+        #ff3b6b,
+        #8b3dff
+    );
+}
+
+.dashboard-brand h1 {
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.dashboard-brand h1 span {
+    color: var(--primary);
+}
+
+.dashboard-brand p {
+    margin-top: 2px;
+
+    color: #999;
+    font-size: 11px;
+}
+
+
+/* PROFILE BUTTON */
+
+.profile-button {
+    border: none;
+    background: #f6f6f8;
+
+    padding: 9px 13px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    cursor: pointer;
+}
+
+.profile-avatar {
+    font-size: 19px;
+}
+
+.profile-text {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   DASHBOARD CONTENT
+========================= */
+
+.dashboard-content {
+    padding: 50px 7%;
+}
+
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome {
+    margin-bottom: 40px;
+}
+
+.section-label {
+    color: var(--primary);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 12px;
+}
+
+.welcome h2 {
+    font-size: 42px;
+    line-height: 1.15;
+
+    margin-bottom: 14px;
+}
+
+.welcome > p:last-child {
+    max-width: 560px;
+
+    color: var(--muted);
+
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   SOS SECTION
+========================= */
+
+.sos-section {
+    background: linear-gradient(
+        135deg,
+        #32162d,
+        #592348,
+        #7d285a
+    );
+
+    color: white;
+
+    border-radius: 28px;
+
+    padding: 38px;
+
+    margin-bottom: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    overflow: hidden;
+}
+
+.emergency-label {
+    color: #ffc4d7;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 12px;
+}
+
+.sos-info h2 {
+    font-size: 30px;
+
+    margin-bottom: 12px;
+}
+
+.sos-info > p:last-child {
+    max-width: 520px;
+
+    color: rgba(255, 255, 255, 0.78);
+
+    line-height: 1.6;
+}
+
+
+/* SOS BUTTON */
+
+.sos-button {
+    flex-shrink: 0;
+
+    width: 130px;
+    height: 130px;
+
+    border: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #ff334f,
+        #d41438
+    );
+
+    box-shadow:
+        0 0 0 12px rgba(255, 255, 255, 0.08),
+        0 15px 35px rgba(0, 0, 0, 0.25);
+
+    transition: 0.2s;
+}
+
+.sos-button:hover {
+    transform: scale(1.05);
+}
+
+.sos-button:active {
+    transform: scale(0.95);
+}
+
+.sos-button span {
+    font-size: 27px;
+    font-weight: 900;
+}
+
+.sos-button small {
+    margin-top: 4px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   SAFETY TOOLS
+========================= */
+
+.tools-section {
+    margin-bottom: 55px;
+}
+
+.tools-section > h2 {
+    font-size: 31px;
+
+    margin-bottom: 30px;
+}
+
+.tools-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/* TOOL CARD */
+
+.tool-card {
+    width: 100%;
+
+    border: 1px solid #eeeeee;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 23px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+
+    position: relative;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #e2d4ea;
+
+    box-shadow:
+        0 12px 30px
+        rgba(50, 20, 60, 0.08);
+}
+
+.tool-icon {
+    width: 54px;
+    height: 54px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    font-size: 25px;
+}
+
+.tool-content {
+    flex: 1;
+}
+
+.tool-content h3 {
+    font-size: 17px;
+
+    margin-bottom: 7px;
+}
+
+.tool-content p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.tool-arrow {
+    color: #bbb;
+
+    font-size: 22px;
+}
+
+
+/* TOOL ICON COLORS */
+
+.location-icon {
+    background: #fff0f4;
+}
+
+.route-icon {
+    background: #f2edff;
+}
+
+.help-icon {
+    background: #fff4ec;
+}
+
+.contacts-icon {
+    background: #eef7ff;
+}
+
+.check-icon {
+    background: #edfff5;
+
+    color: #15965b;
+
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.emergency-icon {
+    background: #fff0f0;
+
+    color: #d6295d;
+}
+
+
+/* =========================
+   SAFETY STATUS
+========================= */
+
+.status-card {
+    background: #f4fbf7;
+
+    border: 1px solid #d9f0e2;
+
+    border-radius: 20px;
+
+    padding: 22px 25px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.status-indicator {
+    width: 14px;
+    height: 14px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #25b96d;
+
+    box-shadow:
+        0 0 0 6px
+        rgba(37, 185, 109, 0.12);
+}
+
+.status-title {
+    color: #5d7567;
+
+    font-size: 12px;
+
+    margin-bottom: 4px;
+}
+
+.status-card h3 {
+    font-size: 16px;
+}
+
+.status-time {
+    margin-left: auto;
+
+    color: #799487;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+    max-width: 1100px;
+
+    height: 72px;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border-top: 1px solid #eeeeee;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    z-index: 200;
+
+    backdrop-filter: blur(12px);
+}
+
+.nav-item {
+    border: none;
+    background: none;
+
+    color: #999;
+
+    text-decoration: none;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    cursor: pointer;
+
+    min-width: 70px;
+}
+
+.nav-item span {
+    font-size: 21px;
+}
+
+.nav-item small {
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+
+/* =========================
+   MOBILE DESIGN
+========================= */
+
+@media (max-width: 700px) {
+
+    .dashboard {
+        padding-bottom: 78px;
+    }
+
+    .dashboard-header {
+        height: 68px;
+
+        padding: 0 20px;
+    }
+
+    .dashboard-brand h1 {
+        font-size: 20px;
+    }
+
+    .dashboard-brand p {
+        display: none;
+    }
+
+    .brand-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+    .profile-text {
+        display: none;
+    }
+
+    .profile-button {
+        padding: 8px 10px;
+    }
+
+    .dashboard-content {
+        padding: 35px 20px;
+    }
+
+    .welcome h2 {
+        font-size: 32px;
+    }
+
+    .welcome > p:last-child {
+        font-size: 15px;
+    }
+
+    .sos-section {
+        padding: 26px 22px;
+
+        border-radius: 24px;
+
+        align-items: flex-start;
+    }
+
+    .sos-info h2 {
+        font-size: 23px;
+    }
+
+    .sos-info > p:last-child {
+        font-size: 13px;
+    }
+
+    .sos-button {
+        width: 90px;
+        height: 90px;
+    }
+
+    .sos-button span {
+        font-size: 20px;
+    }
+
+    .tools-section > h2 {
+        font-size: 26px;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+    }
+
+    .tool-card {
+        padding: 18px;
+
+        border-radius: 18px;
+    }
+
+    .tool-icon {
+        width: 48px;
+        height: 48px;
+
+        border-radius: 15px;
+
+        font-size: 22px;
+    }
+
+    .tool-content h3 {
+        font-size: 16px;
+    }
+
+    .tool-content p {
+        font-size: 12px;
+    }
+
+    .status-card {
+        padding: 18px;
+    }
+
+    .status-time {
+        display: none;
+    }
+
+    .bottom-nav {
+        height: 68px;
+    }
+
+}
