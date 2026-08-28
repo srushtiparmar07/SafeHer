@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SafeHer Dashboard</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- =====================
+             HEADER
+        ====================== -->
+
+        <header class="dashboard-header">
+
+            <a href="index.html" class="dashboard-brand">
+
+                <div class="brand-icon">
+                    🛡
+                </div>
+
+                <div>
+                    <h1>Safe<span>Her</span></h1>
+                    <p>Your safety companion</p>
+                </div>
+
+            </a>
+
+
+            <button class="profile-button"
+                    id="profileButton">
+
+                <span class="profile-avatar">
+                    👤
+                </span>
+
+                <span class="profile-text">
+                    My Profile
+                </span>
+
+            </button>
+
+        </header>
+
+
+        <!-- =====================
+             MAIN CONTENT
+        ====================== -->
+
+        <main class="dashboard-content">
+
+            <!-- WELCOME -->
+
+            <section class="welcome">
+
+                <p class="section-label">
+                    SAFEHER DASHBOARD
+                </p>
+
+                <h2 id="welcomeMessage">
+                    Stay safe. Stay connected.
+                </h2>
+
+                <p>
+                    Your personal safety tools are ready whenever
+                    you need them.
+                </p>
+
+            </section>
+
+
+            <!-- =====================
+                 SOS BUTTON
+            ====================== -->
+
+            <section class="sos-section">
+
+                <div class="sos-info">
+
+                    <p class="emergency-label">
+                        EMERGENCY ASSISTANCE
+                    </p>
+
+                    <h2>
+                        Need help right now?
+                    </h2>
+
+                    <p>
+                        Press the SOS button to alert your trusted
+                        contacts and begin sharing your location.
+                    </p>
+
+                </div>
+
+
+                <button class="sos-button"
+                        id="sosButton">
+
+                    <span>SOS</span>
+
+                    <small>HOLD</small>
+
+                </button>
+
+            </section>
+
+
+            <!-- =====================
+                 SAFETY FEATURES
+            ====================== -->
+
+            <section class="tools-section">
+
+                <p class="section-label">
+                    SAFETY TOOLS
+                </p>
+
+                <h2>
+                    Everything you need to stay safer.
+                </h2>
+
+
+                <div class="tools-grid">
+
+
+                    <!-- LIVE LOCATION -->
+                  <!-- SAFER ROUTES -->
+
+<button class="tool-card"
+        id="routesButton">
+
+    <div class="tool-icon route-icon">
+        🛣️
+    </div>
+
+    <div class="tool-content">
+
+        <h3>
+            Safer Routes
+        </h3>
+
+        <p>
+            Find routes with nearby help and useful
+            safety information for your journey.
+        </p>
+
+    </div>
+
+    <span class="tool-arrow">
+        →
+    </span>
+
+</button>
+
+
+<!-- NEARBY HELP -->
+
+<button class="tool-card"
+        id="nearbyHelpButton">
+
+    <div class="tool-icon help-icon">
+        🏥
+    </div>
+
+    <div class="tool-content">
+
+        <h3>
+            Nearby Help
+        </h3>
+
+        <p>
+            Find nearby police stations and hospitals
+            when you need assistance.
+        </p>
+
+    </div>
+
+    <span class="tool-arrow">
+        →
+    </span>
+
+</button>
+
+                    <button class="tool-card"
+                            id="locationButton">
+
+                        <div class="tool-icon location-icon">
+                            📍
+                        </div>
+
+                        <div class="tool-content">
+
+                            <h3>
+                                Live Location
+                            </h3>
+
+                            <p>
+                                Share your current location with
+                                trusted contacts.
+                            </p>
+
+                        </div>
+
+                        <span class="tool-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <!-- TRUSTED CONTACTS -->
+
+                    <button class="tool-card"
+                            id="contactsButton">
+
+                        <div class="tool-icon contacts-icon">
+                            👥
+                        </div>
+
+                        <div class="tool-content">
+
+                            <h3>
+                                Trusted Contacts
+                            </h3>
+
+                            <p>
+                                Manage the people who can receive
+                                your emergency alerts.
+                            </p>
+
+                        </div>
+
+                        <span class="tool-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <!-- SAFETY CHECK -->
+
+                    <button class="tool-card"
+                            id="checkButton">
+
+                        <div class="tool-icon check-icon">
+                            ✓
+                        </div>
+
+                        <div class="tool-content">
+
+                            <h3>
+                                Safety Check
+                            </h3>
+
+                            <p>
+                                Quickly let your trusted contacts
+                                know that you are safe.
+                            </p>
+
+                        </div>
+
+                        <span class="tool-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <!-- EMERGENCY NUMBERS -->
+
+                    <button class="tool-card"
+                            id="emergencyButton">
+
+                        <div class="tool-icon emergency-icon">
+                            ☎
+                        </div>
+
+                        <div class="tool-content">
+
+                            <h3>
+                                Emergency Numbers
+                            </h3>
+
+                            <p>
+                                Access important emergency contacts
+                                when you need help quickly.
+                            </p>
+
+                        </div>
+
+                        <span class="tool-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================
+                 SAFETY STATUS
+            ====================== -->
+
+            <section class="status-card">
+
+                <div class="status-indicator"></div>
+
+                <div>
+
+                    <p class="status-title">
+                        Safety Status
+                    </p>
+
+                    <h3 id="safetyStatus">
+                        You are currently safe
+                    </h3>
+
+                </div>
+
+                <span class="status-time"
+                      id="statusTime">
+
+                    Just now
+
+                </span>
+
+            </section>
+
+        </main>
+
+
+        <!-- =====================
+             BOTTOM NAVIGATION
+        ====================== -->
+
+        <nav class="bottom-nav">
+
+            <a href="dashboard.html"
+               class="nav-item active">
+
+                <span>⌂</span>
+                <small>Home</small>
+
+            </a>
+
+
+            <button class="nav-item"
+                    id="locationNavButton">
+
+                <span>⌖</span>
+                <small>Location</small>
+
+            </button>
+
+
+            <button class="nav-item"
+                    id="contactsNavButton">
+
+                <span>♧</span>
+                <small>Contacts</small>
+
+            </button>
+
+
+            <button class="nav-item"
+                    id="profileNavButton">
+
+                <span>☻</span>
+                <small>Profile</small>
+
+            </button>
+
+        </nav>
+
+    </div>
+
+
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>
