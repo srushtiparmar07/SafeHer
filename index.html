@@ -4,169 +4,193 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>SafeHer - Women's Safety</title>
 
-    <!-- Connect CSS file -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
+    <div class="app-container">
 
-        <!-- SafeHer Logo -->
-        <div class="safeher-logo">
+        <!-- HEADER -->
+        <header class="app-header">
 
-            <div class="shield">
-                <span class="heart">♥</span>
+            <div class="safeher-logo">
+
+                <div class="shield">
+                    <span>♥</span>
+                </div>
+
+                <div class="logo-info">
+                    <h1>Safe<span>Her</span></h1>
+                    <p>Your safety companion</p>
+                </div>
+
             </div>
 
-            <div class="logo-text">
-                <span class="safe">Safe</span><span class="her">Her</span>
-            </div>
-
-        </div>
-
-
-        <!-- Navigation Links -->
-        <div class="nav-links">
-
-            <a href="#home">Home</a>
-
-            <a href="#about">About</a>
-
-            <a href="signin.html">Sign In</a>
-
-        </div>
-
-    </nav>
-
-
-    <!-- Main Section -->
-    <main id="home" class="hero">
-
-        <div class="hero-content">
-
-            <p class="tagline">
-                Your Safety. Our Priority.
-            </p>
-
-            <h1>
-                Stay Safe.<br>
-                Stay Connected.<br>
-                Stay Empowered.
-            </h1>
-
-            <p class="hero-description">
-
-                SafeHer helps women quickly access
-                emergency support, share their location,
-                and stay connected with trusted contacts.
-
-            </p>
-
-
-            <!-- Button goes to Sign In -->
-            <a href="signin.html">
-
-                <button class="primary-btn">
-                    Get Started
-                </button>
-
+            <a href="signin.html" class="signin-btn">
+                Sign In
             </a>
 
-        </div>
+        </header>
 
 
-        <!-- Safety Symbol -->
-        <div class="hero-icon">
+        <!-- MAIN CONTENT -->
+        <main>
 
-            <div class="big-shield">
-                <span>♥</span>
-            </div>
+            <!-- WELCOME SECTION -->
+            <section class="welcome-section">
 
-        </div>
+                <div class="welcome-badge">
+                    🛡️ Safe • Connected • Protected
+                </div>
 
-    </main>
-
-
-    <!-- About Section -->
-    <section id="about" class="about-section">
-
-        <h2>Why SafeHer?</h2>
-
-        <div class="feature-container">
-
-            <div class="feature-card">
-
-                <div class="feature-icon">🆘</div>
-
-                <h3>Instant SOS</h3>
+                <h2>
+                    Your safety,<br>
+                    always within reach.
+                </h2>
 
                 <p>
-                    Activate an emergency alert quickly
-                    when you feel unsafe.
+                    SafeHer helps you stay connected with trusted people,
+                    access emergency support, and share your location
+                    when you need help.
                 </p>
 
-            </div>
+                <a href="signin.html" class="get-started-btn">
+                    Get Started
+                    <span>→</span>
+                </a>
+
+            </section>
 
 
-            <div class="feature-card">
+            <!-- SOS PREVIEW -->
+            <section class="sos-preview">
 
-                <div class="feature-icon">📍</div>
+                <div class="sos-content">
 
-                <h3>Live Location</h3>
+                    <div class="sos-icon">
+                        !
+                    </div>
 
-                <p>
-                    Share your current location
-                    with trusted contacts.
+                    <div>
+
+                        <p class="small-title">
+                            EMERGENCY
+                        </p>
+
+                        <h3>
+                            Help is just one tap away
+                        </h3>
+
+                    </div>
+
+                </div>
+
+                <div class="sos-button-preview">
+                    SOS
+                </div>
+
+            </section>
+
+
+            <!-- FEATURES -->
+            <section class="features-section">
+
+                <p class="section-label">
+                    HOW SAFEHER HELPS YOU
                 </p>
 
+                <h2>
+                    Protection when it matters.
+                </h2>
+
+                <div class="feature-list">
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon pink">
+                            🚨
+                        </div>
+
+                        <h3>Instant SOS</h3>
+
+                        <p>
+                            Quickly activate an emergency alert
+                            when you feel unsafe.
+                        </p>
+
+                        <span class="arrow">›</span>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon purple">
+                            📍
+                        </div>
+
+                        <h3>Live Location</h3>
+
+                        <p>
+                            Share your current location with
+                            your trusted contacts.
+                        </p>
+
+                        <span class="arrow">›</span>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon blue">
+                            👥
+                        </div>
+
+                        <h3>Trusted Contacts</h3>
+
+                        <p>
+                            Build your emergency support
+                            network with people you trust.
+                        </p>
+
+                        <span class="arrow">›</span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <div class="footer-logo">
+
+                <div class="small-shield">
+                    ♥
+                </div>
+
+                <strong>SafeHer</strong>
+
             </div>
 
+            <p>
+                © 2026 SafeHer. Your safety matters.
+            </p>
 
-            <div class="feature-card">
+        </footer>
 
-                <div class="feature-icon">👥</div>
-
-                <h3>Trusted Network</h3>
-
-                <p>
-                    Stay connected with people
-                    you trust during emergencies.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Footer -->
-    <footer>
-
-        <div class="safeher-logo">
-
-            <div class="shield">
-                <span class="heart">♥</span>
-            </div>
-
-            <div class="logo-text">
-                <span class="safe">Safe</span><span class="her">Her</span>
-            </div>
-
-        </div>
-
-        <p>
-            © 2026 SafeHer. Your safety matters.
-        </p>
-
-    </footer>
+    </div>
 
 </body>
 
