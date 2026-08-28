@@ -1,0 +1,319 @@
+/* =========================
+   SAFEHER OTP PAGE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg, #f7eefb, #fff5f8);
+    color: #202124;
+}
+
+.otp-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px 20px;
+}
+
+.otp-card {
+    width: 100%;
+    max-width: 520px;
+
+    background: #ffffff;
+
+    border-radius: 28px;
+
+    padding: 45px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(80, 30, 90, 0.12);
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+    display: inline-block;
+
+    text-decoration: none;
+
+    color: #777;
+
+    font-size: 14px;
+
+    margin-bottom: 35px;
+}
+
+.back-button:hover {
+    color: #d6295d;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.otp-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 50px;
+}
+
+.otp-logo {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 16px;
+
+    background: linear-gradient(
+        135deg,
+        #ff3b6b,
+        #8b3dff
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+}
+
+.otp-brand h1 {
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.otp-brand h1 span {
+    color: #e6396a;
+}
+
+
+/* =========================
+   OTP CONTENT
+========================= */
+
+.small-label {
+    color: #d6295d;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 14px;
+}
+
+.otp-content h2 {
+    font-size: 32px;
+
+    margin-bottom: 15px;
+}
+
+.otp-description {
+    color: #777;
+
+    font-size: 15px;
+
+    margin-bottom: 8px;
+}
+
+.contact-display {
+    color: #202124;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    margin-bottom: 35px;
+
+    word-break: break-word;
+}
+
+
+/* =========================
+   OTP INPUT BOXES
+========================= */
+
+.otp-inputs {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-bottom: 30px;
+}
+
+.otp-input {
+    width: 100%;
+    max-width: 58px;
+    height: 62px;
+
+    border: 1px solid #dddddd;
+    border-radius: 14px;
+
+    text-align: center;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.otp-input:focus {
+    border-color: #d6295d;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(214, 41, 93, 0.1);
+}
+
+
+/* =========================
+   VERIFY BUTTON
+========================= */
+
+.verify-btn {
+    width: 100%;
+
+    border: none;
+
+    padding: 17px;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    background: linear-gradient(
+        135deg,
+        #ff3b6b,
+        #8b3dff
+    );
+
+    transition: 0.25s;
+}
+
+.verify-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(214, 41, 93, 0.25);
+}
+
+
+/* =========================
+   RESEND SECTION
+========================= */
+
+.resend-section {
+    margin-top: 30px;
+
+    text-align: center;
+}
+
+.resend-section p {
+    color: #777;
+
+    font-size: 14px;
+
+    margin-bottom: 8px;
+}
+
+#resendBtn {
+    border: none;
+
+    background: none;
+
+    color: #d6295d;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    margin-bottom: 10px;
+}
+
+#resendBtn:disabled {
+    color: #bbbbbb;
+    cursor: not-allowed;
+}
+
+#timer {
+    font-size: 12px;
+
+    color: #999;
+}
+
+
+/* =========================
+   SECURITY TEXT
+========================= */
+
+.security-text {
+    margin-top: 40px;
+
+    text-align: center;
+
+    color: #999;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   MOBILE VIEW
+========================= */
+
+@media (max-width: 500px) {
+
+    .otp-page {
+        padding: 15px;
+    }
+
+    .otp-card {
+        padding: 30px 22px;
+
+        border-radius: 22px;
+    }
+
+    .otp-brand {
+        margin-bottom: 40px;
+    }
+
+    .otp-content h2 {
+        font-size: 27px;
+    }
+
+    .otp-inputs {
+        gap: 7px;
+    }
+
+    .otp-input {
+        height: 52px;
+
+        font-size: 20px;
+
+        border-radius: 11px;
+    }
+
+}
