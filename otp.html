@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP - SafeHer</title>
+
+    <link rel="stylesheet" href="css/otp.css">
+</head>
+
+<body>
+
+    <div class="otp-page">
+
+        <div class="otp-card">
+
+            <!-- Back Button -->
+            <a href="signin.html" class="back-button">
+                ← Back
+            </a>
+
+
+            <!-- SafeHer Brand -->
+            <div class="otp-brand">
+
+                <div class="otp-logo">
+                    🛡️
+                </div>
+
+                <h1>Safe<span>Her</span></h1>
+
+            </div>
+
+
+            <!-- OTP Content -->
+            <div class="otp-content">
+
+                <p class="small-label">
+                    VERIFY YOUR ACCOUNT
+                </p>
+
+                <h2>Enter verification code</h2>
+
+                <p class="otp-description">
+                    We sent a verification code to:
+                </p>
+
+                <p id="contactDisplay" class="contact-display">
+                    Loading...
+                </p>
+
+
+                <!-- OTP FORM -->
+                <form id="otpForm">
+
+                    <div class="otp-inputs">
+
+                        <input
+                            type="text"
+                            maxlength="1"
+                            class="otp-input"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <input
+                            type="text"
+                            maxlength="1"
+                            class="otp-input"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <input
+                            type="text"
+                            maxlength="1"
+                            class="otp-input"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <input
+                            type="text"
+                            maxlength="1"
+                            class="otp-input"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <input
+                            type="text"
+                            maxlength="1"
+                            class="otp-input"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <input
+                            type="text"
+                            maxlength="1"
+                            class="otp-input"
+                            inputmode="numeric"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit" class="verify-btn">
+                        Verify & Continue →
+                    </button>
+
+                </form>
+
+
+                <!-- RESEND -->
+                <div class="resend-section">
+
+                    <p>
+                        Didn't receive the code?
+                    </p>
+
+                    <button id="resendBtn" type="button">
+                        Resend OTP
+                    </button>
+
+                    <p id="timer">
+                        Resend available in 60s
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <p class="security-text">
+                🔒 Your verification information is secure.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/otp.js"></script>
+
+</body>
+
+</html>
