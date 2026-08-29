@@ -1,0 +1,421 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #d6295d;
+    --purple: #7b3ff2;
+    --dark: #202124;
+    --muted: #777;
+    --light: #f7f7fa;
+    --white: #ffffff;
+    --border: #eeeeee;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+}
+
+.emergency-page {
+    min-height: 100vh;
+    padding-bottom: 90px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.emergency-header {
+    height: 76px;
+    padding: 0 7%;
+
+    background: white;
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-button {
+    color: #777;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 35px;
+}
+
+.back-button:hover {
+    color: var(--primary);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    background: linear-gradient(
+        135deg,
+        #ff3b6b,
+        #8b3dff
+    );
+}
+
+.brand h1 {
+    font-size: 21px;
+}
+
+.brand h1 span {
+    color: var(--primary);
+}
+
+.brand p {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.emergency-container {
+    width: 100%;
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 50px 25px;
+}
+
+
+/* =========================
+   INTRO
+========================= */
+
+.emergency-intro {
+    margin-bottom: 30px;
+}
+
+.section-label {
+    color: var(--primary);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 10px;
+}
+
+.emergency-intro h2 {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.emergency-intro > p:last-child {
+    color: var(--muted);
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   EMERGENCY CARDS
+========================= */
+
+.emergency-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.emergency-card {
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow:
+        0 7px 22px
+        rgba(30, 20, 40, 0.04);
+}
+
+.service-icon {
+    width: 55px;
+    height: 55px;
+
+    flex-shrink: 0;
+
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+.service-icon.police {
+    background: #eef3ff;
+}
+
+.service-icon.ambulance {
+    background: #fff0f3;
+}
+
+.service-icon.fire {
+    background: #fff4e8;
+}
+
+.service-icon.emergency {
+    background: #f3edff;
+}
+
+.service-info {
+    flex: 1;
+}
+
+.service-info h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.service-info p {
+    color: #888;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.call-button {
+    text-decoration: none;
+
+    background: linear-gradient(
+        135deg,
+        #ff3b6b,
+        #8b3dff
+    );
+
+    color: white;
+
+    padding: 12px 18px;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    transition: 0.2s;
+}
+
+.call-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(123, 63, 242, 0.2);
+}
+
+
+/* =========================
+   SAFETY NOTE
+========================= */
+
+.emergency-note {
+    margin-top: 25px;
+
+    background: #fff9e9;
+
+    border: 1px solid #f5e7bd;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+}
+
+.note-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+}
+
+.emergency-note h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.emergency-note p {
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+    bottom: 0;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+    max-width: 1100px;
+
+    height: 72px;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    border-top: 1px solid #eeeeee;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-around;
+
+    z-index: 200;
+
+    backdrop-filter: blur(12px);
+}
+
+.nav-item {
+    color: #999;
+
+    text-decoration: none;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    min-width: 70px;
+}
+
+.nav-item span {
+    font-size: 20px;
+}
+
+.nav-item small {
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    .emergency-header {
+        height: 68px;
+        padding: 0 20px;
+    }
+
+    .back-button {
+        margin-right: 18px;
+        font-size: 13px;
+    }
+
+    .brand h1 {
+        font-size: 19px;
+    }
+
+    .emergency-container {
+        padding: 35px 20px;
+    }
+
+    .emergency-intro h2 {
+        font-size: 31px;
+    }
+
+    .emergency-card {
+        padding: 16px;
+    }
+
+    .service-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .call-button {
+        padding: 10px 13px;
+    }
+
+    .emergency-note {
+        padding: 16px;
+    }
+
+    .bottom-nav {
+        height: 68px;
+    }
+}
