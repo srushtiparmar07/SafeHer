@@ -294,4 +294,3 @@ emergencyButton.addEventListener("click", function () {
         }
     );
 
-})
