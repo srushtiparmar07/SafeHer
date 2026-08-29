@@ -129,10 +129,7 @@ locationButton.addEventListener("click", function () {
     window.location.href = "location.html";
 
 });
-        alert(
-            "Requesting your current location..."
-        );
-
+        
 
         navigator.geolocation.getCurrentPosition(
 
