@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Live Location - SafeHer</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7fa;
+            color: #202124;
+        }
+
+        .header {
+            height: 76px;
+            background: white;
+            border-bottom: 1px solid #eeeeee;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 7%;
+        }
+
+        .back {
+            color: #777;
+            text-decoration: none;
+            margin-right: 35px;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            color: #d6295d;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+
+            background: linear-gradient(
+                135deg,
+                #ff3b6b,
+                #8b3dff
+            );
+        }
+
+        .brand h1 {
+            font-size: 21px;
+        }
+
+        .brand h1 span {
+            color: #d6295d;
+        }
+
+        .brand p {
+            color: #999;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+            padding: 50px 25px 100px;
+        }
+
+        .label {
+            color: #d6295d;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            color: #777;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .location-card {
+            background: white;
+            border: 1px solid #eeeeee;
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+
+            box-shadow:
+                0 12px 35px
+                rgba(30, 20, 40, 0.06);
+        }
+
+        .location-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+
+            border-radius: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 35px;
+
+            background: #fff0f3;
+        }
+
+        .location-card h3 {
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            color: #777;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .location-button {
+            width: 100%;
+            border: none;
+
+            padding: 15px;
+
+            border-radius: 13px;
+
+            color: white;
+
+            background: linear-gradient(
+                135deg,
+                #ff3b6b,
+                #8b3dff
+            );
+
+            font-size: 14px;
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .location-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .coordinates {
+            display: none;
+
+            margin-top: 20px;
+            padding: 15px;
+
+            background: #f7f7fa;
+
+            border-radius: 14px;
+
+            text-align: left;
+        }
+
+        .coordinates p {
+            font-size: 12px;
+            color: #666;
+            margin: 6px 0;
+        }
+
+        .coordinates strong {
+            color: #202124;
+        }
+
+        .share-card {
+            margin-top: 20px;
+
+            background: #f3edff;
+
+            border: 1px solid #e7ddff;
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .share-icon {
+            font-size: 23px;
+        }
+
+        .share-card h3 {
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .share-card p {
+            color: #777;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .bottom-nav {
+            position: fixed;
+
+            bottom: 0;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 100%;
+            max-width: 1100px;
+
+            height: 72px;
+
+            background: rgba(255,255,255,0.97);
+
+            border-top: 1px solid #eeeeee;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #999;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 4px;
+        }
+
+        .nav-item span {
+            font-size: 20px;
+        }
+
+        .nav-item small {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            color: #d6295d;
+        }
+
+        @media (max-width: 650px) {
+
+            .header {
+                padding: 0 20px;
+                height: 68px;
+            }
+
+            .back {
+                margin-right: 18px;
+            }
+
+            .container {
+                padding: 35px 20px 100px;
+            }
+
+            h2 {
+                font-size: 31px;
+            }
+
+            .location-card {
+                padding: 25px 20px;
+            }
+
+            .bottom-nav {
+                height: 68px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+
+        <a href="dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+        <div class="brand">
+
+            <div class="logo">
+                📍
+            </div>
+
+            <div>
+                <h1>Safe<span>Her</span></h1>
+                <p>Live Location</p>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <p class="label">
+            LOCATION SAFETY
+        </p>
+
+        <h2>
+            Share your location.
+        </h2>
+
+        <p class="intro">
+            Detect your current location and use it when
+            you need to let trusted people know where you are.
+        </p>
+
+
+        <section class="location-card">
+
+            <div class="location-icon">
+                📍
+            </div>
+
+            <h3>
+                Your current location
+            </h3>
+
+            <p class="status" id="locationStatus">
+                Your location has not been detected yet.
+            </p>
+
+            <button
+                class="location-button"
+                id="getLocationButton"
+            >
+                Detect My Location
+            </button>
+
+
+            <div
+                class="coordinates"
+                id="coordinates"
+            >
+
+                <p>
+                    <strong>Latitude:</strong>
+                    <span id="latitude">--</span>
+                </p>
+
+                <p>
+                    <strong>Longitude:</strong>
+                    <span id="longitude">--</span>
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="share-card">
+
+            <div class="share-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <h3>
+                    Your privacy matters
+                </h3>
+
+                <p>
+                    SafeHer only requests your location when
+                    you choose to use the location feature.
+                    You can control location permissions through
+                    your browser.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <nav class="bottom-nav">
+
+        <a
+            href="dashboard.html"
+            class="nav-item active"
+        >
+            <span>⌂</span>
+            <small>Home</small>
+        </a>
+
+        <a
+            href="routes.html"
+            class="nav-item"
+        >
+            <span>🛣️</span>
+            <small>Routes</small>
+        </a>
+
+        <a
+            href="nearby.html"
+            class="nav-item"
+        >
+            <span>📍</span>
+            <small>Nearby</small>
+        </a>
+
+        <a
+            href="contacts.html"
+            class="nav-item"
+        >
+            <span>👥</span>
+            <small>Contacts</small>
+        </a>
+
+    </nav>
+
+
+    <script>
+
+        const getLocationButton =
+            document.getElementById("getLocationButton");
+
+        const locationStatus =
+            document.getElementById("locationStatus");
+
+        const coordinates =
+            document.getElementById("coordinates");
+
+        const latitudeText =
+            document.getElementById("latitude");
+
+        const longitudeText =
+            document.getElementById("longitude");
+
+
+        getLocationButton.addEventListener(
+            "click",
+            function () {
+
+                if (!navigator.geolocation) {
+
+                    locationStatus.textContent =
+                        "Location services are not supported by your browser.";
+
+                    return;
+                }
+
+
+                locationStatus.textContent =
+                    "Detecting your location...";
+
+
+                navigator.geolocation.getCurrentPosition(
+
+                    function (position) {
+
+                        const latitude =
+                            position.coords.latitude;
+
+                        const longitude =
+                            position.coords.longitude;
+
+
+                        latitudeText.textContent =
+                            latitude.toFixed(6);
+
+                        longitudeText.textContent =
+                            longitude.toFixed(6);
+
+
+                        coordinates.style.display =
+                            "block";
+
+
+                        locationStatus.textContent =
+                            "Your current location has been detected ✓";
+
+
+                        getLocationButton.textContent =
+                            "Location Detected ✓";
+
+
+                        localStorage.setItem(
+                            "safeherLatitude",
+                            latitude
+                        );
+
+                        localStorage.setItem(
+                            "safeherLongitude",
+                            longitude
+                        );
+
+                    },
+
+                    function () {
+
+                        locationStatus.textContent =
+                            "Unable to detect your location.";
+
+                        alert(
+                            "Please allow location access in your browser and try again."
+                        );
+
+                    },
+
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
