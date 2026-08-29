@@ -252,15 +252,13 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
 
     const emergencyButton =
-        document.getElementById("emergencyButton");
+    document.getElementById("emergencyButton");
 
-    emergencyButton.addEventListener("click", function () {
+emergencyButton.addEventListener("click", function () {
 
-        alert(
-            "Emergency Numbers\n\nPolice: 112\nAmbulance: 112\nWomen Helpline: 181"
-        );
+    window.location.href = "emergency.html";
 
-    });
+});
 
 
     /* =========================
