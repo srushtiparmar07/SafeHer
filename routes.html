@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Safer Routes - SafeHer</title>
+
+    <link rel="stylesheet" href="routes.css">
+</head>
+
+<body>
+
+    <div class="routes-page">
+
+        <!-- HEADER -->
+
+        <header class="routes-header">
+
+            <a href="dashboard.html" class="back-button">
+                ← Dashboard
+            </a>
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🛡️
+                </div>
+
+                <div>
+                    <h1>Safe<span>Her</span></h1>
+                    <p>Safer Routes</p>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- MAIN -->
+
+        <main class="routes-container">
+
+
+            <!-- INTRO -->
+
+            <section class="routes-intro">
+
+                <p class="section-label">
+                    JOURNEY SAFETY
+                </p>
+
+                <h2>
+                    Choose a safer route.
+                </h2>
+
+                <p>
+                    Enter your destination and compare
+                    available route options with safety
+                    information.
+                </p>
+
+            </section>
+
+
+            <!-- LOCATION -->
+
+            <section class="route-card">
+
+                <div class="route-field">
+
+                    <div class="field-icon">
+                        📍
+                    </div>
+
+                    <div class="field-content">
+
+                        <label>
+                            Your location
+                        </label>
+
+                        <div class="location-row">
+
+                            <span id="currentLocation">
+                                Location not detected
+                            </span>
+
+                            <button
+                                id="detectLocation"
+                                type="button"
+                            >
+                                Detect
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="route-line"></div>
+
+
+                <!-- DESTINATION -->
+
+                <div class="route-field">
+
+                    <div class="field-icon destination">
+                        📌
+                    </div>
+
+                    <div class="field-content">
+
+                        <label for="destination">
+                            Where are you going?
+                        </label>
+
+                        <input
+                            id="destination"
+                            type="text"
+                            placeholder="Enter destination"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="findRoutes"
+                    class="route-search-button"
+                    type="button"
+                >
+                    Find Safer Routes
+                </button>
+
+            </section>
+
+
+            <!-- SAFETY INFORMATION -->
+
+            <section class="safety-info">
+
+                <div class="safety-icon">
+                    🛡️
+                </div>
+
+                <div>
+
+                    <h3>
+                        How SafeHer helps
+                    </h3>
+
+                    <p>
+                        Route safety can consider factors
+                        such as nearby assistance points,
+                        hospitals, police stations and
+                        route accessibility.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ROUTE RESULTS -->
+
+            <section
+                id="routeResults"
+                class="route-results hidden"
+            >
+
+                <div class="results-heading">
+
+                    <div>
+
+                        <p class="section-label">
+                            ROUTE OPTIONS
+                        </p>
+
+                        <h2>
+                            Available routes
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROUTE 1 -->
+
+                <article class="route-option">
+
+                    <div class="route-number">
+                        1
+                    </div>
+
+                    <div class="route-details">
+
+                        <h3>
+                            Recommended Route
+                        </h3>
+
+                        <p>
+                            Choose a route that balances
+                            travel time and access to
+                            nearby assistance.
+                        </p>
+
+                        <div class="route-tags">
+
+                            <span>
+                                🛡️ Safety option
+                            </span>
+
+                            <span>
+                                🚓 Help nearby
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="map-button"
+                        data-route="recommended"
+                        type="button"
+                    >
+                        Open Map
+                    </button>
+
+                </article>
+
+
+                <!-- ROUTE 2 -->
+
+                <article class="route-option">
+
+                    <div class="route-number">
+                        2
+                    </div>
+
+                    <div class="route-details">
+
+                        <h3>
+                            Alternative Route
+                        </h3>
+
+                        <p>
+                            An alternative route option
+                            for your journey.
+                        </p>
+
+                        <div class="route-tags">
+
+                            <span>
+                                🏥 Medical help
+                            </span>
+
+                            <span>
+                                📍 Nearby places
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="map-button"
+                        data-route="alternative"
+                        type="button"
+                    >
+                        Open Map
+                    </button>
+
+                </article>
+
+
+                <!-- SAFETY DISCLAIMER -->
+
+                <div class="route-disclaimer">
+
+                    <strong>
+                        Important:
+                    </strong>
+
+                    Route safety information is intended
+                    as a helpful guide and should not be
+                    treated as a guarantee of personal safety.
+                    Stay aware of your surroundings and use
+                    emergency services when necessary.
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+        <!-- BOTTOM NAVIGATION -->
+
+        <nav class="bottom-nav">
+
+            <a
+                href="dashboard.html"
+                class="nav-item"
+            >
+                <span>⌂</span>
+                <small>Home</small>
+            </a>
+
+
+            <a
+                href="routes.html"
+                class="nav-item active"
+            >
+                <span>🛣️</span>
+                <small>Routes</small>
+            </a>
+
+
+            <a
+                href="nearby.html"
+                class="nav-item"
+            >
+                <span>📍</span>
+                <small>Nearby</small>
+            </a>
+
+
+            <a
+                href="contacts.html"
+                class="nav-item"
+            >
+                <span>👥</span>
+                <small>Contacts</small>
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <script src="routes.js"></script>
+
+</body>
+
+</html>
