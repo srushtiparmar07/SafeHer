@@ -196,13 +196,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const routesButton =
         document.getElementById("routesButton");
 
-    routesButton.addEventListener("click", function () {
+    saferRoutesButton.addEventListener("click", function () {
 
-        alert(
-            "Safer Routes feature is coming next!\n\nIt will help you compare available routes using safety-related information such as nearby police stations and hospitals."
-        );
+    window.location.href = "routes.html";
 
-    });
+});
 
 
     /* =========================
