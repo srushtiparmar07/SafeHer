@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Trusted Contacts - SafeHer</title>
+
+    <link rel="stylesheet" href="contacts.css">
+</head>
+
+<body>
+
+    <div class="contacts-page">
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <header class="contacts-header">
+
+            <a href="dashboard.html" class="back-button">
+                ← Dashboard
+            </a>
+
+            <div class="contacts-brand">
+
+                <div class="brand-icon">
+                    🛡️
+                </div>
+
+                <div>
+                    <h1>Safe<span>Her</span></h1>
+                    <p>Trusted Contacts</p>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
+        <main class="contacts-container">
+
+            <!-- PAGE INTRO -->
+
+            <section class="contacts-intro">
+
+                <p class="section-label">
+                    YOUR SAFETY NETWORK
+                </p>
+
+                <h2>
+                    Trusted Contacts
+                </h2>
+
+                <p>
+                    Add people you trust so they can be contacted
+                    during an emergency.
+                </p>
+
+            </section>
+
+
+            <!-- =========================
+                 ADD CONTACT
+            ========================== -->
+
+            <section class="add-contact-card">
+
+                <div class="card-heading">
+
+                    <div class="heading-icon">
+                        +
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Add a trusted contact
+                        </h3>
+
+                        <p>
+                            Someone you can rely on in an emergency.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form id="contactForm">
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="contactName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contactName"
+                            name="contactName"
+                            placeholder="Enter contact name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="contactPhone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="contactPhone"
+                            name="contactPhone"
+                            placeholder="+91 9876543210"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- RELATIONSHIP -->
+
+                    <div class="form-group">
+
+                        <label for="contactRelation">
+                            Relationship
+                        </label>
+
+                        <select
+                            id="contactRelation"
+                            name="contactRelation"
+                            required
+                        >
+
+                            <option value="">
+                                Select relationship
+                            </option>
+
+                            <option value="Parent">
+                                Parent
+                            </option>
+
+                            <option value="Sibling">
+                                Sibling
+                            </option>
+
+                            <option value="Partner">
+                                Partner
+                            </option>
+
+                            <option value="Friend">
+                                Friend
+                            </option>
+
+                            <option value="Relative">
+                                Relative
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="add-contact-button"
+                    >
+                        Add Contact
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- =========================
+                 CONTACT LIST
+            ========================== -->
+
+            <section class="saved-contacts">
+
+                <div class="contacts-title">
+
+                    <div>
+
+                        <p class="section-label">
+                            EMERGENCY NETWORK
+                        </p>
+
+                        <h2>
+                            Your Contacts
+                        </h2>
+
+                    </div>
+
+                    <span id="contactCount">
+                        0 contacts
+                    </span>
+
+                </div>
+
+
+                <!-- CONTACTS WILL APPEAR HERE -->
+
+                <div id="contactsList"
+                     class="contacts-list">
+
+                    <div class="empty-state"
+                         id="emptyState">
+
+                        <div class="empty-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            No trusted contacts yet
+                        </h3>
+
+                        <p>
+                            Add someone you trust above.
+                            They can later receive your SOS alerts.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 SAFETY INFORMATION
+            ========================== -->
+
+            <section class="safety-information">
+
+                <div class="information-icon">
+                    🔒
+                </div>
+
+                <div>
+
+                    <h3>
+                        Your contacts are important
+                    </h3>
+
+                    <p>
+                        SafeHer will use your trusted contacts
+                        for safety notifications and emergency
+                        alerts. Always make sure the phone numbers
+                        are correct.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- =========================
+             BOTTOM NAVIGATION
+        ========================== -->
+
+        <nav class="bottom-nav">
+
+            <a href="dashboard.html"
+               class="nav-item">
+
+                <span>⌂</span>
+                <small>Home</small>
+
+            </a>
+
+
+            <a href="dashboard.html"
+               class="nav-item">
+
+                <span>⌖</span>
+                <small>Location</small>
+
+            </a>
+
+
+            <a href="contacts.html"
+               class="nav-item active">
+
+                <span>♧</span>
+                <small>Contacts</small>
+
+            </a>
+
+
+            <button
+                class="nav-item"
+                id="profileNavButton"
+                type="button"
+            >
+
+                <span>☻</span>
+                <small>Profile</small>
+
+            </button>
+
+        </nav>
+
+    </div>
+
+
+    <script src="contacts.js"></script>
+
+</body>
+
+</html>
