@@ -16,17 +16,39 @@ document.addEventListener("DOMContentLoaded", function () {
        SOS BUTTON
     ========================= */
 
-    const sosButton = document.getElementById("sosButton");
-    const safetyStatus = document.getElementById("safetyStatus");
+    const sosButton =
+        document.getElementById("sosButton");
+
+    const safetyStatus =
+        document.getElementById("safetyStatus");
 
     let sosTimer;
 
-    sosButton.addEventListener("mousedown", startSOS);
-    sosButton.addEventListener("mouseup", cancelSOS);
-    sosButton.addEventListener("mouseleave", cancelSOS);
 
-    sosButton.addEventListener("touchstart", startSOS);
-    sosButton.addEventListener("touchend", cancelSOS);
+    sosButton.addEventListener(
+        "mousedown",
+        startSOS
+    );
+
+    sosButton.addEventListener(
+        "mouseup",
+        cancelSOS
+    );
+
+    sosButton.addEventListener(
+        "mouseleave",
+        cancelSOS
+    );
+
+    sosButton.addEventListener(
+        "touchstart",
+        startSOS
+    );
+
+    sosButton.addEventListener(
+        "touchend",
+        cancelSOS
+    );
 
 
     function startSOS(event) {
@@ -43,7 +65,8 @@ document.addEventListener("DOMContentLoaded", function () {
             countdown--;
 
             sosButton.innerHTML =
-                "<span>" + countdown +
+                "<span>" +
+                countdown +
                 "</span><small>HOLDING...</small>";
 
             if (countdown <= 0) {
@@ -69,52 +92,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-   function activateSOS() {
+    function activateSOS() {
 
-    sosButton.innerHTML =
-        "<span>🚨</span><small>ALERT SENT</small>";
+        sosButton.innerHTML =
+            "<span>🚨</span><small>ALERT SENT</small>";
 
-    safetyStatus.textContent =
-        "Emergency alert activated";
-
-
-    const savedContacts =
-        JSON.parse(localStorage.getItem("safeherContacts")) || [];
+        safetyStatus.textContent =
+            "Emergency alert activated";
 
 
-    if (savedContacts.length === 0) {
-
-        alert(
-            "🚨 SOS ACTIVATED\n\n" +
-            "You don't have any trusted contacts yet.\n\n" +
-            "Please add a trusted contact first."
-        );
-
-    } else {
-
-        const contactNames =
-            savedContacts
-                .map(function (contact) {
-                    return "• " +
-                        contact.name +
-                        " (" +
-                        contact.phone +
-                        ")";
-                })
-                .join("\n");
+        const savedContacts =
+            JSON.parse(
+                localStorage.getItem("safeherContacts")
+            ) || [];
 
 
-        alert(
-            "🚨 SOS ACTIVATED\n\n" +
-            "Trusted contacts that would be alerted:\n\n" +
-            contactNames +
-            "\n\n" +
-            "Real SMS/call alerts will be connected in a later step."
-        );
+        if (savedContacts.length === 0) {
+
+            alert(
+                "🚨 SOS ACTIVATED\n\n" +
+                "You don't have any trusted contacts yet.\n\n" +
+                "Please add a trusted contact first."
+            );
+
+        } else {
+
+            const contactNames =
+                savedContacts
+                    .map(function (contact) {
+
+                        return "• " +
+                            contact.name +
+                            " (" +
+                            contact.phone +
+                            ")";
+
+                    })
+                    .join("\n");
+
+
+            alert(
+                "🚨 SOS ACTIVATED\n\n" +
+                "Trusted contacts that would be alerted:\n\n" +
+                contactNames +
+                "\n\n" +
+                "Real SMS/call alerts will be connected in a later step."
+            );
+
+        }
 
     }
-
-}
 
 
     /* =========================
@@ -122,59 +149,17 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
 
     const locationButton =
-    document.getElementById("locationButton");
+        document.getElementById("locationButton");
 
-locationButton.addEventListener("click", function () {
+    locationButton.addEventListener(
+        "click",
+        function () {
 
-    window.location.href = "location.html";
+            window.location.href =
+                "location.html";
 
-});
-        
-
-        navigator.geolocation.getCurrentPosition(
-
-            function (position) {
-
-                const latitude =
-                    position.coords.latitude;
-
-                const longitude =
-                    position.coords.longitude;
-
-                sessionStorage.setItem(
-                    "safeherLatitude",
-                    latitude
-                );
-
-                sessionStorage.setItem(
-                    "safeherLongitude",
-                    longitude
-                );
-
-                locationButton.disabled = false;
-
-                alert(
-                    "Location found!\n\nLatitude: " +
-                    latitude.toFixed(5) +
-                    "\nLongitude: " +
-                    longitude.toFixed(5)
-                );
-
-            },
-
-            function () {
-
-                locationButton.disabled = false;
-
-                alert(
-                    "Unable to access your location. Please allow location permission."
-                );
-
-            }
-
-        );
-
-    });
+        }
+    );
 
 
     /* =========================
@@ -184,10 +169,15 @@ locationButton.addEventListener("click", function () {
     const routesButton =
         document.getElementById("routesButton");
 
-    routesButton.addEventListener("click", function () {
-    window.location.href = "routes.html";
+    routesButton.addEventListener(
+        "click",
+        function () {
 
-});
+            window.location.href =
+                "routes.html";
+
+        }
+    );
 
 
     /* =========================
@@ -197,11 +187,16 @@ locationButton.addEventListener("click", function () {
     const nearbyHelpButton =
         document.getElementById("nearbyHelpButton");
 
-    nearbyHelpButton.addEventListener("click", function () {
+    nearbyHelpButton.addEventListener(
+        "click",
+        function () {
 
-    window.location.href = "nearby.html";
+            window.location.href =
+                "nearby.html";
 
-});
+        }
+    );
+
 
     /* =========================
        TRUSTED CONTACTS
@@ -210,11 +205,16 @@ locationButton.addEventListener("click", function () {
     const contactsButton =
         document.getElementById("contactsButton");
 
-    contactsButton.addEventListener("click", function () {
+    contactsButton.addEventListener(
+        "click",
+        function () {
 
-    window.location.href = "contacts.html";
+            window.location.href =
+                "contacts.html";
 
-});
+        }
+    );
+
 
     /* =========================
        SAFETY CHECK
@@ -223,16 +223,19 @@ locationButton.addEventListener("click", function () {
     const checkButton =
         document.getElementById("checkButton");
 
-    checkButton.addEventListener("click", function () {
+    checkButton.addEventListener(
+        "click",
+        function () {
 
-        safetyStatus.textContent =
-            "Safety check completed — you are safe";
+            safetyStatus.textContent =
+                "Safety check completed — you are safe";
 
-        alert(
-            "Safety check completed!"
-        );
+            alert(
+                "Safety check completed!"
+            );
 
-    });
+        }
+    );
 
 
     /* =========================
@@ -240,13 +243,17 @@ locationButton.addEventListener("click", function () {
     ========================= */
 
     const emergencyButton =
-    document.getElementById("emergencyButton");
+        document.getElementById("emergencyButton");
 
-emergencyButton.addEventListener("click", function () {
+    emergencyButton.addEventListener(
+        "click",
+        function () {
 
-    window.location.href = "emergency.html";
+            window.location.href =
+                "emergency.html";
 
-});
+        }
+    );
 
 
     /* =========================
