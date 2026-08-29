@@ -196,8 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const routesButton =
         document.getElementById("routesButton");
 
-    saferRoutesButton.addEventListener("click", function () {
-
+    routesButton.addEventListener("click", function () {
     window.location.href = "routes.html";
 
 });
