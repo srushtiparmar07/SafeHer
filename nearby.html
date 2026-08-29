@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Nearby Help - SafeHer</title>
+
+    <link rel="stylesheet" href="nearby.css">
+</head>
+
+<body>
+
+    <div class="nearby-page">
+
+        <!-- HEADER -->
+
+        <header class="nearby-header">
+
+            <a href="dashboard.html"
+               class="back-button">
+                ← Dashboard
+            </a>
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🛡️
+                </div>
+
+                <div>
+                    <h1>Safe<span>Her</span></h1>
+                    <p>Nearby Help</p>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- MAIN -->
+
+        <main class="nearby-container">
+
+
+            <!-- INTRO -->
+
+            <section class="intro">
+
+                <p class="section-label">
+                    EMERGENCY SUPPORT
+                </p>
+
+                <h2>
+                    Help is nearby.
+                </h2>
+
+                <p>
+                    Find police stations and hospitals near
+                    your current location.
+                </p>
+
+            </section>
+
+
+            <!-- LOCATION CARD -->
+
+            <section class="location-card">
+
+                <div class="location-icon">
+                    📍
+                </div>
+
+                <div class="location-info">
+
+                    <h3>
+                        Your Location
+                    </h3>
+
+                    <p id="locationStatus">
+                        Location not detected
+                    </p>
+
+                </div>
+
+                <button
+                    id="locationButton"
+                    class="location-button"
+                    type="button"
+                >
+                    Find Me
+                </button>
+
+            </section>
+
+
+            <!-- QUICK EMERGENCY -->
+
+            <section class="emergency-card">
+
+                <div>
+
+                    <p class="section-label">
+                        NEED HELP NOW?
+                    </p>
+
+                    <h3>
+                        Emergency Services
+                    </h3>
+
+                    <p>
+                        Call emergency services if you
+                        are in immediate danger.
+                    </p>
+
+                </div>
+
+                <a
+                    href="tel:112"
+                    class="emergency-call"
+                >
+                    📞 Call 112
+                </a>
+
+            </section>
+
+
+            <!-- NEARBY PLACES -->
+
+            <section class="places-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-label">
+                            NEAR YOU
+                        </p>
+
+                        <h2>
+                            Nearby Help
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <!-- POLICE -->
+
+                <div
+                    id="policeList"
+                    class="place-list"
+                >
+
+                    <div class="place-card">
+
+                        <div class="place-icon police">
+                            🚓
+                        </div>
+
+                        <div class="place-info">
+
+                            <h3>
+                                Police Stations
+                            </h3>
+
+                            <p>
+                                Find nearby police stations
+                                for emergency assistance.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="find-button"
+                            id="policeButton"
+                            type="button"
+                        >
+                            Find
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HOSPITAL -->
+
+                <div
+                    id="hospitalList"
+                    class="place-list"
+                >
+
+                    <div class="place-card">
+
+                        <div class="place-icon hospital">
+                            🏥
+                        </div>
+
+                        <div class="place-info">
+
+                            <h3>
+                                Hospitals
+                            </h3>
+
+                            <p>
+                                Find nearby hospitals and
+                                medical assistance.
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="find-button"
+                            id="hospitalButton"
+                            type="button"
+                        >
+                            Find
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SAFETY NOTE -->
+
+            <section class="safety-note">
+
+                <div class="note-icon">
+                    🔒
+                </div>
+
+                <div>
+
+                    <h3>
+                        Stay aware
+                    </h3>
+
+                    <p>
+                        Location information is used to help
+                        you find nearby assistance. Always
+                        contact emergency services if you are
+                        in immediate danger.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- BOTTOM NAVIGATION -->
+
+        <nav class="bottom-nav">
+
+            <a
+                href="dashboard.html"
+                class="nav-item"
+            >
+                <span>⌂</span>
+                <small>Home</small>
+            </a>
+
+
+            <a
+                href="nearby.html"
+                class="nav-item active"
+            >
+                <span>📍</span>
+                <small>Nearby</small>
+            </a>
+
+
+            <a
+                href="contacts.html"
+                class="nav-item"
+            >
+                <span>👥</span>
+                <small>Contacts</small>
+            </a>
+
+
+            <button
+                class="nav-item"
+                id="profileButton"
+                type="button"
+            >
+                <span>👤</span>
+                <small>Profile</small>
+            </button>
+
+        </nav>
+
+    </div>
+
+
+    <script src="nearby.js"></script>
+
+</body>
+
+</html>
