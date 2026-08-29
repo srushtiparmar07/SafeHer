@@ -122,22 +122,13 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
 
     const locationButton =
-        document.getElementById("locationButton");
+    document.getElementById("locationButton");
 
-    locationButton.addEventListener("click", function () {
+locationButton.addEventListener("click", function () {
 
-        if (!navigator.geolocation) {
+    window.location.href = "location.html";
 
-            alert(
-                "Geolocation is not supported by your browser."
-            );
-
-            return;
-
-        }
-
-        locationButton.disabled = true;
-
+});
         alert(
             "Requesting your current location..."
         );
