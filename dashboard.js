@@ -148,19 +148,14 @@ document.addEventListener("DOMContentLoaded", function () {
        LIVE LOCATION
     ========================= */
 
-    const locationButton =
-        document.getElementById("locationButton");
+    const liveLocationButton =
+    document.getElementById("liveLocationButton");
 
-    locationButton.addEventListener(
-        "click",
-        function () {
+liveLocationButton.addEventListener("click", function () {
 
-            window.location.href =
-                "location.html";
+    window.location.href = "location.html";
 
-        }
-    );
-
+});
 
     /* =========================
        SAFER ROUTES
