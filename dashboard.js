@@ -197,12 +197,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     contactsButton.addEventListener("click", function () {
 
-        alert(
-            "Trusted Contacts will allow you to add family members or friends who receive your safety alerts."
-        );
+    window.location.href = "contacts.html";
 
-    });
-
+});
 
     /* =========================
        SAFETY CHECK
