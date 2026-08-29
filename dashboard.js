@@ -69,19 +69,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function activateSOS() {
+   function activateSOS() {
 
-        sosButton.innerHTML =
-            "<span>🚨</span><small>ALERT SENT</small>";
+    sosButton.innerHTML =
+        "<span>🚨</span><small>ALERT SENT</small>";
 
-        safetyStatus.textContent =
-            "Emergency alert activated";
+    safetyStatus.textContent =
+        "Emergency alert activated";
+
+
+    const savedContacts =
+        JSON.parse(localStorage.getItem("safeherContacts")) || [];
+
+
+    if (savedContacts.length === 0) {
 
         alert(
-            "SOS activated! In the final version, your trusted contacts and emergency services can be notified."
+            "🚨 SOS ACTIVATED\n\n" +
+            "You don't have any trusted contacts yet.\n\n" +
+            "Please add a trusted contact first."
+        );
+
+    } else {
+
+        const contactNames =
+            savedContacts
+                .map(function (contact) {
+                    return "• " +
+                        contact.name +
+                        " (" +
+                        contact.phone +
+                        ")";
+                })
+                .join("\n");
+
+
+        alert(
+            "🚨 SOS ACTIVATED\n\n" +
+            "Trusted contacts that would be alerted:\n\n" +
+            contactNames +
+            "\n\n" +
+            "Real SMS/call alerts will be connected in a later step."
         );
 
     }
+
+}
 
 
     /* =========================
