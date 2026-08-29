@@ -214,12 +214,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     nearbyHelpButton.addEventListener("click", function () {
 
-        alert(
-            "Nearby Help will show nearby police stations and hospitals using your current location."
-        );
+    window.location.href = "nearby.html";
 
-    });
-
+});
 
     /* =========================
        TRUSTED CONTACTS
