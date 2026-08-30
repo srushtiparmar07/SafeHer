@@ -631,11 +631,16 @@
         document.getElementById("latitude");
 
     const longitudeText =
-        document.getElementById("longitude");
+    document.getElementById("longitude");
 
-    const refreshButton =
-        document.getElementById("refreshLocation");
+const accuracyText =
+    document.getElementById("accuracy");
 
+const lastUpdatedText =
+    document.getElementById("lastUpdated");
+
+const refreshButton =
+    document.getElementById("refreshLocation");
     const mapButton =
         document.getElementById("mapButton");
 
@@ -670,12 +675,25 @@
                     latitude.toFixed(6);
 
                 longitudeText.textContent =
-                    longitude.toFixed(6);
+    longitude.toFixed(6);
 
 
-                statusText.textContent =
-                    "Location detected ✓";
+const accuracy =
+    position.coords.accuracy;
 
+accuracyText.textContent =
+    Math.round(accuracy) + " meters";
+
+
+const now =
+    new Date();
+
+lastUpdatedText.textContent =
+    now.toLocaleTimeString();
+
+
+statusText.textContent =
+    "Location detected ✓";
 
                 mapButton.href =
                     "https://www.google.com/maps?q=" +
