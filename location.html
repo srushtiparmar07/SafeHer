@@ -3,9 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Live Location - SafeHer</title>
 
@@ -22,6 +20,13 @@
             color: #202124;
         }
 
+        .page {
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        /* HEADER */
+
         .header {
             height: 76px;
             background: white;
@@ -34,10 +39,10 @@
         }
 
         .back {
-            color: #777;
             text-decoration: none;
-            margin-right: 35px;
+            color: #777;
             font-size: 14px;
+            margin-right: 35px;
         }
 
         .back:hover {
@@ -83,10 +88,13 @@
             margin-top: 2px;
         }
 
+
+        /* MAIN */
+
         .container {
             max-width: 850px;
             margin: auto;
-            padding: 50px 25px 100px;
+            padding: 50px 25px;
         }
 
         .label {
@@ -109,54 +117,126 @@
             margin-bottom: 30px;
         }
 
+
+        /* LOCATION CARD */
+
         .location-card {
             background: white;
+
             border: 1px solid #eeeeee;
+
             border-radius: 24px;
+
             padding: 30px;
-            text-align: center;
 
             box-shadow:
                 0 12px 35px
                 rgba(30, 20, 40, 0.06);
         }
 
-        .location-icon {
-            width: 75px;
-            height: 75px;
-            margin: 0 auto 20px;
+        .location-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-            border-radius: 22px;
+        .location-icon {
+            width: 58px;
+            height: 58px;
+
+            border-radius: 17px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            font-size: 35px;
+            font-size: 27px;
 
             background: #fff0f3;
         }
 
-        .location-card h3 {
-            font-size: 21px;
-            margin-bottom: 10px;
+        .location-top h3 {
+            font-size: 19px;
+            margin-bottom: 5px;
         }
 
         .status {
             color: #777;
-            font-size: 13px;
-            line-height: 1.6;
-            margin-bottom: 25px;
+            font-size: 12px;
         }
 
-        .location-button {
-            width: 100%;
+
+        /* COORDINATES */
+
+        .coordinates {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+        .coordinate-box {
+            background: #f7f7fa;
+
+            border-radius: 15px;
+
+            padding: 16px;
+        }
+
+        .coordinate-box span {
+            display: block;
+
+            color: #999;
+
+            font-size: 10px;
+
+            margin-bottom: 7px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.8px;
+        }
+
+        .coordinate-box strong {
+            font-size: 14px;
+
+            word-break: break-all;
+        }
+
+
+        /* BUTTONS */
+
+        .buttons {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+        button,
+        .map-button {
             border: none;
 
-            padding: 15px;
+            padding: 14px;
 
             border-radius: 13px;
 
+            font-size: 12px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            text-decoration: none;
+        }
+
+        .primary {
             color: white;
 
             background: linear-gradient(
@@ -164,42 +244,26 @@
                 #ff3b6b,
                 #8b3dff
             );
-
-            font-size: 14px;
-            font-weight: 800;
-
-            cursor: pointer;
         }
 
-        .location-button:hover {
+        .secondary {
+            background: #f3edff;
+
+            color: #7040d9;
+        }
+
+        button:hover,
+        .map-button:hover {
             transform: translateY(-1px);
         }
 
-        .coordinates {
-            display: none;
 
+        /* SAFETY NOTE */
+
+        .safety-card {
             margin-top: 20px;
-            padding: 15px;
 
-            background: #f7f7fa;
-
-            border-radius: 14px;
-
-            text-align: left;
-        }
-
-        .coordinates p {
-            font-size: 12px;
-            color: #666;
-            margin: 6px 0;
-        }
-
-        .coordinates strong {
-            color: #202124;
-        }
-
-        .share-card {
-            margin-top: 20px;
+            padding: 20px;
 
             background: #f3edff;
 
@@ -207,33 +271,38 @@
 
             border-radius: 20px;
 
-            padding: 20px;
-
             display: flex;
-            gap: 14px;
+
+            gap: 13px;
+
             align-items: flex-start;
         }
 
-        .share-icon {
-            font-size: 23px;
+        .safety-icon {
+            font-size: 22px;
         }
 
-        .share-card h3 {
-            font-size: 15px;
+        .safety-card h3 {
+            font-size: 14px;
             margin-bottom: 6px;
         }
 
-        .share-card p {
+        .safety-card p {
             color: #777;
-            font-size: 12px;
+
+            font-size: 11px;
+
             line-height: 1.6;
         }
+
+
+        /* BOTTOM NAV */
 
         .bottom-nav {
             position: fixed;
 
-            bottom: 0;
             left: 50%;
+            bottom: 0;
 
             transform: translateX(-50%);
 
@@ -247,7 +316,9 @@
             border-top: 1px solid #eeeeee;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-around;
 
             z-index: 100;
@@ -255,10 +326,13 @@
 
         .nav-item {
             text-decoration: none;
+
             color: #999;
 
             display: flex;
+
             flex-direction: column;
+
             align-items: center;
 
             gap: 4px;
@@ -277,11 +351,14 @@
             color: #d6295d;
         }
 
+
+        /* MOBILE */
+
         @media (max-width: 650px) {
 
             .header {
-                padding: 0 20px;
                 height: 68px;
+                padding: 0 20px;
             }
 
             .back {
@@ -297,7 +374,15 @@
             }
 
             .location-card {
-                padding: 25px 20px;
+                padding: 22px;
+            }
+
+            .coordinates {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
             }
 
             .bottom-nav {
@@ -307,7 +392,13 @@
     </style>
 </head>
 
+
 <body>
+
+<div class="page">
+
+
+    <!-- HEADER -->
 
     <header class="header">
 
@@ -322,14 +413,23 @@
             </div>
 
             <div>
-                <h1>Safe<span>Her</span></h1>
-                <p>Live Location</p>
+
+                <h1>
+                    Safe<span>Her</span>
+                </h1>
+
+                <p>
+                    Live Location
+                </p>
+
             </div>
 
         </div>
 
     </header>
 
+
+    <!-- MAIN -->
 
     <main class="container">
 
@@ -338,74 +438,114 @@
         </p>
 
         <h2>
-            Share your location.
+            Your live location
         </h2>
 
         <p class="intro">
-            Detect your current location and use it when
-            you need to let trusted people know where you are.
+            Detect your current location and quickly open
+            or share it when you need help.
         </p>
 
 
+        <!-- LOCATION CARD -->
+
         <section class="location-card">
 
-            <div class="location-icon">
-                📍
+            <div class="location-top">
+
+                <div class="location-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h3>
+                        Current location
+                    </h3>
+
+                    <p
+                        class="status"
+                        id="status"
+                    >
+                        Detecting your location...
+                    </p>
+
+                </div>
+
             </div>
 
-            <h3>
-                Your current location
-            </h3>
 
-            <p class="status" id="locationStatus">
-                Your location has not been detected yet.
-            </p>
+            <div class="coordinates">
 
-            <button
-                class="location-button"
-                id="getLocationButton"
-            >
-                Detect My Location
-            </button>
+                <div class="coordinate-box">
+
+                    <span>
+                        Latitude
+                    </span>
+
+                    <strong id="latitude">
+                        --
+                    </strong>
+
+                </div>
 
 
-            <div
-                class="coordinates"
-                id="coordinates"
-            >
+                <div class="coordinate-box">
 
-                <p>
-                    <strong>Latitude:</strong>
-                    <span id="latitude">--</span>
-                </p>
+                    <span>
+                        Longitude
+                    </span>
 
-                <p>
-                    <strong>Longitude:</strong>
-                    <span id="longitude">--</span>
-                </p>
+                    <strong id="longitude">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    class="primary"
+                    id="refreshLocation"
+                >
+                    📍 Refresh Location
+                </button>
+
+                <a
+                    class="map-button secondary"
+                    id="mapButton"
+                    href="#"
+                    target="_blank"
+                >
+                    🗺️ Open in Maps
+                </a>
 
             </div>
 
         </section>
 
 
-        <section class="share-card">
+        <!-- SAFETY -->
 
-            <div class="share-icon">
+        <section class="safety-card">
+
+            <div class="safety-icon">
                 🛡️
             </div>
 
             <div>
 
                 <h3>
-                    Your privacy matters
+                    Your location stays under your control
                 </h3>
 
                 <p>
-                    SafeHer only requests your location when
-                    you choose to use the location feature.
-                    You can control location permissions through
-                    your browser.
+                    SafeHer requests your location only when
+                    you use this feature. Your browser controls
+                    whether location access is allowed.
                 </p>
 
             </div>
@@ -414,6 +554,8 @@
 
     </main>
 
+
+    <!-- BOTTOM NAV -->
 
     <nav class="bottom-nav">
 
@@ -451,107 +593,114 @@
 
     </nav>
 
-
-    <script>
-
-        const getLocationButton =
-            document.getElementById("getLocationButton");
-
-        const locationStatus =
-            document.getElementById("locationStatus");
-
-        const coordinates =
-            document.getElementById("coordinates");
-
-        const latitudeText =
-            document.getElementById("latitude");
-
-        const longitudeText =
-            document.getElementById("longitude");
+</div>
 
 
-        getLocationButton.addEventListener(
-            "click",
-            function () {
+<script>
 
-                if (!navigator.geolocation) {
+    const statusText =
+        document.getElementById("status");
 
-                    locationStatus.textContent =
-                        "Location services are not supported by your browser.";
+    const latitudeText =
+        document.getElementById("latitude");
 
-                    return;
-                }
+    const longitudeText =
+        document.getElementById("longitude");
 
+    const refreshButton =
+        document.getElementById("refreshLocation");
 
-                locationStatus.textContent =
-                    "Detecting your location...";
-
-
-                navigator.geolocation.getCurrentPosition(
-
-                    function (position) {
-
-                        const latitude =
-                            position.coords.latitude;
-
-                        const longitude =
-                            position.coords.longitude;
+    const mapButton =
+        document.getElementById("mapButton");
 
 
-                        latitudeText.textContent =
-                            latitude.toFixed(6);
+    function getLocation() {
 
-                        longitudeText.textContent =
-                            longitude.toFixed(6);
-
-
-                        coordinates.style.display =
-                            "block";
+        statusText.textContent =
+            "Requesting your location...";
 
 
-                        locationStatus.textContent =
-                            "Your current location has been detected ✓";
+        if (!navigator.geolocation) {
+
+            statusText.textContent =
+                "Location is not supported by this browser.";
+
+            return;
+        }
 
 
-                        getLocationButton.textContent =
-                            "Location Detected ✓";
+        navigator.geolocation.getCurrentPosition(
+
+            function (position) {
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
 
 
-                        localStorage.setItem(
-                            "safeherLatitude",
-                            latitude
-                        );
+                latitudeText.textContent =
+                    latitude.toFixed(6);
 
-                        localStorage.setItem(
-                            "safeherLongitude",
-                            longitude
-                        );
+                longitudeText.textContent =
+                    longitude.toFixed(6);
 
-                    },
 
-                    function () {
+                statusText.textContent =
+                    "Location detected ✓";
 
-                        locationStatus.textContent =
-                            "Unable to detect your location.";
 
-                        alert(
-                            "Please allow location access in your browser and try again."
-                        );
+                mapButton.href =
+                    "https://www.google.com/maps?q=" +
+                    latitude +
+                    "," +
+                    longitude;
 
-                    },
 
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    }
-
+                sessionStorage.setItem(
+                    "safeherLatitude",
+                    latitude
                 );
 
+                sessionStorage.setItem(
+                    "safeherLongitude",
+                    longitude
+                );
+
+            },
+
+            function () {
+
+                statusText.textContent =
+                    "Unable to access your location.";
+
+                alert(
+                    "Please allow location access in your browser and try again."
+                );
+
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             }
+
         );
 
-    </script>
+    }
+
+
+    refreshButton.addEventListener(
+        "click",
+        getLocation
+    );
+
+
+    getLocation();
+
+</script>
 
 </body>
 
