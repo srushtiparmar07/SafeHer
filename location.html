@@ -624,6 +624,8 @@
 
 <script>
 
+    <script>
+
     const statusText =
         document.getElementById("status");
 
@@ -631,24 +633,28 @@
         document.getElementById("latitude");
 
     const longitudeText =
-    document.getElementById("longitude");
+        document.getElementById("longitude");
 
-const accuracyText =
-    document.getElementById("accuracy");
+    const accuracyText =
+        document.getElementById("accuracy");
 
-const lastUpdatedText =
-    document.getElementById("lastUpdated");
+    const lastUpdatedText =
+        document.getElementById("lastUpdated");
 
-const refreshButton =
-    document.getElementById("refreshLocation");
+    const refreshButton =
+        document.getElementById("refreshLocation");
+
     const mapButton =
         document.getElementById("mapButton");
 
 
-    function getLocation() {
+    let watchId = null;
+
+
+    function startLiveLocation() {
 
         statusText.textContent =
-            "Requesting your location...";
+            "Starting live location...";
 
 
         if (!navigator.geolocation) {
@@ -657,92 +663,109 @@ const refreshButton =
                 "Location is not supported by this browser.";
 
             return;
+
         }
 
 
-        navigator.geolocation.getCurrentPosition(
+        watchId =
+            navigator.geolocation.watchPosition(
 
-            function (position) {
+                function (position) {
 
-                const latitude =
-                    position.coords.latitude;
+                    const latitude =
+                        position.coords.latitude;
 
-                const longitude =
-                    position.coords.longitude;
+                    const longitude =
+                        position.coords.longitude;
 
-
-                latitudeText.textContent =
-                    latitude.toFixed(6);
-
-                longitudeText.textContent =
-    longitude.toFixed(6);
+                    const accuracy =
+                        position.coords.accuracy;
 
 
-const accuracy =
-    position.coords.accuracy;
+                    latitudeText.textContent =
+                        latitude.toFixed(6);
 
-accuracyText.textContent =
-    Math.round(accuracy) + " meters";
+                    longitudeText.textContent =
+                        longitude.toFixed(6);
 
-
-const now =
-    new Date();
-
-lastUpdatedText.textContent =
-    now.toLocaleTimeString();
+                    accuracyText.textContent =
+                        Math.round(accuracy) +
+                        " meters";
 
 
-statusText.textContent =
-    "Location detected ✓";
+                    const now =
+                        new Date();
 
-                mapButton.href =
-                    "https://www.google.com/maps?q=" +
-                    latitude +
-                    "," +
-                    longitude;
+                    lastUpdatedText.textContent =
+                        now.toLocaleTimeString();
 
 
-                sessionStorage.setItem(
-                    "safeherLatitude",
-                    latitude
-                );
+                    statusText.textContent =
+                        "🟢 Live location active";
 
-                sessionStorage.setItem(
-                    "safeherLongitude",
-                    longitude
-                );
 
-            },
+                    mapButton.href =
+                        "https://www.google.com/maps?q=" +
+                        latitude +
+                        "," +
+                        longitude;
 
-            function () {
 
-                statusText.textContent =
-                    "Unable to access your location.";
+                    sessionStorage.setItem(
+                        "safeherLatitude",
+                        latitude
+                    );
 
-                alert(
-                    "Please allow location access in your browser and try again."
-                );
+                    sessionStorage.setItem(
+                        "safeherLongitude",
+                        longitude
+                    );
 
-            },
+                },
 
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            }
 
-        );
+                function () {
+
+                    statusText.textContent =
+                        "Unable to access your location.";
+
+                    alert(
+                        "Please allow location access in your browser and try again."
+                    );
+
+                },
+
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+
+            );
+
+    }
+
+
+    function refreshLocation() {
+
+        statusText.textContent =
+            "Refreshing location...";
+
+        startLiveLocation();
 
     }
 
 
     refreshButton.addEventListener(
         "click",
-        getLocation
+        refreshLocation
     );
 
 
-    getLocation();
+    startLiveLocation();
+
+</script>
 
 </script>
 
