@@ -45,12 +45,11 @@ const contactInput =
 const recaptchaVerifier =
     new RecaptchaVerifier(
         auth,
-        "recaptcha-container",
+        "signInButton",
         {
-            size: "normal"
+            size: "invisible"
         }
     );
-
 
 /* =========================
    SEND OTP
