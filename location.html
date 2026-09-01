@@ -622,152 +622,113 @@
 </div>
 
 
-
-
-    <script>
+  <script>
 
     const statusText =
-        document.getElementById("status");
+    document.getElementById("status");
 
-    const latitudeText =
-        document.getElementById("latitude");
+const latitudeText =
+    document.getElementById("latitude");
 
-    const longitudeText =
-        document.getElementById("longitude");
+const longitudeText =
+    document.getElementById("longitude");
 
-    const accuracyText =
-        document.getElementById("accuracy");
+const accuracyText =
+    document.getElementById("accuracy");
 
-    const lastUpdatedText =
-        document.getElementById("lastUpdated");
+const lastUpdatedText =
+    document.getElementById("lastUpdated");
 
-    const refreshButton =
-        document.getElementById("refreshLocation");
+const refreshButton =
+    document.getElementById("refreshLocation");
 
-    const mapButton =
-        document.getElementById("mapButton");
-
-
-    let watchId = null;
+const mapButton =
+    document.getElementById("mapButton");
 
 
-    function startLiveLocation() {
+function getLocation() {
 
-        statusText.textContent =
-            "Starting live location...";
+    statusText.textContent =
+        "Getting your location...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        function (position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+            const accuracy =
+                position.coords.accuracy;
 
 
-        if (!navigator.geolocation) {
+            latitudeText.textContent =
+                latitude.toFixed(6);
+
+            longitudeText.textContent =
+                longitude.toFixed(6);
+
+            accuracyText.textContent =
+                Math.round(accuracy) + " meters";
+
+
+            lastUpdatedText.textContent =
+                new Date().toLocaleTimeString();
+
 
             statusText.textContent =
-                "Location is not supported by this browser.";
-
-            return;
-
-        }
+                "📍 Location found";
 
 
-        watchId =
-            navigator.geolocation.watchPosition(
-
-                function (position) {
-
-                    const latitude =
-                        position.coords.latitude;
-
-                    const longitude =
-                        position.coords.longitude;
-
-                    const accuracy =
-                        position.coords.accuracy;
+            mapButton.href =
+                "https://www.google.com/maps?q=" +
+                latitude + "," + longitude;
 
 
-                    latitudeText.textContent =
-                        latitude.toFixed(6);
-
-                    longitudeText.textContent =
-                        longitude.toFixed(6);
-
-                    accuracyText.textContent =
-                        Math.round(accuracy) +
-                        " meters";
-
-
-                    const now =
-                        new Date();
-
-                    lastUpdatedText.textContent =
-                        now.toLocaleTimeString();
-
-
-                    statusText.textContent =
-                        "🟢 Live location active";
-
-
-                    mapButton.href =
-                        "https://www.google.com/maps?q=" +
-                        latitude +
-                        "," +
-                        longitude;
-
-
-                    sessionStorage.setItem(
-                        "safeherLatitude",
-                        latitude
-                    );
-
-                    sessionStorage.setItem(
-                        "safeherLongitude",
-                        longitude
-                    );
-
-                },
-
-
-                function () {
-
-                    statusText.textContent =
-                        "Unable to access your location.";
-
-                    alert(
-                        "Please allow location access in your browser and try again."
-                    );
-
-                },
-
-
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
-
+            sessionStorage.setItem(
+                "safeherLatitude",
+                latitude
             );
 
-    }
+            sessionStorage.setItem(
+                "safeherLongitude",
+                longitude
+            );
 
+        },
 
-    function refreshLocation() {
+        function () {
 
-        statusText.textContent =
-            "Refreshing location...";
+            statusText.textContent =
+                "Unable to access your location.";
 
-        startLiveLocation();
+            alert(
+                "Please allow location access in your browser and try again."
+            );
 
-    }
+        },
 
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
 
-    refreshButton.addEventListener(
-        "click",
-        refreshLocation
     );
+}
 
 
-    startLiveLocation();
+refreshButton.addEventListener(
+    "click",
+    getLocation
+);
 
-</script>
 
-</script>
+getLocation();
+      </script>
 
 </body>
 
