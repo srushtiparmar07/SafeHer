@@ -152,49 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
 const locationButton =
     document.getElementById("locationButton");
 
-navigator.geolocation.getCurrentPosition(
+const locationButton =
+    document.getElementById("locationButton");
 
-    function (position) {
-
-        const latitude =
-            position.coords.latitude;
-
-        const longitude =
-            position.coords.longitude;
-
-        sessionStorage.setItem(
-            "safeherLatitude",
-            latitude
-        );
-
-        sessionStorage.setItem(
-            "safeherLongitude",
-            longitude
-        );
-
-        locationButton.disabled = false;
-
-        alert(
-            "Location found!\n\nLatitude: " +
-            latitude.toFixed(5) +
-            "\nLongitude: " +
-            longitude.toFixed(5)
-        );
-
-    },
-
-    function () {
-
-        locationButton.disabled = false;
-
-        alert(
-            "Unable to access your location. Please allow location permission."
-        );
-
-    }
-
-);
-
+locationButton.addEventListener("click", function () {
+    window.location.href = "location.html";
+});
     /* =========================
        SAFER ROUTES
     ========================= */
