@@ -144,16 +144,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================
-       LIVE LOCATION
-    ========================= */
+   
+/* =========================
+   LIVE LOCATION
+========================= */
 
 const locationButton =
     document.getElementById("locationButton");
 
-locationButton.addEventListener("click", function () {
-    window.location.href = "location.html";
-});
+if (locationButton) {
+
+    locationButton.addEventListener(
+        "click",
+        function () {
+
+            window.location.href =
+                "location.html";
+
+        }
+    );
+
+}
     /* =========================
        SAFER ROUTES
     ========================= */
