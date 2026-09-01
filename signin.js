@@ -5,25 +5,28 @@ signinForm.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
-    const contact = contactInput.value.trim();
+    const phone = contactInput.value.trim();
 
-    if (contact === "") {
+    const phonePattern =
+        /^\+?[0-9\s-]{10,15}$/;
 
-        alert("Please enter your email address or phone number.");
+    if (!phonePattern.test(phone)) {
+
+        alert("Please enter a valid phone number.");
+
         return;
-
     }
 
     sessionStorage.setItem(
         "safeherContact",
-        contact
+        phone
     );
 
     sessionStorage.setItem(
-        "safeherLoggedIn",
-        "true"
+        "safeherLoginType",
+        "phone"
     );
 
-    window.location.href = "dashboard.html";
+    window.location.href = "otp.html";
 
 });
