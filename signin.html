@@ -87,22 +87,20 @@
                         required
                     >
 
-                    <button type="submit" class="continue-btn">
-
+                    <button
+                        type="submit"
+                        class="continue-btn"
+                    >
                         Continue
-
                         <span>→</span>
-
                     </button>
 
                 </form>
 
 
                 <p class="terms">
-
                     By continuing, you agree to SafeHer's
                     Terms of Service and Privacy Policy.
-
                 </p>
 
 
@@ -124,7 +122,15 @@
     </div>
 
 
-    <script src="signin.js"></script>
+    <!-- Firebase reCAPTCHA -->
+    <div id="recaptcha-container"></div>
+
+
+    <!-- Firebase Sign In -->
+    <script
+        type="module"
+        src="signin.js">
+    </script>
 
 </body>
 
