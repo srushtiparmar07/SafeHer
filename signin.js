@@ -14,7 +14,7 @@ import {
 ========================= */
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
+    apiKey: "AIzaSyAsoy6pxPRQ-AC5eYurx6bopmoOcLIzaWE",
     authDomain: "safeher-96bdb.firebaseapp.com",
     projectId: "safeher-96bdb",
     storageBucket: "safeher-96bdb.firebasestorage.app",
