@@ -3,16 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Live Location - SafeHer</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
 
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -20,12 +24,16 @@
             color: #202124;
         }
 
+
         .page {
             min-height: 100vh;
             padding-bottom: 90px;
         }
 
-        /* HEADER */
+
+        /* =========================
+           HEADER
+        ========================= */
 
         .header {
             height: 76px;
@@ -38,6 +46,7 @@
             padding: 0 7%;
         }
 
+
         .back {
             text-decoration: none;
             color: #777;
@@ -45,15 +54,18 @@
             margin-right: 35px;
         }
 
+
         .back:hover {
             color: #d6295d;
         }
+
 
         .brand {
             display: flex;
             align-items: center;
             gap: 11px;
         }
+
 
         .logo {
             width: 44px;
@@ -74,13 +86,16 @@
             );
         }
 
+
         .brand h1 {
             font-size: 21px;
         }
 
+
         .brand h1 span {
             color: #d6295d;
         }
+
 
         .brand p {
             color: #999;
@@ -89,13 +104,16 @@
         }
 
 
-        /* MAIN */
+        /* =========================
+           MAIN
+        ========================= */
 
         .container {
             max-width: 850px;
             margin: auto;
             padding: 50px 25px;
         }
+
 
         .label {
             color: #d6295d;
@@ -105,10 +123,12 @@
             margin-bottom: 10px;
         }
 
+
         h2 {
             font-size: 38px;
             margin-bottom: 12px;
         }
+
 
         .intro {
             color: #777;
@@ -118,7 +138,9 @@
         }
 
 
-        /* LOCATION CARD */
+        /* =========================
+           LOCATION CARD
+        ========================= */
 
         .location-card {
             background: white;
@@ -134,12 +156,16 @@
                 rgba(30, 20, 40, 0.06);
         }
 
+
         .location-top {
             display: flex;
             align-items: center;
+
             gap: 15px;
+
             margin-bottom: 25px;
         }
+
 
         .location-icon {
             width: 58px;
@@ -156,10 +182,12 @@
             background: #fff0f3;
         }
 
+
         .location-top h3 {
             font-size: 19px;
             margin-bottom: 5px;
         }
+
 
         .status {
             color: #777;
@@ -167,16 +195,20 @@
         }
 
 
-        /* COORDINATES */
+        /* =========================
+           COORDINATES
+        ========================= */
 
         .coordinates {
             display: grid;
+
             grid-template-columns: 1fr 1fr;
 
             gap: 12px;
 
             margin-bottom: 20px;
         }
+
 
         .coordinate-box {
             background: #f7f7fa;
@@ -185,6 +217,7 @@
 
             padding: 16px;
         }
+
 
         .coordinate-box span {
             display: block;
@@ -200,6 +233,7 @@
             letter-spacing: 0.8px;
         }
 
+
         .coordinate-box strong {
             font-size: 14px;
 
@@ -207,7 +241,9 @@
         }
 
 
-        /* BUTTONS */
+        /* =========================
+           BUTTONS
+        ========================= */
 
         .buttons {
             display: grid;
@@ -217,8 +253,10 @@
             gap: 12px;
         }
 
+
         button,
         .map-button {
+
             border: none;
 
             padding: 14px;
@@ -236,6 +274,7 @@
             text-decoration: none;
         }
 
+
         .primary {
             color: white;
 
@@ -246,11 +285,13 @@
             );
         }
 
+
         .secondary {
             background: #f3edff;
 
             color: #7040d9;
         }
+
 
         button:hover,
         .map-button:hover {
@@ -258,7 +299,9 @@
         }
 
 
-        /* SAFETY NOTE */
+        /* =========================
+           SAFETY NOTE
+        ========================= */
 
         .safety-card {
             margin-top: 20px;
@@ -278,14 +321,18 @@
             align-items: flex-start;
         }
 
+
         .safety-icon {
             font-size: 22px;
         }
 
+
         .safety-card h3 {
             font-size: 14px;
+
             margin-bottom: 6px;
         }
+
 
         .safety-card p {
             color: #777;
@@ -296,7 +343,9 @@
         }
 
 
-        /* BOTTOM NAV */
+        /* =========================
+           BOTTOM NAVIGATION
+        ========================= */
 
         .bottom-nav {
             position: fixed;
@@ -311,7 +360,12 @@
 
             height: 72px;
 
-            background: rgba(255,255,255,0.97);
+            background: rgba(
+                255,
+                255,
+                255,
+                0.97
+            );
 
             border-top: 1px solid #eeeeee;
 
@@ -323,6 +377,7 @@
 
             z-index: 100;
         }
+
 
         .nav-item {
             text-decoration: none;
@@ -338,79 +393,104 @@
             gap: 4px;
         }
 
+
         .nav-item span {
             font-size: 20px;
         }
 
+
         .nav-item small {
             font-size: 10px;
+
             font-weight: 600;
         }
+
 
         .nav-item.active {
             color: #d6295d;
         }
 
 
-        /* MOBILE */
+        /* =========================
+           MOBILE
+        ========================= */
 
         @media (max-width: 650px) {
 
             .header {
                 height: 68px;
+
                 padding: 0 20px;
             }
+
 
             .back {
                 margin-right: 18px;
             }
 
+
             .container {
                 padding: 35px 20px 100px;
             }
+
 
             h2 {
                 font-size: 31px;
             }
 
+
             .location-card {
                 padding: 22px;
             }
+
 
             .coordinates {
                 grid-template-columns: 1fr;
             }
 
+
             .buttons {
                 grid-template-columns: 1fr;
             }
 
+
             .bottom-nav {
                 height: 68px;
             }
+
         }
+
     </style>
+
 </head>
 
 
 <body>
 
+
 <div class="page">
 
 
-    <!-- HEADER -->
+    <!-- =========================
+         HEADER
+    ========================= -->
 
     <header class="header">
 
-        <a href="dashboard.html" class="back">
+        <a href="dashboard.html"
+           class="back">
+
             ← Dashboard
+
         </a>
+
 
         <div class="brand">
 
             <div class="logo">
                 📍
             </div>
+
 
             <div>
 
@@ -429,33 +509,46 @@
     </header>
 
 
-    <!-- MAIN -->
+    <!-- =========================
+         MAIN
+    ========================= -->
 
     <main class="container">
+
 
         <p class="label">
             LOCATION SAFETY
         </p>
 
+
         <h2>
-            Your live location
+            Your location
         </h2>
 
+
         <p class="intro">
-            Detect your current location and quickly open
-            or share it when you need help.
+
+            Detect your current location and
+            quickly open it in Google Maps
+            when you need help.
+
         </p>
 
 
-        <!-- LOCATION CARD -->
+        <!-- =========================
+             LOCATION CARD
+        ========================= -->
 
         <section class="location-card">
 
+
             <div class="location-top">
+
 
                 <div class="location-icon">
                     📍
                 </div>
+
 
                 <div>
 
@@ -463,82 +556,99 @@
                         Current location
                     </h3>
 
+
                     <p
                         class="status"
                         id="status"
                     >
-                        Detecting your location...
+                        Click Refresh Location
                     </p>
 
                 </div>
 
+
             </div>
 
 
+            <!-- COORDINATES -->
+
             <div class="coordinates">
 
-    <div class="coordinate-box">
 
-        <span>
-            Latitude
-        </span>
+                <div class="coordinate-box">
 
-        <strong id="latitude">
-            --
-        </strong>
-
-    </div>
+                    <span>
+                        Latitude
+                    </span>
 
 
-    <div class="coordinate-box">
+                    <strong id="latitude">
+                        --
+                    </strong>
 
-        <span>
-            Longitude
-        </span>
-
-        <strong id="longitude">
-            --
-        </strong>
-
-    </div>
+                </div>
 
 
-    <div class="coordinate-box">
+                <div class="coordinate-box">
 
-        <span>
-            Accuracy
-        </span>
-
-        <strong id="accuracy">
-            --
-        </strong>
-
-    </div>
+                    <span>
+                        Longitude
+                    </span>
 
 
-    <div class="coordinate-box">
+                    <strong id="longitude">
+                        --
+                    </strong>
 
-        <span>
-            Last Updated
-        </span>
+                </div>
 
-        <strong id="lastUpdated">
-            --
-        </strong>
 
-    </div>
+                <div class="coordinate-box">
 
-</div>
+                    <span>
+                        Accuracy
+                    </span>
 
+
+                    <strong id="accuracy">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="coordinate-box">
+
+                    <span>
+                        Last Updated
+                    </span>
+
+
+                    <strong id="lastUpdated">
+                        --
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTONS -->
 
             <div class="buttons">
+
 
                 <button
                     class="primary"
                     id="refreshLocation"
+                    type="button"
                 >
-                    📍 Refresh Location
+
+                    📍 Get My Location
+
                 </button>
+
 
                 <a
                     class="map-button secondary"
@@ -546,21 +656,29 @@
                     href="#"
                     target="_blank"
                 >
+
                     🗺️ Open in Maps
+
                 </a>
 
+
             </div>
+
 
         </section>
 
 
-        <!-- SAFETY -->
+        <!-- =========================
+             SAFETY NOTE
+        ========================= -->
 
         <section class="safety-card">
+
 
             <div class="safety-icon">
                 🛡️
             </div>
+
 
             <div>
 
@@ -568,167 +686,255 @@
                     Your location stays under your control
                 </h3>
 
+
                 <p>
-                    SafeHer requests your location only when
-                    you use this feature. Your browser controls
-                    whether location access is allowed.
+
+                    SafeHer requests your location
+                    only when you use this feature.
+                    Your browser controls whether
+                    location access is allowed.
+
                 </p>
 
             </div>
 
+
         </section>
+
 
     </main>
 
 
-    <!-- BOTTOM NAV -->
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================= -->
 
     <nav class="bottom-nav">
+
 
         <a
             href="dashboard.html"
             class="nav-item active"
         >
-            <span>⌂</span>
-            <small>Home</small>
+
+            <span>
+                ⌂
+            </span>
+
+            <small>
+                Home
+            </small>
+
         </a>
+
 
         <a
             href="routes.html"
             class="nav-item"
         >
-            <span>🛣️</span>
-            <small>Routes</small>
+
+            <span>
+                🛣️
+            </span>
+
+            <small>
+                Routes
+            </small>
+
         </a>
+
 
         <a
             href="nearby.html"
             class="nav-item"
         >
-            <span>📍</span>
-            <small>Nearby</small>
+
+            <span>
+                📍
+            </span>
+
+            <small>
+                Nearby
+            </small>
+
         </a>
+
 
         <a
             href="contacts.html"
             class="nav-item"
         >
-            <span>👥</span>
-            <small>Contacts</small>
+
+            <span>
+                👥
+            </span>
+
+            <small>
+                Contacts
+            </small>
+
         </a>
 
+
     </nav>
+
 
 </div>
 
 
-  <script>
+<!-- =========================
+     LOCATION JAVASCRIPT
+========================= -->
+
+<script>
 
     const statusText =
-    document.getElementById("status");
+        document.getElementById("status");
 
-const latitudeText =
-    document.getElementById("latitude");
+    const latitudeText =
+        document.getElementById("latitude");
 
-const longitudeText =
-    document.getElementById("longitude");
+    const longitudeText =
+        document.getElementById("longitude");
 
-const accuracyText =
-    document.getElementById("accuracy");
+    const accuracyText =
+        document.getElementById("accuracy");
 
-const lastUpdatedText =
-    document.getElementById("lastUpdated");
+    const lastUpdatedText =
+        document.getElementById("lastUpdated");
 
-const refreshButton =
-    document.getElementById("refreshLocation");
+    const refreshButton =
+        document.getElementById("refreshLocation");
 
-const mapButton =
-    document.getElementById("mapButton");
-
-
-function getLocation() {
-
-    statusText.textContent =
-        "Getting your location...";
-
-    navigator.geolocation.getCurrentPosition(
-
-        function (position) {
-
-            const latitude =
-                position.coords.latitude;
-
-            const longitude =
-                position.coords.longitude;
-
-            const accuracy =
-                position.coords.accuracy;
+    const mapButton =
+        document.getElementById("mapButton");
 
 
-            latitudeText.textContent =
-                latitude.toFixed(6);
+    function getLocation() {
 
-            longitudeText.textContent =
-                longitude.toFixed(6);
-
-            accuracyText.textContent =
-                Math.round(accuracy) + " meters";
+        statusText.textContent =
+            "Getting your location...";
 
 
-            lastUpdatedText.textContent =
-                new Date().toLocaleTimeString();
-
+        if (!navigator.geolocation) {
 
             statusText.textContent =
-                "📍 Location found";
+                "Location is not supported by this browser.";
 
+            return;
 
-            mapButton.href =
-                "https://www.google.com/maps?q=" +
-                latitude + "," + longitude;
-
-
-            sessionStorage.setItem(
-                "safeherLatitude",
-                latitude
-            );
-
-            sessionStorage.setItem(
-                "safeherLongitude",
-                longitude
-            );
-
-        },
-
-        function () {
-
-            statusText.textContent =
-                "Unable to access your location.";
-
-            alert(
-                "Please allow location access in your browser and try again."
-            );
-
-        },
-
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
         }
 
+
+        navigator.geolocation.getCurrentPosition(
+
+            function (position) {
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
+
+                const accuracy =
+                    position.coords.accuracy;
+
+
+                latitudeText.textContent =
+                    latitude.toFixed(6);
+
+
+                longitudeText.textContent =
+                    longitude.toFixed(6);
+
+
+                accuracyText.textContent =
+                    Math.round(accuracy) +
+                    " meters";
+
+
+                lastUpdatedText.textContent =
+                    new Date().toLocaleTimeString();
+
+
+                statusText.textContent =
+                    "📍 Location ready";
+
+
+                mapButton.href =
+                    "https://www.google.com/maps?q=" +
+                    latitude +
+                    "," +
+                    longitude;
+
+
+                sessionStorage.setItem(
+                    "safeherLatitude",
+                    latitude
+                );
+
+
+                sessionStorage.setItem(
+                    "safeherLongitude",
+                    longitude
+                );
+
+            },
+
+
+            function (error) {
+
+                statusText.textContent =
+                    "Unable to access your location.";
+
+
+                console.log(
+                    "Location error:",
+                    error
+                );
+
+            },
+
+
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+
+        );
+
+    }
+
+
+    refreshButton.addEventListener(
+        "click",
+        getLocation
     );
-}
 
 
-refreshButton.addEventListener(
-    "click",
-    getLocation
-);
+    mapButton.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                mapButton.getAttribute("href") === "#"
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "Please get your location first."
+                );
+
+            }
+
+        }
+    );
 
 
-getLocation();
-      </script>
+</script>
+
 
 </body>
 
