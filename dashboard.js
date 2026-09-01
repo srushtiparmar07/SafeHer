@@ -148,10 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
        LIVE LOCATION
     ========================= */
 
-    
-const locationButton =
-    document.getElementById("locationButton");
-
 const locationButton =
     document.getElementById("locationButton");
 
