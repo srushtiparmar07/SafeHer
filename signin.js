@@ -1,12 +1,12 @@
 import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
     getAuth,
     RecaptchaVerifier,
     signInWithPhoneNumber
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
 /* =========================
@@ -14,7 +14,7 @@ import {
 ========================= */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAsoy6pxPRQ-AC5eYurx6bopmoOcLIzaWE",
+    apiKey: "YOUR_API_KEY",
     authDomain: "safeher-96bdb.firebaseapp.com",
     projectId: "safeher-96bdb",
     storageBucket: "safeher-96bdb.firebasestorage.app",
@@ -28,7 +28,7 @@ const auth = getAuth(app);
 
 
 /* =========================
-   SIGN IN FORM
+   ELEMENTS
 ========================= */
 
 const signinForm =
@@ -37,9 +37,12 @@ const signinForm =
 const contactInput =
     document.getElementById("contact");
 
+const signInButton =
+    document.getElementById("signInButton");
+
 
 /* =========================
-   RECAPTCHA
+   INVISIBLE RECAPTCHA
 ========================= */
 
 const recaptchaVerifier =
@@ -47,175 +50,164 @@ const recaptchaVerifier =
         auth,
         "signInButton",
         {
-            size: "invisible"
+            size: "invisible",
+
+            callback: function () {
+                sendOTP();
+            },
+
+            "expired-callback": function () {
+                console.log(
+                    "reCAPTCHA expired. Please try again."
+                );
+            }
         }
     );
+
+
+/* =========================
+   FORM SUBMIT
+========================= */
+
+signinForm.addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+        sendOTP();
+
+    }
+);
+
 
 /* =========================
    SEND OTP
 ========================= */
 
-signinForm.addEventListener(
-    "submit",
-    async function (event) {
+async function sendOTP() {
 
-        event.preventDefault();
-
-
-        let phone =
-            contactInput.value.trim();
+    let phone =
+        contactInput.value.trim();
 
 
-        /* Convert spaces and hyphens */
+    phone =
+        phone.replace(
+            /[\s-]/g,
+            ""
+        );
+
+
+    /* Add India country code
+       if 10-digit number is entered */
+
+    if (
+        /^[0-9]{10}$/.test(phone)
+    ) {
 
         phone =
-            phone.replace(/[\s-]/g, "");
+            "+91" + phone;
+
+    }
 
 
-        /* India number helper */
+    if (
+        !/^\+[1-9]\d{7,14}$/.test(phone)
+    ) {
 
-        if (
-            /^[0-9]{10}$/.test(phone)
-        ) {
+        alert(
+            "Please enter a valid phone number with country code."
+        );
 
-            phone =
-                "+91" + phone;
+        return;
 
-        }
+    }
 
 
-        /* Validate E.164-style number */
+    signInButton.disabled = true;
 
-        if (
-            !/^\+[1-9]\d{7,14}$/.test(phone)
-        ) {
+    signInButton.innerHTML =
+        "Sending OTP...";
 
-            alert(
-                "Please enter a valid phone number with country code."
+
+    try {
+
+        const confirmationResult =
+            await signInWithPhoneNumber(
+                auth,
+                phone,
+                recaptchaVerifier
             );
 
-            return;
 
-        }
+        /*
+           Save phone number.
+        */
+
+        sessionStorage.setItem(
+            "safeherContact",
+            phone
+        );
 
 
-        const continueButton =
-            signinForm.querySelector(
-                ".continue-btn"
-            );
+        /*
+           Save verification ID.
+        */
+
+        sessionStorage.setItem(
+            "safeherVerificationId",
+            confirmationResult.verificationId
+        );
 
 
-        continueButton.disabled = true;
+        /*
+           Go to OTP page.
+        */
 
-        continueButton.textContent =
-            "Sending OTP...";
+        window.location.href =
+            "otp.html";
 
+
+    } catch (error) {
+
+        console.error(
+            "Firebase Phone Auth Error:",
+            error
+        );
+
+
+        alert(
+            "Unable to send OTP.\n\n" +
+            error.code +
+            "\n\n" +
+            error.message
+        );
+
+
+        signInButton.disabled =
+            false;
+
+        signInButton.innerHTML =
+            "Continue <span>→</span>";
+
+
+        /*
+           Reset reCAPTCHA so another attempt
+           can be made.
+        */
 
         try {
 
-            const confirmationResult =
-                await signInWithPhoneNumber(
-                    auth,
-                    phone,
-                    recaptchaVerifier
-                );
+            recaptchaVerifier.clear();
 
+        } catch (resetError) {
 
-            /*
-               Save Firebase confirmation result
-               temporarily for otp.js
-            */
-
-            sessionStorage.setItem(
-                "safeherContact",
-                phone
+            console.log(
+                resetError
             );
-
-
-            sessionStorage.setItem(
-                "safeherLoginType",
-                "phone"
-            );
-
-
-            /*
-               confirmationResult cannot be stored
-               directly in sessionStorage.
-
-               Store its verification ID instead.
-            */
-
-            sessionStorage.setItem(
-                "safeherVerificationId",
-                confirmationResult.verificationId
-            );
-
-
-            /*
-               Store the Firebase confirmation
-               object in memory for the next page.
-            */
-
-            window.safeherConfirmationResult =
-                confirmationResult;
-
-
-            /*
-               Move to OTP page.
-            */
-
-            window.location.href =
-                "otp.html";
-
-
-        } catch (error) {
-
-            console.error(
-                "Firebase OTP error:",
-                error
-            );
-
-
-            alert(
-                "Unable to send OTP.\n\n" +
-                error.message
-            );
-
-
-            continueButton.disabled = false;
-
-            continueButton.innerHTML =
-                "Continue <span>→</span>";
-
-
-            /*
-               Reset reCAPTCHA after an error.
-            */
-
-            try {
-
-                const widgetId =
-                    await recaptchaVerifier.render();
-
-                if (
-                    window.grecaptcha
-                ) {
-
-                    window.grecaptcha.reset(
-                        widgetId
-                    );
-
-                }
-
-            } catch (recaptchaError) {
-
-                console.log(
-                    recaptchaError
-                );
-
-            }
 
         }
 
     }
-);
+
+}
