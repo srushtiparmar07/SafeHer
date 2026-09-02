@@ -8,6 +8,14 @@ import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
 
 /* =========================
    FIREBASE CONFIG
@@ -22,8 +30,12 @@ const firebaseConfig = {
     appId: "1:777297641744:web:91eeb505836708ccad2595"
 };
 
+
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
+const db = getFirestore(app);
 
 
 /* =========================
@@ -54,8 +66,12 @@ const contact =
     sessionStorage.getItem("safeherContact");
 
 if (contact) {
-    contactDisplay.textContent = contact;
+
+    contactDisplay.textContent =
+        contact;
+
 } else {
+
     contactDisplay.textContent =
         "your registered phone number";
 }
@@ -76,7 +92,9 @@ otpInputs.forEach(function (input, index) {
             this.value.length === 1 &&
             index < otpInputs.length - 1
         ) {
+
             otpInputs[index + 1].focus();
+
         }
 
     });
@@ -89,7 +107,9 @@ otpInputs.forEach(function (input, index) {
             this.value === "" &&
             index > 0
         ) {
+
             otpInputs[index - 1].focus();
+
         }
 
     });
@@ -110,7 +130,9 @@ otpForm.addEventListener(
         let otp = "";
 
         otpInputs.forEach(function (input) {
+
             otp += input.value;
+
         });
 
 
@@ -146,6 +168,7 @@ otpForm.addEventListener(
         const verifyButton =
             otpForm.querySelector(".verify-btn");
 
+
         verifyButton.disabled = true;
 
         verifyButton.textContent =
@@ -154,6 +177,10 @@ otpForm.addEventListener(
 
         try {
 
+            /* =========================
+               CREATE FIREBASE CREDENTIAL
+            ========================= */
+
             const credential =
                 PhoneAuthProvider.credential(
                     verificationId,
@@ -161,13 +188,84 @@ otpForm.addEventListener(
                 );
 
 
-            await signInWithCredential(
-                auth,
-                credential
+            /* =========================
+               SIGN IN WITH FIREBASE
+            ========================= */
+
+            const userCredential =
+                await signInWithCredential(
+                    auth,
+                    credential
+                );
+
+
+            const user =
+                userCredential.user;
+
+
+            console.log(
+                "Firebase user signed in:",
+                user.uid
             );
 
 
-            /* Login successful */
+            /* =========================
+               FIRESTORE USER DOCUMENT
+            ========================= */
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
+
+
+            const userSnapshot =
+                await getDoc(userRef);
+
+
+            if (!userSnapshot.exists()) {
+
+                /* First time user */
+
+                await setDoc(
+                    userRef,
+                    {
+                        phone: user.phoneNumber || contact,
+                        createdAt: serverTimestamp(),
+                        lastLogin: serverTimestamp()
+                    }
+                );
+
+                console.log(
+                    "New SafeHer user created in Firestore."
+                );
+
+            } else {
+
+                /* Existing user */
+
+                await setDoc(
+                    userRef,
+                    {
+                        phone: user.phoneNumber || contact,
+                        lastLogin: serverTimestamp()
+                    },
+                    {
+                        merge: true
+                    }
+                );
+
+                console.log(
+                    "Existing SafeHer user updated."
+                );
+            }
+
+
+            /* =========================
+               LOGIN SUCCESS
+            ========================= */
 
             sessionStorage.setItem(
                 "safeherLoggedIn",
@@ -222,6 +320,7 @@ const countdown =
 
         timeLeft--;
 
+
         timerDisplay.textContent =
             "Resend available in " +
             timeLeft +
@@ -232,8 +331,10 @@ const countdown =
 
             clearInterval(countdown);
 
+
             timerDisplay.textContent =
                 "You can now request a new OTP.";
+
 
             resendBtn.disabled = false;
 
@@ -253,6 +354,7 @@ resendBtn.addEventListener(
         alert(
             "Please go back to Sign In and request a new OTP."
         );
+
 
         window.location.href =
             "signin.html";
