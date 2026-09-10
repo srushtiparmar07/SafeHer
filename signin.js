@@ -1,8 +1,8 @@
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+/* =========================
+   SUPABASE CONFIGURATION
+========================= */
 
 const SUPABASE_URL = 'https://bswgjfguytayxffuorwy.supabase.co';
 const SUPABASE_KEY = 'sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx';
@@ -13,183 +13,67 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
    ELEMENTS
 ========================= */
 
-const signinForm =
-    document.getElementById("signinForm");
-
-const contactInput =
-    document.getElementById("contact");
-
-const signInButton =
-    document.getElementById("signInButton");
-
-
-/* =========================
-   INVISIBLE RECAPTCHA
-========================= */
-
-const recaptchaVerifier =
-    new RecaptchaVerifier(
-        auth,
-        "signInButton",
-        {
-            size: "invisible",
-
-            callback: function () {
-                sendOTP();
-            },
-
-            "expired-callback": function () {
-                console.log(
-                    "reCAPTCHA expired. Please try again."
-                );
-            }
-        }
-    );
-
+const signinForm = document.getElementById("signinForm");
+const contactInput = document.getElementById("contact");
+const signInButton = document.getElementById("signInButton");
 
 /* =========================
    FORM SUBMIT
 ========================= */
 
-signinForm.addEventListener(
-    "submit",
-    function (event) {
-
+if (signinForm) {
+    signinForm.addEventListener("submit", function (event) {
         event.preventDefault();
-
         sendOTP();
-
-    }
-);
-
+    });
+}
 
 /* =========================
-   SEND OTP
+   SEND OTP VIA SUPABASE
 ========================= */
 
 async function sendOTP() {
+    let phone = contactInput.value.trim();
 
-    let phone =
-        contactInput.value.trim();
+    // Clean space and hyphen formatting
+    phone = phone.replace(/[\s-]/g, "");
 
-
-    phone =
-        phone.replace(
-            /[\s-]/g,
-            ""
-        );
-
-
-    /* Add India country code
-       if 10-digit number is entered */
-
-    if (
-        /^[0-9]{10}$/.test(phone)
-    ) {
-
-        phone =
-            "+91" + phone;
-
+    /* Add India country code (+91) if 10-digit number is entered */
+    if (/^[0-9]{10}$/.test(phone)) {
+        phone = "+91" + phone;
     }
 
-
-    if (
-        !/^\+[1-9]\d{7,14}$/.test(phone)
-    ) {
-
-        alert(
-            "Please enter a valid phone number with country code."
-        );
-
+    /* Validate international E.164 phone format */
+    if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+        alert("Please enter a valid phone number with country code.");
         return;
-
     }
 
-
+    // Update UI state
     signInButton.disabled = true;
-
-    signInButton.innerHTML =
-        "Sending OTP...";
-
+    signInButton.innerHTML = "Sending OTP...";
 
     try {
+        /* Request Phone OTP from Supabase Auth */
+        const { data, error } = await supabase.auth.signInWithOtp({
+            phone: phone
+        });
 
-        const confirmationResult =
-            await signInWithPhoneNumber(
-                auth,
-                phone,
-                recaptchaVerifier
-            );
+        if (error) throw error;
 
+        /* Save phone number to session storage for the OTP page */
+        sessionStorage.setItem("safeherContact", phone);
 
-        /*
-           Save phone number.
-        */
-
-        sessionStorage.setItem(
-            "safeherContact",
-            phone
-        );
-
-
-        /*
-           Save verification ID.
-        */
-
-        sessionStorage.setItem(
-            "safeherVerificationId",
-            confirmationResult.verificationId
-        );
-
-
-        /*
-           Go to OTP page.
-        */
-
-        window.location.href =
-            "otp.html";
-
+        /* Redirect to OTP verification page */
+        window.location.href = "otp.html";
 
     } catch (error) {
+        console.error("Supabase Phone Auth Error:", error);
 
-        console.error(
-            "Firebase Phone Auth Error:",
-            error
-        );
+        alert("Unable to send OTP.\n\n" + (error.message || "Unknown error occurred."));
 
-
-        alert(
-            "Unable to send OTP.\n\n" +
-            error.code +
-            "\n\n" +
-            error.message
-        );
-
-
-        signInButton.disabled =
-            false;
-
-        signInButton.innerHTML =
-            "Continue <span>→</span>";
-
-
-        /*
-           Reset reCAPTCHA so another attempt
-           can be made.
-        */
-
-        try {
-
-            recaptchaVerifier.clear();
-
-        } catch (resetError) {
-
-            console.log(
-                resetError
-            );
-
-        }
-
+        // Reset UI state on error
+        signInButton.disabled = false;
+        signInButton.innerHTML = "Continue <span>→</span>";
     }
-
 }
