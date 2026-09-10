@@ -9,36 +9,42 @@
 body {
   background-color: #f4f6f9;
   color: #333;
-  line-height: 1.6;
+  min-height: 100vh;
 }
 
-/* Layout Container */
+/* Layout Containers */
+.container {
+  width: 100%;
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
 .dashboard-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Navigation Bar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 15px 30px;
+.auth-box {
+  background: #ffffff;
+  padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
+  width: 100%;
 }
 
+/* Logo & Headers */
 .logo {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  margin-bottom: 25px;
 }
 
 .logo h1 {
-  font-size: 24px;
+  font-size: 26px;
   color: #1a202c;
 }
 
@@ -46,63 +52,60 @@ body {
   color: #6b21a8;
 }
 
-/* Welcome Banner */
-.welcome-banner {
-  margin-bottom: 30px;
-}
-
-.welcome-banner h2 {
-  font-size: 28px;
-  color: #1a202c;
+.subtitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #718096;
+  letter-spacing: 0.5px;
+  display: block;
   margin-bottom: 5px;
 }
 
-.welcome-banner p {
-  color: #718096;
+h2 {
+  font-size: 22px;
+  color: #1a202c;
+  margin-bottom: 15px;
 }
 
-/* Card Grid Layout */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-/* Card Styling */
-.card {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+/* Form Elements & OTP Grid */
+.otp-container {
   display: flex;
-  flex-direction: column;
+  gap: 10px;
   justify-content: space-between;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 25px;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.card h3 {
+.otp-input {
+  width: 45px;
+  height: 50px;
+  text-align: center;
   font-size: 20px;
-  margin-bottom: 10px;
-  color: #2d3748;
+  font-weight: 600;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-.card p {
-  color: #718096;
-  font-size: 14px;
+.otp-input:focus {
+  border-color: #6b21a8;
+}
+
+input[type="email"], input[type="text"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
   margin-bottom: 20px;
 }
 
-/* SOS Card Specific Styling */
-.sos-card {
-  border-left: 5px solid #e53e3e;
+input[type="email"]:focus, input[type="text"]:focus {
+  border-color: #6b21a8;
 }
 
-/* Button Styles */
+/* Buttons */
 .btn-primary {
   background-color: #6b21a8;
   color: #ffffff;
@@ -120,6 +123,79 @@ body {
   background-color: #581c87;
 }
 
+.btn-link {
+  background: none;
+  border: none;
+  color: #6b21a8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resend-section {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #718096;
+}
+
+/* Dashboard Specific Layout */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 15px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.welcome-banner {
+  margin-bottom: 30px;
+}
+
+.welcome-banner h2 {
+  font-size: 28px;
+  color: #1a202c;
+  margin-bottom: 5px;
+}
+
+.welcome-banner p {
+  color: #718096;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #2d3748;
+}
+
+.card p {
+  color: #718096;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.sos-card {
+  border-left: 5px solid #e53e3e;
+}
+
 .btn-danger {
   background-color: #e53e3e;
   color: #ffffff;
@@ -130,7 +206,6 @@ body {
   font-weight: 600;
   cursor: pointer;
   width: 100%;
-  transition: background-color 0.2s ease;
 }
 
 .btn-danger:hover {
@@ -145,7 +220,6 @@ body {
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 .btn-secondary:hover {
