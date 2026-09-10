@@ -1,199 +1,305 @@
 /* Reset & Base Styles */
+
 * {
+
   margin: 0;
+
   padding: 0;
+
   box-sizing: border-box;
+
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
+
+
 
 body {
-  background-color: #ffffff;
+
+  background-color: #f4f6f9;
+
   color: #333;
-  min-height: 100vh;
-  display: flex;
-  overflow-x: hidden;
+
+  line-height: 1.6;
+
 }
 
-/* Split Screen Layout Container */
-.split-container, body {
-  display: flex;
-  width: 100vw;
-  min-height: 100vh;
+
+
+/* Layout Container */
+
+.dashboard-container {
+
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 20px;
+
 }
 
-/* Left Hero Gradient Panel */
-.hero-section {
-  flex: 1;
-  background: linear-gradient(135deg, #4c1d95 0%, #db2777 100%);
-  color: #ffffff;
-  padding: 60px;
+
+
+/* Navigation Bar */
+
+.navbar {
+
   display: flex;
-  flex-direction: column;
+
   justify-content: space-between;
-}
 
-.hero-section .back-link {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.hero-content h2 {
-  font-size: 42px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 20px 0;
-  color: #ffffff;
-}
-
-.hero-content p {
-  font-size: 16px;
-  opacity: 0.9;
-}
-
-.brand {
-  display: flex;
   align-items: center;
+
+  background-color: #ffffff;
+
+  padding: 15px 30px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  margin-bottom: 30px;
+
+}
+
+
+
+.logo {
+
+  display: flex;
+
+  align-items: center;
+
   gap: 10px;
-  font-size: 20px;
-  font-weight: bold;
+
 }
 
-/* Right Form Panel */
-.form-section {
-  flex: 1;
-  background: #ffffff;
-  padding: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 600px;
-}
 
-.auth-box {
-  width: 100%;
-  max-width: 420px;
-}
 
-.subtitle {
-  font-size: 11px;
-  font-weight: 700;
-  color: #db2777;
-  letter-spacing: 1px;
-  display: block;
-  margin-bottom: 8px;
-}
+.logo h1 {
 
-h2 {
-  font-size: 28px;
+  font-size: 24px;
+
   color: #1a202c;
-  margin-bottom: 8px;
+
 }
 
-.instruction {
-  font-size: 14px;
+
+
+.logo strong {
+
+  color: #6b21a8;
+
+}
+
+
+
+/* Welcome Banner */
+
+.welcome-banner {
+
+  margin-bottom: 30px;
+
+}
+
+
+
+.welcome-banner h2 {
+
+  font-size: 28px;
+
+  color: #1a202c;
+
+  margin-bottom: 5px;
+
+}
+
+
+
+.welcome-banner p {
+
   color: #718096;
-  margin-bottom: 25px;
+
 }
 
-/* Form Elements & OTP Inputs */
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #4a5568;
-  margin-bottom: 8px;
+
+
+/* Card Grid Layout */
+
+.card-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  gap: 20px;
+
 }
 
-input[type="email"], input[type="text"] {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 15px;
-  outline: none;
-  margin-bottom: 20px;
-  background-color: #fff;
-}
 
-input[type="email"]:focus, input[type="text"]:focus {
-  border-color: #db2777;
-  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
-}
 
-.otp-container {
+/* Card Styling */
+
+.card {
+
+  background: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
   display: flex;
-  gap: 12px;
+
+  flex-direction: column;
+
   justify-content: space-between;
-  margin-bottom: 25px;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
 }
 
-.otp-input {
-  width: 50px;
-  height: 55px;
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  outline: none;
+
+
+.card:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
 }
 
-.otp-input:focus {
-  border-color: #db2777;
-  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
+
+
+.card h3 {
+
+  font-size: 20px;
+
+  margin-bottom: 10px;
+
+  color: #2d3748;
+
 }
 
-/* Gradient Buttons */
+
+
+.card p {
+
+  color: #718096;
+
+  font-size: 14px;
+
+  margin-bottom: 20px;
+
+}
+
+
+
+/* SOS Card Specific Styling */
+
+.sos-card {
+
+  border-left: 5px solid #e53e3e;
+
+}
+
+
+
+/* Button Styles */
+
 .btn-primary {
-  background: linear-gradient(135deg, #db2777 0%, #4c1d95 100%);
+
+  background-color: #6b21a8;
+
   color: #ffffff;
+
   border: none;
-  padding: 14px 20px;
+
+  padding: 12px 20px;
+
   border-radius: 8px;
+
   font-size: 15px;
+
   font-weight: 600;
+
   cursor: pointer;
+
   width: 100%;
-  transition: opacity 0.2s ease;
+
+  transition: background-color 0.2s ease;
+
 }
+
+
 
 .btn-primary:hover {
-  opacity: 0.9;
+
+  background-color: #581c87;
+
 }
 
-.terms-text {
-  font-size: 12px;
-  color: #a0aec0;
-  margin-top: 20px;
-  text-align: center;
-}
 
-.security-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #f7fafc;
-  padding: 12px 15px;
-  border-radius: 8px;
-  font-size: 12px;
-  color: #718096;
-  margin-top: 25px;
-  border: 1px solid #edf2f7;
-}
 
-.resend-section {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: #718096;
-}
+.btn-danger {
 
-.btn-link {
-  background: none;
+  background-color: #e53e3e;
+
+  color: #ffffff;
+
   border: none;
-  color: #db2777;
+
+  padding: 12px 20px;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+
   font-weight: 600;
+
   cursor: pointer;
-  margin-top: 5px;
+
+  width: 100%;
+
+  transition: background-color 0.2s ease;
+
+}
+
+
+
+.btn-danger:hover {
+
+  background-color: #c53030;
+
+}
+
+
+
+.btn-secondary {
+
+  background-color: #edf2f7;
+
+  color: #4a5568;
+
+  border: none;
+
+  padding: 8px 16px;
+
+  border-radius: 6px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+
+}
+
+
+
+.btn-secondary:hover {
+
+  background-color: #e2e8f0;
+
 }
