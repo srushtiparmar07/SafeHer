@@ -6,30 +6,42 @@ const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener("DOMContentLoaded", function () {
-  const otpForm = document.getElementById("otpForm");
-  const otpInput = document.getElementById("otpInput");
+  // 1. Get saved email from sessionStorage
   const email = sessionStorage.getItem("authEmail");
+  const emailDisplay = document.getElementById("emailDisplay"); // or the tag displaying 'Loading...'
+  
+  if (emailDisplay && email) {
+    emailDisplay.innerText = email;
+  }
+
+  const otpForm = document.getElementById("otpForm");
 
   if (!otpForm) return;
 
   otpForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const token = otpInput ? otpInput.value.trim() : "";
+    // 2. Combine all 6 input box values into one string
+    const inputs = document.querySelectorAll(".otp-input"); // adjust class to match your 6 boxes
+    let token = "";
+    inputs.forEach((input) => {
+      token += input.value.trim();
+    });
 
-    if (!token) {
-      alert("Please enter the verification code.");
+    // Check if the user entered all 6 digits
+    if (token.length !== 6) {
+      alert("Please enter the complete 6-digit verification code.");
       return;
     }
 
     if (!email) {
-      alert("Session expired. Please sign in again.");
+      alert("Session expired. Please go back and sign in again.");
       window.location.href = "signin.html";
       return;
     }
 
     try {
-      // 1. Verify Email OTP
+      // 3. Verify OTP with Supabase
       const { data, error } = await supabase.auth.verifyOtp({
         email: email,
         token: token,
@@ -38,32 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (error) throw error;
 
-      const user = data.user;
-
-      // 2. Check & Create Database Profile
-      const { data: existingProfile } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      if (!existingProfile) {
-        await supabase.from("profiles").insert([
-          {
-            id: user.id,
-            email: user.email || email,
-            full_name: "SafeHer User",
-            created_at: new Date().toISOString(),
-          },
-        ]);
-      }
-
-      sessionStorage.removeItem("authEmail");
-      alert("Signed in successfully!");
-      window.location.href = "dashboard.html";
+      alert("Verification successful!");
+      window.location.href = "dashboard.html"; // Redirect to your app's home screen
     } catch (error) {
-      console.error("Verification Error:", error);
-      alert(error.message || "Invalid code. Please try again.");
+      console.error("Verification error:", error);
+      alert(error.message || "Invalid or expired verification code.");
     }
   });
 });
