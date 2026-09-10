@@ -2,30 +2,12 @@ import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-import {
-    getAuth,
-    RecaptchaVerifier,
-    signInWithPhoneNumber
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
+const SUPABASE_URL = 'https://bswgjfguytayxffuorwy.supabase.co/rest/v1/';
+const SUPABASE_KEY = 'sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx';
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAsoy6pxPRQ-AC5eYurx6bopmoOcLIzaWE",
-    authDomain: "safeher-96bdb.firebaseapp.com",
-    projectId: "safeher-96bdb",
-    storageBucket: "safeher-96bdb.firebasestorage.app",
-    messagingSenderId: "777297641744",
-    appId: "1:777297641744:web:91eeb505836708ccad2595"
-};
-
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* =========================
    ELEMENTS
