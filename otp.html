@@ -8,35 +8,46 @@
   <script type="module" src="otp.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <div class="auth-box">
-      <div class="logo">
-        <span class="shield-icon">🛡️</span>
-        <h1>Safe<strong>Her</strong></h1>
+  <div class="split-container">
+    <!-- Left Hero Section -->
+    <div class="hero-section">
+      <a href="signin.html" class="back-link">&larr; Back to Sign In</a>
+      <div class="hero-content">
+        <span class="subtitle" style="color: #fff;">WELCOME TO SAFEHER</span>
+        <h2>Safety starts with staying connected.</h2>
+        <p>Enter the verification code sent to your email to access your security dashboard.</p>
       </div>
+      <div class="brand">
+        <span>🛡️</span> Safe<strong>Her</strong>
+      </div>
+    </div>
 
-      <span class="subtitle">VERIFY YOUR ACCOUNT</span>
-      <h2>Enter verification code</h2>
-      <p class="instruction">We sent a verification code to:<br>
-        <strong id="emailDisplay">Loading...</strong>
-      </p>
+    <!-- Right Form Section -->
+    <div class="form-section">
+      <div class="auth-box">
+        <span class="subtitle">VERIFY YOUR ACCOUNT</span>
+        <h2>Enter verification code</h2>
+        <p class="instruction">We sent a verification code to:<br>
+          <strong id="emailDisplay">Loading...</strong>
+        </p>
 
-      <form id="otpForm">
-        <div class="otp-container">
-          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
-          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
-          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
-          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
-          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
-          <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+        <form id="otpForm">
+          <div class="otp-container">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required />
+          </div>
+
+          <button type="submit" id="verifyBtn" class="btn-primary">Verify &amp; Continue &rarr;</button>
+        </form>
+
+        <div class="resend-section">
+          <p>Didn't receive the code?</p>
+          <button type="button" id="resendBtn" class="btn-link">Resend OTP</button>
         </div>
-
-        <button type="submit" id="verifyBtn" class="btn-primary">Verify &amp; Continue &rarr;</button>
-      </form>
-
-      <div class="resend-section">
-        <p>Didn't receive the code?</p>
-        <button type="button" id="resendBtn" class="btn-link">Resend OTP</button>
       </div>
     </div>
   </div>
