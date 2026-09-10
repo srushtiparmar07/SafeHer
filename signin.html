@@ -3,11 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Sign In - SafeHer</title>
-
     <link rel="stylesheet" href="signin.css">
 </head>
 
@@ -23,17 +20,13 @@
             </a>
 
             <div class="brand">
-
                 <div class="brand-icon">
                     🛡
                 </div>
-
                 <h1>Safe<span>Her</span></h1>
-
             </div>
 
             <div class="info-content">
-
                 <p class="small-label">
                     WELCOME TO SAFEHER
                 </p>
@@ -44,10 +37,9 @@
                 </h2>
 
                 <p class="info-text">
-                    Enter your phone number to continue
+                    Enter your email address to continue
                     to SafeHer.
                 </p>
-
             </div>
 
         </section>
@@ -67,31 +59,30 @@
                 </h2>
 
                 <p class="form-description">
-                    Enter your phone number to receive
+                    Enter your email address to receive
                     a verification code.
                 </p>
 
 
                 <!-- SIGN IN FORM -->
+                <form id="signInForm">
 
-                <form id="signinForm">
-
-                    <label for="contact">
-                        Phone Number
+                    <label for="emailInput">
+                        Email Address
                     </label>
 
                     <input
-                        type="tel"
-                        id="contact"
-                        placeholder="+91 9876543210"
+                        type="email"
+                        id="emailInput"
+                        placeholder="name@example.com"
                         required
                     >
 
-                   <button
-    type="submit"
-    id="signInButton"
-    class="continue-btn"
->
+                    <button
+                        type="submit"
+                        id="signInButton"
+                        class="continue-btn"
+                    >
                         Continue
                         <span>→</span>
                     </button>
@@ -106,14 +97,11 @@
 
 
                 <div class="security-note">
-
                     <span>🔒</span>
-
                     <p>
                         Your information is protected and used
                         only for account verification.
                     </p>
-
                 </div>
 
             </div>
@@ -122,14 +110,8 @@
 
     </div>
 
-
-
-
-    <!-- Firebase Sign In -->
-    <script
-        type="module"
-        src="signin.js">
-    </script>
+    <!-- Supabase Sign In Script -->
+    <script type="module" src="signin.js"></script>
 
 </body>
 
