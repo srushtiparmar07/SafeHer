@@ -1,166 +1,69 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-/* =========================
-   SUPABASE CONFIGURATION
-========================= */
+const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 
-const SUPABASE_URL = 'https://bswgjfguytayxffuorwy.supabase.co';
-const SUPABASE_KEY = 'sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+document.addEventListener("DOMContentLoaded", function () {
+  const otpForm = document.getElementById("otpForm");
+  const otpInput = document.getElementById("otpInput");
+  const email = sessionStorage.getItem("authEmail");
 
-/* =========================
-   ELEMENTS
-========================= */
+  if (!otpForm) return;
 
-const contactDisplay = document.getElementById("contactDisplay");
-const otpInputs = document.querySelectorAll(".otp-input");
-const otpForm = document.getElementById("otpForm");
-const resendBtn = document.getElementById("resendBtn");
-const timerDisplay = document.getElementById("timer");
+  otpForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-/* =========================
-   DISPLAY PHONE NUMBER
-========================= */
+    const token = otpInput ? otpInput.value.trim() : "";
 
-const contact = sessionStorage.getItem("safeherContact");
+    if (!token) {
+      alert("Please enter the verification code.");
+      return;
+    }
 
-if (contact) {
-    contactDisplay.textContent = contact;
-} else {
-    contactDisplay.textContent = "your registered phone number";
-}
+    if (!email) {
+      alert("Session expired. Please sign in again.");
+      window.location.href = "signin.html";
+      return;
+    }
 
-/* =========================
-   OTP INPUT BEHAVIOUR
-========================= */
+    try {
+      // 1. Verify Email OTP
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: email,
+        token: token,
+        type: "email",
+      });
 
-otpInputs.forEach(function (input, index) {
-    input.addEventListener("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, "");
+      if (error) throw error;
 
-        if (this.value.length === 1 && index < otpInputs.length - 1) {
-            otpInputs[index + 1].focus();
-        }
-    });
+      const user = data.user;
 
-    input.addEventListener("keydown", function (event) {
-        if (event.key === "Backspace" && this.value === "" && index > 0) {
-            otpInputs[index - 1].focus();
-        }
-    });
+      // 2. Check & Create Database Profile
+      const { data: existingProfile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (!existingProfile) {
+        await supabase.from("profiles").insert([
+          {
+            id: user.id,
+            email: user.email || email,
+            full_name: "SafeHer User",
+            created_at: new Date().toISOString(),
+          },
+        ]);
+      }
+
+      sessionStorage.removeItem("authEmail");
+      alert("Signed in successfully!");
+      window.location.href = "dashboard.html";
+    } catch (error) {
+      console.error("Verification Error:", error);
+      alert(error.message || "Invalid code. Please try again.");
+    }
+  });
 });
-
-/* =========================
-   VERIFY OTP VIA SUPABASE
-========================= */
-
-if (otpForm) {
-    otpForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        let otp = "";
-        otpInputs.forEach(function (input) {
-            otp += input.value;
-        });
-
-        if (otp.length !== 6) {
-            alert("Please enter the complete 6-digit OTP.");
-            return;
-        }
-
-        if (!contact) {
-            alert("Your OTP session has expired. Please request a new OTP.");
-            window.location.href = "signin.html";
-            return;
-        }
-
-        const verifyButton = otpForm.querySelector(".verify-btn");
-        verifyButton.disabled = true;
-        verifyButton.textContent = "Verifying...";
-
-        try {
-            /* Verify Phone OTP with Supabase */
-            const { data, error } = await supabase.auth.verifyOtp({
-                phone: contact,
-                token: otp,
-                type: 'sms'
-            });
-
-            if (error) throw error;
-
-            const user = data.user;
-
-            /* Manage Profile in Supabase public.profiles */
-            if (user) {
-                const { data: profile } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("id", user.id)
-                    .maybeSingle();
-
-                if (!profile) {
-                    /* First-time user: Create profile record */
-                    await supabase
-                        .from("profiles")
-                        .insert([
-                            {
-                                id: user.id,
-                                phone: user.phone || contact,
-                                updated_at: new Date()
-                            }
-                        ]);
-                } else {
-                    /* Existing user: Update timestamp */
-                    await supabase
-                        .from("profiles")
-                        .update({ updated_at: new Date() })
-                        .eq("id", user.id);
-                }
-            }
-
-            /* Clear temporary storage and redirect */
-            sessionStorage.setItem("safeherLoggedIn", "true");
-            window.location.href = "dashboard.html";
-
-        } catch (error) {
-            console.error("Supabase OTP verification error:", error);
-            alert("Invalid or expired OTP. Please try again.");
-
-            verifyButton.disabled = false;
-            verifyButton.textContent = "Verify & Continue →";
-        }
-    });
-}
-
-/* =========================
-   RESEND TIMER
-========================= */
-
-let timeLeft = 60;
-if (resendBtn) resendBtn.disabled = true;
-
-const countdown = setInterval(function () {
-    timeLeft--;
-
-    if (timerDisplay) {
-        timerDisplay.textContent = "Resend available in " + timeLeft + "s";
-    }
-
-    if (timeLeft <= 0) {
-        clearInterval(countdown);
-        if (timerDisplay) timerDisplay.textContent = "You can now request a new OTP.";
-        if (resendBtn) resendBtn.disabled = false;
-    }
-}, 1000);
-
-/* =========================
-   RESEND OTP
-========================= */
-
-if (resendBtn) {
-    resendBtn.addEventListener("click", function () {
-        alert("Please go back to Sign In and request a new OTP.");
-        window.location.href = "signin.html";
-    });
-}
