@@ -1,307 +1,114 @@
-document.addEventListener("DOMContentLoaded", function () {
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    /* =========================
-       CHECK LOGIN STATUS
-    ========================= */
+/* =========================================================
+   1. SUPABASE SETUP
+   Replace these two values with your project credentials:
+   - Dashboard -> Project Settings -> API
+========================================================= */
+const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 
-    const loggedIn = sessionStorage.getItem("safeherLoggedIn");
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    if (!loggedIn) {
+/* =========================================================
+   2. DASHBOARD LOGIC
+========================================================= */
+document.addEventListener("DOMContentLoaded", async function () {
+  const userNameElement = document.getElementById("userName");
+  const signOutButton = document.getElementById("signOutButton");
+  const sosButton = document.getElementById("sosButton");
+
+  /* =========================
+     CHECK AUTHENTICATION
+  ========================= */
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    alert("Please sign in to access your dashboard.");
+    window.location.href = "signin.html";
+    return;
+  }
+
+  /* =========================
+     LOAD USER PROFILE
+  ========================= */
+  async function loadUserProfile() {
+    try {
+      // Fetch user profile from your 'profiles' table
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("full_name, name")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (error && error.code !== "PGRST116") {
+        console.error("Error fetching profile:", error);
+      }
+
+      // Display name from profile, user metadata, or default to email/phone
+      const displayName =
+        profile?.full_name ||
+        profile?.name ||
+        user.user_metadata?.full_name ||
+        user.phone ||
+        user.email ||
+        "User";
+
+      if (userNameElement) {
+        userNameElement.textContent = displayName;
+      }
+    } catch (err) {
+      console.error("Failed to load user profile:", err);
+    }
+  }
+
+  /* =========================
+     EMERGENCY SOS ACTION
+  ========================= */
+  if (sosButton) {
+    sosButton.addEventListener("click", async function () {
+      const confirmed = confirm("Are you sure you want to send an emergency SOS alert?");
+      if (!confirmed) return;
+
+      try {
+        // Record emergency event in Supabase
+        const { error } = await supabase.from("emergency_events").insert([
+          {
+            user_id: user.id,
+            status: "active",
+            created_at: new Date().toISOString(),
+          },
+        ]);
+
+        if (error) throw error;
+
+        alert("Emergency SOS alert recorded! Notifying your trusted contacts...");
+      } catch (error) {
+        console.error("Error triggering SOS:", error);
+        alert("Unable to trigger SOS alert. Please call local emergency services immediately.");
+      }
+    });
+  }
+
+  /* =========================
+     SIGN OUT LOGIC
+  ========================= */
+  if (signOutButton) {
+    signOutButton.addEventListener("click", async function () {
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+
         window.location.href = "signin.html";
-        return;
-    }
-
-
-    /* =========================
-       SOS BUTTON
-    ========================= */
-
-    const sosButton =
-        document.getElementById("sosButton");
-
-    const safetyStatus =
-        document.getElementById("safetyStatus");
-
-    let sosTimer;
-
-
-    sosButton.addEventListener(
-        "mousedown",
-        startSOS
-    );
-
-    sosButton.addEventListener(
-        "mouseup",
-        cancelSOS
-    );
-
-    sosButton.addEventListener(
-        "mouseleave",
-        cancelSOS
-    );
-
-    sosButton.addEventListener(
-        "touchstart",
-        startSOS
-    );
-
-    sosButton.addEventListener(
-        "touchend",
-        cancelSOS
-    );
-
-
-    function startSOS(event) {
-
-        event.preventDefault();
-
-        sosButton.innerHTML =
-            "<span>3</span><small>HOLDING...</small>";
-
-        let countdown = 3;
-
-        sosTimer = setInterval(function () {
-
-            countdown--;
-
-            sosButton.innerHTML =
-                "<span>" +
-                countdown +
-                "</span><small>HOLDING...</small>";
-
-            if (countdown <= 0) {
-
-                clearInterval(sosTimer);
-
-                activateSOS();
-
-            }
-
-        }, 1000);
-
-    }
-
-
-    function cancelSOS() {
-
-        clearInterval(sosTimer);
-
-        sosButton.innerHTML =
-            "<span>SOS</span><small>HOLD</small>";
-
-    }
-
-
-    function activateSOS() {
-
-        sosButton.innerHTML =
-            "<span>🚨</span><small>ALERT SENT</small>";
-
-        safetyStatus.textContent =
-            "Emergency alert activated";
-
-
-        const savedContacts =
-            JSON.parse(
-                localStorage.getItem("safeherContacts")
-            ) || [];
-
-
-        if (savedContacts.length === 0) {
-
-            alert(
-                "🚨 SOS ACTIVATED\n\n" +
-                "You don't have any trusted contacts yet.\n\n" +
-                "Please add a trusted contact first."
-            );
-
-        } else {
-
-            const contactNames =
-                savedContacts
-                    .map(function (contact) {
-
-                        return "• " +
-                            contact.name +
-                            " (" +
-                            contact.phone +
-                            ")";
-
-                    })
-                    .join("\n");
-
-
-            alert(
-                "🚨 SOS ACTIVATED\n\n" +
-                "Trusted contacts that would be alerted:\n\n" +
-                contactNames +
-                "\n\n" +
-                "Real SMS/call alerts will be connected in a later step."
-            );
-
-        }
-
-    }
-
-
-   
-/* =========================
-   LIVE LOCATION
-========================= */
-
-const locationButton =
-    document.getElementById("locationButton");
-
-if (locationButton) {
-
-    locationButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "location.html";
-
-        }
-    );
-
-}
-    /* =========================
-       SAFER ROUTES
-    ========================= */
-
-    const routesButton =
-        document.getElementById("routesButton");
-
-    routesButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "routes.html";
-
-        }
-    );
-
-
-    /* =========================
-       NEARBY HELP
-    ========================= */
-
-    const nearbyHelpButton =
-        document.getElementById("nearbyHelpButton");
-
-    nearbyHelpButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "nearby.html";
-
-        }
-    );
-
-
-    /* =========================
-       TRUSTED CONTACTS
-    ========================= */
-
-    const contactsButton =
-        document.getElementById("contactsButton");
-
-    contactsButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "contacts.html";
-
-        }
-    );
-
-
-    /* =========================
-       SAFETY CHECK
-    ========================= */
-
-    const checkButton =
-        document.getElementById("checkButton");
-
-    checkButton.addEventListener(
-        "click",
-        function () {
-
-            safetyStatus.textContent =
-                "Safety check completed — you are safe";
-
-            alert(
-                "Safety check completed!"
-            );
-
-        }
-    );
-
-
-    /* =========================
-       EMERGENCY NUMBERS
-    ========================= */
-
-    const emergencyButton =
-        document.getElementById("emergencyButton");
-
-    emergencyButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "emergency.html";
-
-        }
-    );
-
-
-    /* =========================
-       BOTTOM NAVIGATION
-    ========================= */
-
-    const locationNavButton =
-        document.getElementById("locationNavButton");
-
-    const contactsNavButton =
-        document.getElementById("contactsNavButton");
-
-    const profileNavButton =
-        document.getElementById("profileNavButton");
-
-
-    locationNavButton.addEventListener(
-        "click",
-        function () {
-
-            locationButton.click();
-
-        }
-    );
-
-
-    contactsNavButton.addEventListener(
-        "click",
-        function () {
-
-            contactsButton.click();
-
-        }
-    );
-
-
-    profileNavButton.addEventListener(
-        "click",
-        function () {
-
-            alert(
-                "Profile feature will be added next."
-            );
-
-        }
-    );
-
+      } catch (error) {
+        console.error("Error signing out:", error);
+        alert("Failed to sign out. Please try again.");
+      }
+    });
+  }
+
+  /* =========================
+     INITIAL LOAD
+  ========================= */
+  loadUserProfile();
 });
