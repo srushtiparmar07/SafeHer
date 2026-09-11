@@ -771,3 +771,154 @@ footer {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* =========================================================
+   SafeHer Premium Dark Theme Override
+   Appended after the existing styles so it overrides colors cleanly.
+   ========================================================= */
+
+:root {
+  --ink: #f8f7ff;
+  --muted: #a8a8bd;
+  --surface: rgba(22, 22, 39, 0.88);
+  --background: #080812;
+  --border: rgba(255, 255, 255, 0.1);
+  --primary: #9b6cff;
+  --primary-dark: #7c3aed;
+  --primary-soft: rgba(155, 108, 255, 0.14);
+  --pink: #f472b6;
+  --danger: #ff5470;
+  --danger-dark: #ffb0bd;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 25px 55px rgba(0, 0, 0, 0.42);
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 85% 8%, rgba(155, 108, 255, 0.2), transparent 27%),
+    radial-gradient(circle at 5% 35%, rgba(244, 114, 182, 0.1), transparent 24%),
+    linear-gradient(145deg, #080812 0%, #0d0d19 52%, #090914 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.28;
+  pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.logo-info h1,
+.logo h1,
+.feature-item h3,
+.card h3,
+.features-section > h2,
+.welcome-banner h2,
+.footer-logo strong {
+  color: var(--ink);
+}
+
+.logo-info h1 span,
+.logo strong {
+  color: #c084fc;
+}
+
+.logo-info p,
+.welcome-section > p,
+.feature-item p,
+.card p,
+.welcome-banner p,
+footer {
+  color: var(--muted);
+}
+
+.signin-btn,
+.btn-secondary {
+  color: #ddd2ff;
+  background: rgba(155, 108, 255, 0.1);
+  border-color: rgba(192, 132, 252, 0.3);
+}
+
+.signin-btn:hover,
+.btn-secondary:hover {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.welcome-badge {
+  color: #d9c7ff;
+  background: rgba(155, 108, 255, 0.12);
+  border-color: rgba(192, 132, 252, 0.25);
+}
+
+.welcome-section h2 {
+  color: transparent;
+  background: linear-gradient(110deg, #ffffff 10%, #d9c7ff 58%, #f472b6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.get-started-btn,
+.btn-primary {
+  background: linear-gradient(110deg, #7c3aed, #a855f7 55%, #ec4899);
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.3);
+}
+
+.sos-preview {
+  background: linear-gradient(105deg, rgba(80, 11, 39, .95), rgba(146, 28, 65, .75));
+  border: 1px solid rgba(255, 110, 143, .28);
+  box-shadow: 0 20px 45px rgba(98, 15, 45, .3);
+}
+
+.feature-item,
+.card {
+  background: linear-gradient(145deg, rgba(28, 28, 48, .94), rgba(17,17,30,.88));
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+.feature-item:hover,
+.card:hover {
+  border-color: rgba(192,132,252,.42);
+  box-shadow: var(--shadow-hover);
+}
+
+.feature-icon.pink { background: rgba(244,114,182,.14); border: 1px solid rgba(244,114,182,.24); }
+.feature-icon.purple { background: rgba(155,108,255,.14); border: 1px solid rgba(155,108,255,.24); }
+.feature-icon.blue { background: rgba(96,165,250,.14); border: 1px solid rgba(96,165,250,.24); }
+.arrow { color: #c084fc; }
+
+.welcome-banner {
+  background: linear-gradient(135deg, rgba(28, 28, 48, .96), rgba(38, 27, 65, .9));
+  border-color: rgba(192, 132, 252, .2);
+}
+
+.welcome-banner::after {
+  background: rgba(155, 108, 255, 0.14);
+}
+
+.navbar {
+  background: rgba(22, 22, 39, 0.88);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+.shield-icon {
+  background: rgba(155, 108, 255, 0.16);
+}
+
+.sos-card {
+  background: linear-gradient(135deg, rgba(67, 18, 29, .94), rgba(28, 28, 48, .94));
+  border-color: rgba(255, 84, 112, .35);
+}
+
+.sos-card h3 { color: #ffb0bd; }
+.location-display { color: #c5c5d4 !important; }
+
+footer { border-color: var(--border); }
