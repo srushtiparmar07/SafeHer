@@ -10,41 +10,47 @@
 <body>
   <div class="dashboard-container">
     <header class="navbar">
-      <div class="logo">
-        <span class="shield-icon">🛡️</span>
-        <h1>Safe<strong>Her</strong></h1>
-      </div>
+      <a href="index.html" class="logo" aria-label="SafeHer home">
+        <img src="safer-logo-transparent.png" alt="SafeHer - Your safety companion" class="dashboard-brand-logo">
+      </a>
       <button id="logoutBtn" class="btn-secondary">Log Out</button>
     </header>
 
     <main class="main-content">
       <section class="welcome-banner">
-        <h2>Emergency Action Dashboard</h2>
+        <div class="dashboard-eyebrow">YOUR SAFETY COMMAND CENTER</div>
+        <h1>Emergency Action Dashboard</h1>
         <p>Quick access to safety features and live tracking.</p>
       </section>
 
+      <div class="status-row">
+        <div class="status-pill"><span class="status-dot"></span> System protected</div>
+        <div class="status-note">Stay connected. Stay safe.</div>
+      </div>
+
       <div class="card-grid">
-        <!-- Live Location Feature Card -->
-        <div class="card">
-          <h3>📍 Live Location</h3>
+        <article class="card location-card">
+          <div class="card-icon">📍</div>
+          <h2>Live Location</h2>
           <p>Get your current GPS coordinates or open your position directly on Google Maps.</p>
-          <button id="locationBtn" class="btn-primary">Share Live Location</button>
-          <div id="locationOutput" class="location-display" style="margin-top: 15px; font-weight: bold; color: #4a5568;"></div>
-        </div>
+          <button id="locationBtn" class="btn-primary">Share Live Location <span>→</span></button>
+          <div id="locationOutput" class="location-display"></div>
+        </article>
 
-        <!-- Trusted Contacts Feature Card -->
-        <div class="card">
-          <h3>👥 Trusted Contacts</h3>
+        <article class="card contacts-card">
+          <div class="card-icon">👥</div>
+          <h2>Trusted Contacts</h2>
           <p>Manage your emergency contacts and send instant alert notifications.</p>
-          <button id="contactsBtn" class="btn-primary">View Contacts</button>
-        </div>
+          <button id="contactsBtn" class="btn-primary">View Contacts <span>→</span></button>
+        </article>
 
-        <!-- SOS Alert Feature Card -->
-        <div class="card sos-card">
-          <h3>🚨 Emergency SOS</h3>
+        <article class="card sos-card">
+          <div class="card-icon">🚨</div>
+          <div class="urgent-label">URGENT ACTION</div>
+          <h2>Emergency SOS</h2>
           <p>Trigger an immediate distress signal to nearby contacts and safety networks.</p>
-          <button id="sosBtn" class="btn-danger">Trigger SOS Alert</button>
-        </div>
+          <button id="sosBtn" class="btn-danger">Trigger SOS Alert <span>!</span></button>
+        </article>
       </div>
     </main>
   </div>
