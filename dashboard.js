@@ -14,13 +14,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Selectors for all feature buttons & elements
   const locationBtn = document.getElementById("locationBtn");
   const contactsBtn = document.getElementById("contactsBtn");
+  const routesBtn = document.getElementById("routesBtn");
+  const nearbyBtn = document.getElementById("nearbyBtn");
+  const emergencyBtn = document.getElementById("emergencyBtn");
   const sosBtn = document.getElementById("sosBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const locationOutput = document.getElementById("locationOutput");
 
-  // 1. Live Location Button Logic
+  // 1. Live Location Button Logic (or redirect to location.html if preferred)
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
       if ("geolocation" in navigator) {
@@ -30,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             
-            locationBtn.innerText = "Share Live Location";
+            locationBtn.innerText = "Share Live Location →";
             if (locationOutput) {
               locationOutput.innerText = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
             }
@@ -40,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.open(mapUrl, "_blank");
           },
           (error) => {
-            locationBtn.innerText = "Share Live Location";
+            locationBtn.innerText = "Share Live Location →";
             console.error("Location error:", error);
             alert("Unable to fetch location. Please allow location access in your browser settings.");
           },
@@ -52,15 +56,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 2. Trusted Contacts Button Logic
+  // 2. Trusted Contacts Page Navigation
   if (contactsBtn) {
     contactsBtn.addEventListener("click", () => {
-      alert("Trusted Contacts module loaded!");
-      // You can redirect to contacts page: window.location.href = "contacts.html";
+      window.location.href = "contacts.html";
     });
   }
 
-  // 3. Emergency SOS Button Logic
+  // 3. Safer Routes Page Navigation
+  if (routesBtn) {
+    routesBtn.addEventListener("click", () => {
+      window.location.href = "routes.html";
+    });
+  }
+
+  // 4. Nearby Help Page Navigation
+  if (nearbyBtn) {
+    nearbyBtn.addEventListener("click", () => {
+      window.location.href = "nearby.html";
+    });
+  }
+
+  // 5. Emergency Numbers Page Navigation
+  if (emergencyBtn) {
+    emergencyBtn.addEventListener("click", () => {
+      window.location.href = "emergency.html";
+    });
+  }
+
+  // 6. Emergency SOS Button Logic
   if (sosBtn) {
     sosBtn.addEventListener("click", () => {
       const confirmSOS = confirm("Are you sure you want to trigger an Emergency SOS Alert?");
@@ -70,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 4. Logout Logic
+  // 7. Logout Logic
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();
