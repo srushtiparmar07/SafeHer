@@ -1,5 +1,5 @@
 /* =========================
-   SAFEHER OTP PAGE
+   SAFEHER DARK THEME (OTP PAGE)
 ========================= */
 
 * {
@@ -10,310 +10,196 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg, #f7eefb, #fff5f8);
-    color: #202124;
-}
-
-.otp-page {
+    background: #0b0f19;
+    color: #f1f5f9;
     min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 30px 20px;
 }
 
-.otp-card {
+.split-container {
+    display: flex;
+    min-height: 100vh;
     width: 100%;
-    max-width: 520px;
-
-    background: #ffffff;
-
-    border-radius: 28px;
-
-    padding: 45px;
-
-    box-shadow:
-        0 20px 60px
-        rgba(80, 30, 90, 0.12);
 }
 
+/* Hero Section (Left) */
+.hero-section {
+    flex: 1;
+    background: linear-gradient(135deg, #111827, #0b0f19);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
 
-/* =========================
-   BACK BUTTON
-========================= */
-
-.back-button {
-    display: inline-block;
-
+.back-link {
+    color: #94a3b8;
     text-decoration: none;
-
-    color: #777;
-
     font-size: 14px;
-
-    margin-bottom: 35px;
+    transition: 0.2s;
 }
 
-.back-button:hover {
-    color: #d6295d;
+.back-link:hover {
+    color: #f43f5e;
 }
 
-
-/* =========================
-   BRAND
-========================= */
-
-.otp-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    margin-bottom: 50px;
-}
-
-.otp-logo {
-    width: 50px;
-    height: 50px;
-
-    border-radius: 16px;
-
-    background: linear-gradient(
-        135deg,
-        #ff3b6b,
-        #8b3dff
-    );
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 24px;
-}
-
-.otp-brand h1 {
-    font-size: 27px;
+.hero-content h2 {
+    font-size: 38px;
     font-weight: 800;
+    margin-bottom: 15px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
 }
 
-.otp-brand h1 span {
-    color: #e6396a;
+.hero-content p {
+    color: #94a3b8;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
-
-/* =========================
-   OTP CONTENT
-========================= */
-
-.small-label {
-    color: #d6295d;
-
+.subtitle {
+    display: inline-block;
+    color: #f43f5e;
     font-size: 12px;
     font-weight: 800;
-
     letter-spacing: 1.5px;
-
-    margin-bottom: 14px;
-}
-
-.otp-content h2 {
-    font-size: 32px;
-
     margin-bottom: 15px;
 }
 
-.otp-description {
-    color: #777;
-
-    font-size: 15px;
-
-    margin-bottom: 8px;
+.brand {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
 }
 
-.contact-display {
-    color: #202124;
+.brand strong {
+    color: #f43f5e;
+}
 
-    font-size: 16px;
+/* Form Section (Right) */
+.form-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    background: #0b0f19;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 440px;
+    background: #111827;
+    padding: 45px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.auth-box h2 {
+    font-size: 26px;
     font-weight: 700;
-
-    margin-bottom: 35px;
-
-    word-break: break-word;
+    margin-bottom: 10px;
+    color: #ffffff;
 }
 
+.instruction {
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
 
-/* =========================
-   OTP INPUT BOXES
-========================= */
+.instruction strong {
+    color: #ffffff;
+}
 
-.otp-inputs {
+/* OTP Input Boxes */
+.otp-container {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-
     margin-bottom: 30px;
 }
 
 .otp-input {
-    width: 100%;
-    max-width: 58px;
-    height: 62px;
-
-    border: 1px solid #dddddd;
-    border-radius: 14px;
-
+    width: 50px;
+    height: 58px;
+    background: #0b0f19;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     text-align: center;
-
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-
+    color: #ffffff;
     outline: none;
-
     transition: 0.2s;
 }
 
 .otp-input:focus {
-    border-color: #d6295d;
-
-    box-shadow:
-        0 0 0 4px
-        rgba(214, 41, 93, 0.1);
+    border-color: #f43f5e;
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
 }
 
-
-/* =========================
-   VERIFY BUTTON
-========================= */
-
-.verify-btn {
+/* Buttons */
+.btn-primary {
     width: 100%;
-
     border: none;
-
-    padding: 17px;
-
-    border-radius: 14px;
-
+    padding: 16px;
+    border-radius: 12px;
     cursor: pointer;
-
     color: white;
-
     font-size: 16px;
     font-weight: 700;
-
-    background: linear-gradient(
-        135deg,
-        #ff3b6b,
-        #8b3dff
-    );
-
+    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
     transition: 0.25s;
 }
 
-.verify-btn:hover {
+.btn-primary:hover {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 25px
-        rgba(214, 41, 93, 0.25);
+    box-shadow: 0 10px 25px rgba(244, 63, 94, 0.3);
 }
 
-
-/* =========================
-   RESEND SECTION
-========================= */
-
+/* Resend Section */
 .resend-section {
-    margin-top: 30px;
-
+    margin-top: 25px;
     text-align: center;
 }
 
 .resend-section p {
-    color: #777;
-
+    color: #94a3b8;
     font-size: 14px;
-
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
-#resendBtn {
+.btn-link {
     border: none;
-
     background: none;
-
-    color: #d6295d;
-
+    color: #f43f5e;
     font-size: 14px;
     font-weight: 700;
-
     cursor: pointer;
-
-    margin-bottom: 10px;
 }
 
-#resendBtn:disabled {
-    color: #bbbbbb;
-    cursor: not-allowed;
+.btn-link:hover {
+    text-decoration: underline;
 }
 
-#timer {
-    font-size: 12px;
-
-    color: #999;
-}
-
-
-/* =========================
-   SECURITY TEXT
-========================= */
-
-.security-text {
-    margin-top: 40px;
-
-    text-align: center;
-
-    color: #999;
-
-    font-size: 12px;
-}
-
-
-/* =========================
-   MOBILE VIEW
-========================= */
-
-@media (max-width: 500px) {
-
-    .otp-page {
-        padding: 15px;
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .split-container {
+        flex-direction: column;
     }
-
-    .otp-card {
-        padding: 30px 22px;
-
-        border-radius: 22px;
+    .hero-section {
+        padding: 30px 20px;
+        min-height: auto;
     }
-
-    .otp-brand {
-        margin-bottom: 40px;
+    .form-section {
+        padding: 30px 20px;
     }
-
-    .otp-content h2 {
-        font-size: 27px;
-    }
-
-    .otp-inputs {
-        gap: 7px;
-    }
-
     .otp-input {
-        height: 52px;
-
-        font-size: 20px;
-
-        border-radius: 11px;
+        width: 42px;
+        height: 50px;
+        font-size: 18px;
     }
-
 }
