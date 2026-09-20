@@ -1,3 +1,7 @@
+/* =========================
+   SAFEHER DARK THEME (ROUTES PAGE)
+========================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,19 +9,19 @@
 }
 
 :root {
-    --primary: #d6295d;
-    --purple: #7b3ff2;
-    --dark: #202124;
-    --muted: #777;
-    --light: #f7f7fa;
+    --primary: #f43f5e;
+    --purple: #8b5cf6;
+    --dark: #0b0f19;
+    --muted: #94a3b8;
+    --light: #111827;
     --white: #ffffff;
-    --border: #eeeeee;
+    --border: rgba(255, 255, 255, 0.08);
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: var(--light);
-    color: var(--dark);
+    background: var(--dark);
+    color: #f1f5f9;
 }
 
 .routes-page {
@@ -33,7 +37,7 @@ body {
 .routes-header {
     height: 76px;
     padding: 0 7%;
-    background: white;
+    background: #111827;
 
     display: flex;
     align-items: center;
@@ -47,12 +51,13 @@ body {
 }
 
 .back-button {
-    color: #777;
+    color: #94a3b8;
     text-decoration: none;
 
     font-size: 14px;
 
     margin-right: 35px;
+    transition: 0.2s;
 }
 
 .back-button:hover {
@@ -79,13 +84,14 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 }
 
 .brand h1 {
     font-size: 21px;
+    color: #ffffff;
 }
 
 .brand h1 span {
@@ -94,7 +100,7 @@ body {
 
 .brand p {
     font-size: 11px;
-    color: #999;
+    color: #94a3b8;
     margin-top: 2px;
 }
 
@@ -135,7 +141,7 @@ body {
 
 .routes-intro h2 {
     font-size: 38px;
-
+    color: #ffffff;
     margin-bottom: 12px;
 }
 
@@ -153,7 +159,7 @@ body {
 ========================= */
 
 .route-card {
-    background: white;
+    background: #111827;
 
     border: 1px solid var(--border);
 
@@ -163,7 +169,7 @@ body {
 
     box-shadow:
         0 12px 35px
-        rgba(30, 20, 40, 0.06);
+        rgba(0, 0, 0, 0.4);
 
     margin-bottom: 22px;
 }
@@ -184,7 +190,7 @@ body {
 
     border-radius: 15px;
 
-    background: #f1eaff;
+    background: rgba(139, 92, 246, 0.1);
 
     display: flex;
     align-items: center;
@@ -194,7 +200,7 @@ body {
 }
 
 .field-icon.destination {
-    background: #fff0f3;
+    background: rgba(244, 63, 94, 0.1);
 }
 
 .field-content {
@@ -204,7 +210,7 @@ body {
 .field-content label {
     display: block;
 
-    color: #888;
+    color: #94a3b8;
 
     font-size: 11px;
 
@@ -228,7 +234,7 @@ body {
 }
 
 .location-row span {
-    color: #555;
+    color: #f1f5f9;
 
     font-size: 14px;
 }
@@ -236,7 +242,7 @@ body {
 .location-row button {
     border: none;
 
-    background: #f3f0ff;
+    background: rgba(139, 92, 246, 0.15);
 
     color: var(--purple);
 
@@ -249,10 +255,11 @@ body {
     font-weight: 700;
 
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .location-row button:hover {
-    background: #e8e1ff;
+    background: rgba(139, 92, 246, 0.25);
 }
 
 .field-content input {
@@ -264,13 +271,13 @@ body {
 
     font-size: 15px;
 
-    color: var(--dark);
+    color: #ffffff;
 
     background: transparent;
 }
 
 .field-content input::placeholder {
-    color: #aaa;
+    color: #64748b;
 }
 
 .route-line {
@@ -278,7 +285,7 @@ body {
 
     height: 28px;
 
-    background: #e5e5e5;
+    background: rgba(255, 255, 255, 0.1);
 
     margin-left: 24px;
 
@@ -307,8 +314,8 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 
     font-size: 14px;
@@ -325,7 +332,7 @@ body {
 
     box-shadow:
         0 8px 20px
-        rgba(123, 63, 242, 0.2);
+        rgba(244, 63, 94, 0.3);
 }
 
 
@@ -334,9 +341,9 @@ body {
 ========================= */
 
 .safety-info {
-    background: #f5f1ff;
+    background: rgba(139, 92, 246, 0.08);
 
-    border: 1px solid #ebe2ff;
+    border: 1px solid rgba(139, 92, 246, 0.2);
 
     border-radius: 20px;
 
@@ -359,7 +366,7 @@ body {
 
     border-radius: 13px;
 
-    background: white;
+    background: #111827;
 
     display: flex;
     align-items: center;
@@ -370,12 +377,12 @@ body {
 
 .safety-info h3 {
     font-size: 15px;
-
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
 .safety-info p {
-    color: #777;
+    color: #94a3b8;
 
     font-size: 12px;
 
@@ -397,6 +404,7 @@ body {
 
 .results-heading h2 {
     font-size: 27px;
+    color: #ffffff;
 }
 
 
@@ -405,7 +413,7 @@ body {
 ========================= */
 
 .route-option {
-    background: white;
+    background: #111827;
 
     border: 1px solid var(--border);
 
@@ -423,7 +431,7 @@ body {
 
     box-shadow:
         0 6px 20px
-        rgba(30, 20, 40, 0.03);
+        rgba(0, 0, 0, 0.3);
 }
 
 .route-number {
@@ -434,7 +442,7 @@ body {
 
     border-radius: 12px;
 
-    background: #f1eaff;
+    background: rgba(139, 92, 246, 0.15);
 
     color: var(--purple);
 
@@ -453,12 +461,12 @@ body {
 
 .route-details h3 {
     font-size: 16px;
-
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
 .route-details p {
-    color: #888;
+    color: #94a3b8;
 
     font-size: 12px;
 
@@ -476,7 +484,7 @@ body {
 }
 
 .route-tags span {
-    background: #f7f7f9;
+    background: #1f2937;
 
     border-radius: 8px;
 
@@ -484,7 +492,7 @@ body {
 
     font-size: 10px;
 
-    color: #666;
+    color: #cbd5e1;
 
     font-weight: 600;
 }
@@ -492,7 +500,7 @@ body {
 .map-button {
     border: none;
 
-    background: #f3f0ff;
+    background: rgba(139, 92, 246, 0.15);
 
     color: var(--purple);
 
@@ -507,10 +515,11 @@ body {
     cursor: pointer;
 
     white-space: nowrap;
+    transition: 0.2s;
 }
 
 .map-button:hover {
-    background: #e8e1ff;
+    background: rgba(139, 92, 246, 0.25);
 }
 
 
@@ -519,15 +528,15 @@ body {
 ========================= */
 
 .route-disclaimer {
-    background: #fff9e9;
+    background: rgba(245, 158, 11, 0.08);
 
-    border: 1px solid #f5e7bd;
+    border: 1px solid rgba(245, 158, 11, 0.2);
 
     border-radius: 15px;
 
     padding: 16px;
 
-    color: #777;
+    color: #cbd5e1;
 
     font-size: 11px;
 
@@ -563,9 +572,9 @@ body {
 
     height: 72px;
 
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(17, 24, 39, 0.95);
 
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid var(--border);
 
     display: flex;
 
@@ -583,7 +592,7 @@ body {
 
     background: none;
 
-    color: #999;
+    color: #64748b;
 
     text-decoration: none;
 
@@ -598,6 +607,7 @@ body {
     cursor: pointer;
 
     min-width: 70px;
+    transition: 0.2s;
 }
 
 .nav-item span {
