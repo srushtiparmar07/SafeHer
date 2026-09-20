@@ -1,3 +1,7 @@
+/* =========================
+   SAFEHER DARK THEME (NEARBY PAGE)
+========================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,19 +9,19 @@
 }
 
 :root {
-    --primary: #d6295d;
-    --purple: #7b3ff2;
-    --dark: #202124;
-    --muted: #777;
-    --light: #f7f7fa;
+    --primary: #f43f5e;
+    --purple: #8b5cf6;
+    --dark: #0b0f19;
+    --muted: #94a3b8;
+    --light: #111827;
     --white: #ffffff;
-    --border: #eeeeee;
+    --border: rgba(255, 255, 255, 0.08);
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: var(--light);
-    color: var(--dark);
+    background: var(--dark);
+    color: #f1f5f9;
 }
 
 .nearby-page {
@@ -33,7 +37,7 @@ body {
 .nearby-header {
     height: 76px;
     padding: 0 7%;
-    background: white;
+    background: #111827;
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--border);
@@ -43,10 +47,11 @@ body {
 }
 
 .back-button {
-    color: #777;
+    color: #94a3b8;
     text-decoration: none;
     font-size: 14px;
     margin-right: 35px;
+    transition: 0.2s;
 }
 
 .back-button:hover {
@@ -72,13 +77,14 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 }
 
 .brand h1 {
     font-size: 21px;
+    color: #ffffff;
 }
 
 .brand h1 span {
@@ -87,7 +93,7 @@ body {
 
 .brand p {
     font-size: 11px;
-    color: #999;
+    color: #94a3b8;
     margin-top: 2px;
 }
 
@@ -122,6 +128,7 @@ body {
 
 .intro h2 {
     font-size: 38px;
+    color: #ffffff;
     margin-bottom: 12px;
 }
 
@@ -137,7 +144,7 @@ body {
 ========================= */
 
 .location-card {
-    background: white;
+    background: #111827;
     border: 1px solid var(--border);
     border-radius: 22px;
     padding: 22px;
@@ -150,7 +157,7 @@ body {
 
     box-shadow:
         0 10px 30px
-        rgba(30, 20, 40, 0.05);
+        rgba(0, 0, 0, 0.4);
 }
 
 .location-icon {
@@ -159,7 +166,7 @@ body {
 
     border-radius: 15px;
 
-    background: #f1eaff;
+    background: rgba(139, 92, 246, 0.1);
 
     display: flex;
     align-items: center;
@@ -174,12 +181,13 @@ body {
 
 .location-info h3 {
     font-size: 16px;
+    color: #ffffff;
     margin-bottom: 5px;
 }
 
 .location-info p {
     font-size: 12px;
-    color: #999;
+    color: #94a3b8;
 }
 
 .location-button {
@@ -192,17 +200,19 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 
     font-weight: 700;
 
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .location-button:hover {
     transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3);
 }
 
 
@@ -211,9 +221,9 @@ body {
 ========================= */
 
 .emergency-card {
-    background: #fff1f4;
+    background: rgba(244, 63, 94, 0.08);
 
-    border: 1px solid #ffdce5;
+    border: 1px solid rgba(244, 63, 94, 0.2);
 
     border-radius: 22px;
 
@@ -230,11 +240,12 @@ body {
 
 .emergency-card h3 {
     font-size: 19px;
+    color: #ffffff;
     margin-bottom: 7px;
 }
 
 .emergency-card p:not(.section-label) {
-    color: #777;
+    color: #94a3b8;
     font-size: 13px;
     line-height: 1.5;
 }
@@ -244,7 +255,7 @@ body {
 
     text-decoration: none;
 
-    background: #d6295d;
+    background: var(--primary);
 
     color: white;
 
@@ -255,6 +266,12 @@ body {
     font-weight: 700;
 
     font-size: 13px;
+    transition: 0.2s;
+}
+
+.emergency-call:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 15px rgba(244, 63, 94, 0.4);
 }
 
 
@@ -272,6 +289,7 @@ body {
 
 .section-heading h2 {
     font-size: 27px;
+    color: #ffffff;
 }
 
 .place-list {
@@ -279,7 +297,7 @@ body {
 }
 
 .place-card {
-    background: white;
+    background: #111827;
 
     border: 1px solid var(--border);
 
@@ -295,7 +313,7 @@ body {
 
     box-shadow:
         0 6px 20px
-        rgba(30, 20, 40, 0.03);
+        rgba(0, 0, 0, 0.3);
 }
 
 .place-icon {
@@ -316,11 +334,11 @@ body {
 }
 
 .place-icon.police {
-    background: #eef4ff;
+    background: rgba(139, 92, 246, 0.1);
 }
 
 .place-icon.hospital {
-    background: #fff0f2;
+    background: rgba(244, 63, 94, 0.1);
 }
 
 .place-info {
@@ -329,11 +347,12 @@ body {
 
 .place-info h3 {
     font-size: 16px;
+    color: #ffffff;
     margin-bottom: 5px;
 }
 
 .place-info p {
-    color: #999;
+    color: #94a3b8;
     font-size: 12px;
     line-height: 1.5;
 }
@@ -341,9 +360,9 @@ body {
 .find-button {
     border: none;
 
-    background: #f4f4f7;
+    background: #1f2937;
 
-    color: var(--dark);
+    color: #f1f5f9;
 
     padding: 11px 17px;
 
@@ -352,10 +371,11 @@ body {
     font-weight: 700;
 
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .find-button:hover {
-    background: #e9e9ed;
+    background: #374151;
 }
 
 
@@ -364,7 +384,9 @@ body {
 ========================= */
 
 .safety-note {
-    background: #f5f1ff;
+    background: rgba(139, 92, 246, 0.08);
+
+    border: 1px solid rgba(139, 92, 246, 0.2);
 
     border-radius: 18px;
 
@@ -383,11 +405,12 @@ body {
 
 .safety-note h3 {
     font-size: 14px;
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
 .safety-note p {
-    color: #777;
+    color: #94a3b8;
     font-size: 12px;
     line-height: 1.6;
 }
@@ -410,9 +433,9 @@ body {
 
     height: 72px;
 
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(17, 24, 39, 0.95);
 
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid var(--border);
 
     display: flex;
 
@@ -430,7 +453,7 @@ body {
 
     background: none;
 
-    color: #999;
+    color: #64748b;
 
     text-decoration: none;
 
@@ -445,6 +468,7 @@ body {
     cursor: pointer;
 
     min-width: 70px;
+    transition: 0.2s;
 }
 
 .nav-item span {
