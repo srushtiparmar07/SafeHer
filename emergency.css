@@ -1,3 +1,7 @@
+/* =========================
+   SAFEHER DARK THEME (EMERGENCY PAGE)
+========================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,19 +9,19 @@
 }
 
 :root {
-    --primary: #d6295d;
-    --purple: #7b3ff2;
-    --dark: #202124;
-    --muted: #777;
-    --light: #f7f7fa;
+    --primary: #f43f5e;
+    --purple: #8b5cf6;
+    --dark: #0b0f19;
+    --muted: #94a3b8;
+    --light: #111827;
     --white: #ffffff;
-    --border: #eeeeee;
+    --border: rgba(255, 255, 255, 0.08);
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: var(--light);
-    color: var(--dark);
+    background: var(--dark);
+    color: #f1f5f9;
 }
 
 .emergency-page {
@@ -34,7 +38,7 @@ body {
     height: 76px;
     padding: 0 7%;
 
-    background: white;
+    background: #111827;
     border-bottom: 1px solid var(--border);
 
     display: flex;
@@ -46,10 +50,11 @@ body {
 }
 
 .back-button {
-    color: #777;
+    color: #94a3b8;
     text-decoration: none;
     font-size: 14px;
     margin-right: 35px;
+    transition: 0.2s;
 }
 
 .back-button:hover {
@@ -76,13 +81,14 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 }
 
 .brand h1 {
     font-size: 21px;
+    color: #ffffff;
 }
 
 .brand h1 span {
@@ -91,7 +97,7 @@ body {
 
 .brand p {
     font-size: 11px;
-    color: #999;
+    color: #94a3b8;
     margin-top: 2px;
 }
 
@@ -132,6 +138,7 @@ body {
 
 .emergency-intro h2 {
     font-size: 38px;
+    color: #ffffff;
     margin-bottom: 12px;
 }
 
@@ -155,7 +162,7 @@ body {
 }
 
 .emergency-card {
-    background: white;
+    background: #111827;
 
     border: 1px solid var(--border);
 
@@ -170,7 +177,7 @@ body {
 
     box-shadow:
         0 7px 22px
-        rgba(30, 20, 40, 0.04);
+        rgba(0, 0, 0, 0.3);
 }
 
 .service-icon {
@@ -189,19 +196,19 @@ body {
 }
 
 .service-icon.police {
-    background: #eef3ff;
+    background: rgba(139, 92, 246, 0.1);
 }
 
 .service-icon.ambulance {
-    background: #fff0f3;
+    background: rgba(244, 63, 94, 0.1);
 }
 
 .service-icon.fire {
-    background: #fff4e8;
+    background: rgba(245, 158, 11, 0.1);
 }
 
 .service-icon.emergency {
-    background: #f3edff;
+    background: rgba(139, 92, 246, 0.15);
 }
 
 .service-info {
@@ -210,11 +217,12 @@ body {
 
 .service-info h3 {
     font-size: 16px;
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
 .service-info p {
-    color: #888;
+    color: #94a3b8;
 
     font-size: 12px;
 
@@ -226,8 +234,8 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 
     color: white;
@@ -250,7 +258,7 @@ body {
 
     box-shadow:
         0 7px 18px
-        rgba(123, 63, 242, 0.2);
+        rgba(244, 63, 94, 0.3);
 }
 
 
@@ -261,9 +269,9 @@ body {
 .emergency-note {
     margin-top: 25px;
 
-    background: #fff9e9;
+    background: rgba(245, 158, 11, 0.08);
 
-    border: 1px solid #f5e7bd;
+    border: 1px solid rgba(245, 158, 11, 0.2);
 
     border-radius: 18px;
 
@@ -284,7 +292,7 @@ body {
 
     border-radius: 12px;
 
-    background: white;
+    background: #111827;
 
     display: flex;
     align-items: center;
@@ -295,11 +303,12 @@ body {
 
 .emergency-note h3 {
     font-size: 14px;
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
 .emergency-note p {
-    color: #777;
+    color: #94a3b8;
 
     font-size: 11px;
 
@@ -324,9 +333,9 @@ body {
 
     height: 72px;
 
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(17, 24, 39, 0.95);
 
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid var(--border);
 
     display: flex;
 
@@ -340,7 +349,7 @@ body {
 }
 
 .nav-item {
-    color: #999;
+    color: #64748b;
 
     text-decoration: none;
 
@@ -353,6 +362,7 @@ body {
     gap: 4px;
 
     min-width: 70px;
+    transition: 0.2s;
 }
 
 .nav-item span {
