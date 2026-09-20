@@ -1,5 +1,5 @@
 /* =========================
-   SAFEHER TRUSTED CONTACTS
+   SAFEHER DARK THEME (TRUSTED CONTACTS)
 ========================= */
 
 * {
@@ -9,19 +9,19 @@
 }
 
 :root {
-    --primary: #d6295d;
-    --purple: #7b3ff2;
-    --dark: #202124;
-    --muted: #777;
-    --light: #f7f7fa;
+    --primary: #f43f5e;
+    --purple: #8b5cf6;
+    --dark: #0b0f19;
+    --muted: #94a3b8;
+    --light: #111827;
     --white: #ffffff;
-    --border: #eeeeee;
+    --border: rgba(255, 255, 255, 0.08);
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #f7f7fa;
-    color: var(--dark);
+    background: var(--dark);
+    color: #f1f5f9;
 }
 
 
@@ -44,7 +44,7 @@ body {
 
     padding: 0 7%;
 
-    background: #ffffff;
+    background: #111827;
 
     display: flex;
     align-items: center;
@@ -58,13 +58,14 @@ body {
 }
 
 .back-button {
-    color: #777;
+    color: #94a3b8;
 
     text-decoration: none;
 
     font-size: 14px;
 
     margin-right: 35px;
+    transition: 0.2s;
 }
 
 .back-button:hover {
@@ -91,13 +92,14 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 }
 
 .contacts-brand h1 {
     font-size: 21px;
+    color: #ffffff;
 }
 
 .contacts-brand h1 span {
@@ -106,7 +108,7 @@ body {
 
 .contacts-brand p {
     font-size: 11px;
-    color: #999;
+    color: #94a3b8;
     margin-top: 2px;
 }
 
@@ -147,7 +149,7 @@ body {
 
 .contacts-intro h2 {
     font-size: 38px;
-
+    color: #ffffff;
     margin-bottom: 12px;
 }
 
@@ -165,7 +167,7 @@ body {
 ========================= */
 
 .add-contact-card {
-    background: white;
+    background: #111827;
 
     border: 1px solid var(--border);
 
@@ -177,7 +179,7 @@ body {
 
     box-shadow:
         0 10px 30px
-        rgba(30, 20, 40, 0.05);
+        rgba(0, 0, 0, 0.4);
 }
 
 .card-heading {
@@ -195,7 +197,7 @@ body {
 
     border-radius: 15px;
 
-    background: #fff0f4;
+    background: rgba(244, 63, 94, 0.1);
 
     color: var(--primary);
 
@@ -209,12 +211,12 @@ body {
 
 .card-heading h3 {
     font-size: 18px;
-
+    color: #ffffff;
     margin-bottom: 5px;
 }
 
 .card-heading p {
-    color: #999;
+    color: #94a3b8;
 
     font-size: 13px;
 }
@@ -245,7 +247,7 @@ body {
 
 .form-group label {
     font-size: 13px;
-
+    color: #cbd5e1;
     font-weight: 700;
 
     margin-bottom: 8px;
@@ -257,13 +259,13 @@ body {
 
     padding: 15px 16px;
 
-    border: 1px solid #dddddd;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 
     border-radius: 13px;
 
-    background: white;
+    background: #0b0f19;
 
-    color: var(--dark);
+    color: #ffffff;
 
     font-size: 14px;
 
@@ -272,13 +274,18 @@ body {
     transition: 0.2s;
 }
 
+.form-group select option {
+    background: #111827;
+    color: #ffffff;
+}
+
 .form-group input:focus,
 .form-group select:focus {
     border-color: var(--primary);
 
     box-shadow:
-        0 0 0 4px
-        rgba(214, 41, 93, 0.08);
+        0 0 0 3px
+        rgba(244, 63, 94, 0.2);
 }
 
 .add-contact-button {
@@ -300,8 +307,8 @@ body {
 
     background: linear-gradient(
         135deg,
-        #ff3b6b,
-        #8b3dff
+        #f43f5e,
+        #8b5cf6
     );
 
     transition: 0.2s;
@@ -312,7 +319,7 @@ body {
 
     box-shadow:
         0 10px 25px
-        rgba(214, 41, 93, 0.2);
+        rgba(244, 63, 94, 0.3);
 }
 
 
@@ -332,10 +339,11 @@ body {
 
 .contacts-title h2 {
     font-size: 27px;
+    color: #ffffff;
 }
 
 #contactCount {
-    color: #999;
+    color: #94a3b8;
 
     font-size: 13px;
 }
@@ -359,9 +367,9 @@ body {
 ========================= */
 
 .empty-state {
-    background: white;
+    background: #111827;
 
-    border: 1px dashed #dcdcdc;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
 
     border-radius: 20px;
 
@@ -378,7 +386,7 @@ body {
 
 .empty-state h3 {
     font-size: 17px;
-
+    color: #ffffff;
     margin-bottom: 8px;
 }
 
@@ -387,7 +395,7 @@ body {
 
     margin: auto;
 
-    color: #999;
+    color: #94a3b8;
 
     font-size: 13px;
 
@@ -400,7 +408,7 @@ body {
 ========================= */
 
 .contact-card {
-    background: white;
+    background: #111827;
 
     border: 1px solid var(--border);
 
@@ -413,6 +421,8 @@ body {
     align-items: center;
 
     gap: 15px;
+
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .contact-avatar {
@@ -427,7 +437,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: #f1eaff;
+    background: rgba(139, 92, 246, 0.15);
 
     color: var(--purple);
 
@@ -442,12 +452,12 @@ body {
 
 .contact-details h3 {
     font-size: 16px;
-
+    color: #ffffff;
     margin-bottom: 4px;
 }
 
 .contact-details p {
-    color: #888;
+    color: #94a3b8;
 
     font-size: 12px;
 
@@ -477,19 +487,22 @@ body {
 
     border-radius: 11px;
 
-    background: #f6f6f8;
+    background: #1f2937;
+
+    color: #f1f5f9;
 
     cursor: pointer;
 
     font-size: 16px;
+    transition: 0.2s;
 }
 
 .contact-action:hover {
-    background: #eeeeF2;
+    background: #374151;
 }
 
 .delete-action {
-    color: #d6295d;
+    color: var(--primary);
 }
 
 
@@ -504,7 +517,8 @@ body {
 
     border-radius: 18px;
 
-    background: #f5f1ff;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
 
     display: flex;
 
@@ -519,12 +533,12 @@ body {
 
 .safety-information h3 {
     font-size: 14px;
-
+    color: #ffffff;
     margin-bottom: 7px;
 }
 
 .safety-information p {
-    color: #777;
+    color: #94a3b8;
 
     font-size: 12px;
 
@@ -550,9 +564,9 @@ body {
 
     height: 72px;
 
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(17, 24, 39, 0.95);
 
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid var(--border);
 
     display: flex;
 
@@ -570,7 +584,7 @@ body {
 
     background: none;
 
-    color: #999;
+    color: #64748b;
 
     text-decoration: none;
 
@@ -585,6 +599,7 @@ body {
     cursor: pointer;
 
     min-width: 70px;
+    transition: 0.2s;
 }
 
 .nav-item span {
