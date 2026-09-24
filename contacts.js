@@ -2,8 +2,6 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 /* =========================================================
    1. SUPABASE SETUP
-   Replace these two values with your project credentials:
-   - Dashboard -> Project Settings -> API
 ========================================================= */
 const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
@@ -160,7 +158,8 @@ document.addEventListener("DOMContentLoaded", async function () {
      DELETE A CONTACT
   ========================= */
   async function deleteContact(id) {
-    const contact = contacts.find((item) => item.id === id);
+    // Fixed type comparison using String() conversion
+    const contact = contacts.find((item) => String(item.id) === String(id));
 
     if (!contact) return;
 
@@ -188,7 +187,8 @@ document.addEventListener("DOMContentLoaded", async function () {
      EDIT A CONTACT
   ========================= */
   async function editContact(id) {
-    const contact = contacts.find((item) => item.id === id);
+    // Fixed type comparison using String() conversion
+    const contact = contacts.find((item) => String(item.id) === String(id));
 
     if (!contact) return;
 
