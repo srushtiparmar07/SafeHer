@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeHer - Women's Safety</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Supabase CDN (Required for session checking) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="app-container">
@@ -65,5 +67,30 @@
       <p>© 2026 SafeHer. Your safety matters.</p>
     </footer>
   </div>
+
+  <!-- Auto-Login Session Check Script -->
+  <script>
+    // Initialize Supabase (Make sure these match your project credentials)
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL'; 
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    
+    // If you already initialize supabase in another included script file, 
+    // you can remove window.supabase.createClient here and rely on your global instance.
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (supabaseClient) {
+        try {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          // If a session exists, bypass the landing page completely and go to dashboard
+          if (session) {
+            window.location.replace("dashboard.html");
+          }
+        } catch (err) {
+          console.error("Session check error:", err);
+        }
+      }
+    });
+  </script>
 </body>
 </html>
