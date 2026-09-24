@@ -1,205 +1,409 @@
 /* =========================
+
    SAFEHER DARK THEME (OTP PAGE)
+
 ========================= */
 
+
+
 * {
+
     margin: 0;
+
     padding: 0;
+
     box-sizing: border-box;
+
 }
+
+
 
 body {
+
     font-family: Arial, Helvetica, sans-serif;
+
     background: #0b0f19;
+
     color: #f1f5f9;
+
     min-height: 100vh;
+
 }
+
+
 
 .split-container {
+
     display: flex;
+
     min-height: 100vh;
+
     width: 100%;
+
 }
+
+
 
 /* Hero Section (Left) */
+
 .hero-section {
+
     flex: 1;
+
     background: linear-gradient(135deg, #111827, #0b0f19);
+
     padding: 50px;
+
     display: flex;
+
     flex-direction: column;
+
     justify-content: space-between;
+
     border-right: 1px solid rgba(255, 255, 255, 0.06);
+
 }
+
+
 
 .back-link {
+
     color: #94a3b8;
+
     text-decoration: none;
+
     font-size: 14px;
+
     transition: 0.2s;
+
 }
+
+
 
 .back-link:hover {
+
     color: #f43f5e;
+
 }
+
+
 
 .hero-content h2 {
+
     font-size: 38px;
+
     font-weight: 800;
+
     margin-bottom: 15px;
+
     color: #ffffff;
+
     letter-spacing: -0.5px;
+
 }
+
+
 
 .hero-content p {
+
     color: #94a3b8;
+
     font-size: 16px;
+
     line-height: 1.6;
+
 }
+
+
 
 .subtitle {
+
     display: inline-block;
+
     color: #f43f5e;
+
     font-size: 12px;
+
     font-weight: 800;
+
     letter-spacing: 1.5px;
+
     margin-bottom: 15px;
+
 }
+
+
 
 .brand {
+
     font-size: 20px;
+
     font-weight: 600;
+
     color: #ffffff;
+
 }
+
+
 
 .brand strong {
+
     color: #f43f5e;
+
 }
+
+
 
 /* Form Section (Right) */
+
 .form-section {
+
     flex: 1;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     padding: 50px;
+
     background: #0b0f19;
+
 }
+
+
 
 .auth-box {
+
     width: 100%;
+
     max-width: 440px;
+
     background: #111827;
+
     padding: 45px;
+
     border-radius: 24px;
+
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+
     border: 1px solid rgba(255, 255, 255, 0.06);
+
 }
+
+
 
 .auth-box h2 {
+
     font-size: 26px;
+
     font-weight: 700;
+
     margin-bottom: 10px;
+
     color: #ffffff;
+
 }
+
+
 
 .instruction {
+
     color: #94a3b8;
+
     font-size: 14px;
+
     line-height: 1.5;
+
     margin-bottom: 30px;
+
 }
+
+
 
 .instruction strong {
+
     color: #ffffff;
+
 }
+
+
 
 /* OTP Input Boxes */
+
 .otp-container {
+
     display: flex;
+
     justify-content: space-between;
+
     gap: 10px;
+
     margin-bottom: 30px;
+
 }
+
+
 
 .otp-input {
+
     width: 50px;
+
     height: 58px;
+
     background: #0b0f19;
+
     border: 1px solid rgba(255, 255, 255, 0.1);
+
     border-radius: 12px;
+
     text-align: center;
+
     font-size: 22px;
+
     font-weight: 700;
+
     color: #ffffff;
+
     outline: none;
+
     transition: 0.2s;
+
 }
+
+
 
 .otp-input:focus {
+
     border-color: #f43f5e;
+
     box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+
 }
+
+
 
 /* Buttons */
+
 .btn-primary {
+
     width: 100%;
+
     border: none;
+
     padding: 16px;
+
     border-radius: 12px;
+
     cursor: pointer;
+
     color: white;
+
     font-size: 16px;
+
     font-weight: 700;
+
     background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+
     transition: 0.25s;
+
 }
+
+
 
 .btn-primary:hover {
+
     transform: translateY(-2px);
+
     box-shadow: 0 10px 25px rgba(244, 63, 94, 0.3);
+
 }
+
+
 
 /* Resend Section */
+
 .resend-section {
+
     margin-top: 25px;
+
     text-align: center;
+
 }
+
+
 
 .resend-section p {
+
     color: #94a3b8;
+
     font-size: 14px;
+
     margin-bottom: 6px;
+
 }
+
+
 
 .btn-link {
+
     border: none;
+
     background: none;
+
     color: #f43f5e;
+
     font-size: 14px;
+
     font-weight: 700;
+
     cursor: pointer;
+
 }
+
+
 
 .btn-link:hover {
+
     text-decoration: underline;
+
 }
 
+
+
 /* Mobile Responsiveness */
+
 @media (max-width: 768px) {
+
     .split-container {
+
         flex-direction: column;
+
     }
+
     .hero-section {
+
         padding: 30px 20px;
+
         min-height: auto;
+
     }
+
     .form-section {
+
         padding: 30px 20px;
+
     }
+
     .otp-input {
+
         width: 42px;
+
         height: 50px;
+
         font-size: 18px;
+
     }
+
 }
