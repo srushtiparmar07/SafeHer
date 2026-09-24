@@ -1,6 +1,5 @@
 /* =========================================================
-   SafeHer Signal — Sign In UI
-   Complete replacement for signin.css
+   SafeHer Signal — Sign In UI (Red/Purple Dark Theme)
    ========================================================= */
 
 :root {
@@ -9,11 +8,11 @@
   --panel: rgba(18, 24, 36, 0.82);
   --panel-solid: #121824;
   --line: rgba(255, 255, 255, 0.12);
-  --line-bright: rgba(157, 255, 225, 0.3);
+  --line-bright: rgba(244, 63, 94, 0.3);
   --text: #f3f7f7;
   --muted: #9aa9af;
-  --aqua: #9dffe1;
-  --aqua-dark: #55e6ba;
+  --primary: #f43f5e;
+  --primary-dark: #e11d48;
   --coral: #ff6f7d;
   --violet: #a98cff;
   --shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
@@ -36,8 +35,8 @@ body {
   overflow-x: hidden;
   color: var(--text);
   background:
-    radial-gradient(circle at 12% 16%, rgba(157, 255, 225, 0.1), transparent 25%),
-    radial-gradient(circle at 90% 85%, rgba(169, 140, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 12% 16%, rgba(244, 63, 94, 0.1), transparent 25%),
+    radial-gradient(circle at 90% 85%, rgba(139, 92, 246, 0.14), transparent 28%),
     var(--night);
   -webkit-font-smoothing: antialiased;
 }
@@ -69,7 +68,7 @@ input {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible {
-  outline: 3px solid rgba(157, 255, 225, 0.45);
+  outline: 3px solid rgba(244, 63, 94, 0.45);
   outline-offset: 4px;
 }
 
@@ -90,7 +89,7 @@ input:focus-visible {
   overflow: hidden;
   padding: 34px clamp(28px, 5vw, 76px) 60px;
   background:
-    linear-gradient(145deg, rgba(17, 34, 38, 0.92), rgba(9, 13, 22, 0.95)),
+    linear-gradient(145deg, rgba(34, 17, 24, 0.92), rgba(9, 13, 22, 0.95)),
     var(--night-soft);
   border-right: 1px solid var(--line);
 }
@@ -102,12 +101,12 @@ input:focus-visible {
   bottom: -170px;
   width: 520px;
   height: 520px;
-  border: 1px solid rgba(157, 255, 225, 0.16);
+  border: 1px solid rgba(244, 63, 94, 0.16);
   border-radius: 50%;
   box-shadow:
-    0 0 0 38px rgba(157, 255, 225, 0.035),
-    0 0 0 78px rgba(157, 255, 225, 0.025),
-    0 0 0 118px rgba(157, 255, 225, 0.018);
+    0 0 0 38px rgba(244, 63, 94, 0.035),
+    0 0 0 78px rgba(244, 63, 94, 0.025),
+    0 0 0 118px rgba(244, 63, 94, 0.018);
 }
 
 .signin-info::after {
@@ -115,7 +114,7 @@ input:focus-visible {
   position: absolute;
   right: 35px;
   bottom: 34px;
-  color: rgba(157, 255, 225, 0.34);
+  color: rgba(244, 63, 94, 0.34);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 2px;
@@ -132,7 +131,7 @@ input:focus-visible {
 }
 
 .back-home:hover {
-  color: var(--aqua);
+  color: var(--primary);
   transform: translateX(-3px);
 }
 
@@ -152,10 +151,10 @@ input:focus-visible {
   place-items: center;
   width: 48px;
   height: 48px;
-  color: var(--night);
-  background: var(--aqua);
+  color: #ffffff;
+  background: linear-gradient(135deg, #f43f5e, #8b5cf6);
   border-radius: 15px 15px 15px 4px;
-  box-shadow: 0 0 30px rgba(157, 255, 225, 0.26);
+  box-shadow: 0 0 30px rgba(244, 63, 94, 0.26);
   font-size: 23px;
   transform: rotate(-7deg);
 }
@@ -168,7 +167,7 @@ input:focus-visible {
 }
 
 .brand h1 span {
-  color: var(--aqua);
+  color: var(--primary);
 }
 
 .info-content {
@@ -179,7 +178,7 @@ input:focus-visible {
 
 .small-label,
 .form-label {
-  color: var(--aqua);
+  color: var(--primary);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 2px;
@@ -208,7 +207,7 @@ input:focus-visible {
   place-items: center;
   padding: 42px clamp(25px, 7vw, 100px);
   background:
-    radial-gradient(circle at 90% 15%, rgba(169, 140, 255, 0.12), transparent 28%),
+    radial-gradient(circle at 90% 15%, rgba(139, 92, 246, 0.12), transparent 28%),
     #0a0d16;
 }
 
@@ -267,13 +266,13 @@ input:focus-visible {
 }
 
 #emailInput:hover {
-  border-color: rgba(157, 255, 225, 0.28);
+  border-color: rgba(244, 63, 94, 0.28);
 }
 
 #emailInput:focus {
   background: rgba(5, 9, 16, 0.9);
-  border-color: var(--aqua-dark);
-  box-shadow: 0 0 0 4px rgba(157, 255, 225, 0.1), 0 0 25px rgba(157, 255, 225, 0.08);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.15), 0 0 25px rgba(244, 63, 94, 0.08);
 }
 
 .continue-btn {
@@ -285,11 +284,11 @@ input:focus-visible {
   min-height: 53px;
   margin-top: 17px;
   padding: 13px 20px;
-  color: #07100f;
-  background: linear-gradient(110deg, var(--aqua), #c4ffe9);
+  color: #ffffff;
+  background: linear-gradient(135deg, #f43f5e, #8b5cf6);
   border: 0;
   border-radius: 12px;
-  box-shadow: 0 12px 25px rgba(85, 230, 186, 0.18);
+  box-shadow: 0 12px 25px rgba(244, 63, 94, 0.22);
   cursor: pointer;
   font-weight: 800;
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
@@ -301,8 +300,8 @@ input:focus-visible {
 }
 
 .continue-btn:hover {
-  filter: brightness(1.06);
-  box-shadow: 0 16px 32px rgba(85, 230, 186, 0.28);
+  filter: brightness(1.08);
+  box-shadow: 0 16px 32px rgba(244, 63, 94, 0.32);
   transform: translateY(-2px);
 }
 
@@ -325,8 +324,8 @@ input:focus-visible {
   margin-top: 28px;
   padding: 14px;
   color: #aab8bb;
-  background: rgba(157, 255, 225, 0.055);
-  border: 1px solid rgba(157, 255, 225, 0.14);
+  background: rgba(244, 63, 94, 0.055);
+  border: 1px solid rgba(244, 63, 94, 0.14);
   border-radius: 12px;
 }
 
