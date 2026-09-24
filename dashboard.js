@@ -14,6 +14,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Populate User Profile Information in the Header
+  const user = session.user;
+  if (user && user.email) {
+    const userEmailElements = document.querySelectorAll("#userEmail, #profileEmail, .profile-email");
+    userEmailElements.forEach(el => {
+      el.textContent = user.email;
+    });
+
+    const userNameElements = document.querySelectorAll("#userName, #profileName, .profile-name");
+    const username = user.email.split("@")[0];
+    const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
+    userNameElements.forEach(el => {
+      el.textContent = formattedName;
+    });
+  }
+
   // Selectors for all feature buttons & elements
   const locationBtn = document.getElementById("locationBtn");
   const contactsBtn = document.getElementById("contactsBtn");
@@ -24,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const logoutBtn = document.getElementById("logoutBtn");
   const locationOutput = document.getElementById("locationOutput");
 
-  // 1. Live Location Button Logic (or redirect to location.html if preferred)
+  // 1. Live Location Button Logic
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
       if ("geolocation" in navigator) {
@@ -84,12 +100,74 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 6. Emergency SOS Button Logic
+  // 6. Emergency SOS Button Logic (Fetches contacts & shares live location)
   if (sosBtn) {
-    sosBtn.addEventListener("click", () => {
-      const confirmSOS = confirm("Are you sure you want to trigger an Emergency SOS Alert?");
-      if (confirmSOS) {
-        alert("SOS Alert Triggered! Sending location updates to emergency contacts.");
+    sosBtn.addEventListener("click", async () => {
+      const confirmSOS = confirm("🚨 EMERGENCY SOS: Are you sure you want to trigger an emergency alert? This will fetch your live location and prepare alerts for your trusted contacts.");
+      if (!confirmSOS) return;
+
+      sosBtn.innerText = "Processing SOS...";
+      sosBtn.disabled = true;
+
+      try {
+        // Fetch Trusted Contacts from Supabase for this logged-in user
+        const { data: contacts, error: contactError } = await supabase
+          .from("trusted_contacts")
+          .select("*")
+          .eq("user_id", user.id);
+
+        if (contactError || !contacts || contacts.length === 0) {
+          alert("SOS Triggered, but no trusted contacts found! Please add contacts in the Trusted Contacts section first.");
+          sosBtn.innerText = "Trigger SOS Alert !";
+          sosBtn.disabled = false;
+          return;
+        }
+
+        // Get Current GPS Location
+        if (!("geolocation" in navigator)) {
+          alert("Geolocation is not supported by your browser.");
+          sosBtn.innerText = "Trigger SOS Alert !";
+          sosBtn.disabled = false;
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+            
+            const emergencyMessage = encodeURIComponent(
+              `🚨 EMERGENCY SOS! I need help immediately. My current live location is: ${mapsLink}`
+            );
+
+            // Automatically open messaging/WhatsApp links for each saved contact with location attached
+            contacts.forEach((contact, index) => {
+              if (contact.phone) {
+                const cleanPhone = contact.phone.replace(/\D/g, '');
+                setTimeout(() => {
+                  window.open(`https://wa.me/${cleanPhone}?text=${emergencyMessage}`, '_blank');
+                }, index * 500);
+              }
+            });
+
+            sosBtn.innerText = "SOS Alert Dispatched! 🚨";
+            sosBtn.style.background = "#10b981"; // Turns button green on success
+          },
+          (error) => {
+            console.error("Location error:", error);
+            alert("Could not fetch your GPS location. Please check your device location permissions.");
+            sosBtn.innerText = "Trigger SOS Alert !";
+            sosBtn.disabled = false;
+          },
+          { enableHighAccuracy: true }
+        );
+
+      } catch (err) {
+        console.error("SOS Error:", err);
+        alert("An error occurred while processing the SOS alert.");
+        sosBtn.innerText = "Trigger SOS Alert !";
+        sosBtn.disabled = false;
       }
     });
   }
