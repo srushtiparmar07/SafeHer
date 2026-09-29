@@ -38,32 +38,32 @@
         <div class="status-note">Stay connected. Stay safe.</div>
       </div>
 
-      <!-- Subscription Upgrade Section -->
-      <section class="subscription-section" style="margin-bottom: 2rem;">
-        <div class="card" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 1px solid #dee2e6;">
+      <!-- Subscription Upgrade Section (Controlled by dashboard.js) -->
+      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none;">
+        <div class="card">
           <h2>Upgrade Your SafeHer Plan</h2>
-          <p style="margin-bottom: 1.5rem;">Choose a recurring subscription plan to unlock full premium safety features.</p>
+          <p>Choose a recurring subscription plan to unlock full premium safety features.</p>
           
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+          <div class="subscription-grid">
             <!-- Monthly Plan -->
-            <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid #ced4da; text-align: center;">
-              <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Monthly Plan</h3>
-              <p style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 1rem;">₹39 <span style="font-size: 0.85rem; font-weight: normal; color: #6c757d;">/ month</span></p>
-              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht4v1D7FKkovc')" style="width: 100%;">Choose Monthly</button>
+            <div class="subscription-plan-card">
+              <h3>Monthly Plan</h3>
+              <div class="plan-price">₹39 <span>/ month</span></div>
+              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht4v1D7FKkovc', 'Monthly')">Choose Monthly</button>
             </div>
 
             <!-- Quarterly Plan -->
-            <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid #ced4da; text-align: center;">
-              <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Quarterly Plan</h3>
-              <p style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 1rem;">₹99 <span style="font-size: 0.85rem; font-weight: normal; color: #6c757d;">/ 3 months</span></p>
-              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht70DeIjgJeCn')" style="width: 100%;">Choose Quarterly</button>
+            <div class="subscription-plan-card">
+              <h3>Quarterly Plan</h3>
+              <div class="plan-price">₹99 <span>/ 3 months</span></div>
+              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht70DeIjgJeCn', 'Quarterly')">Choose Quarterly</button>
             </div>
 
             <!-- Annual Plan -->
-            <div style="background: white; padding: 1.25rem; border-radius: 8px; border: 1px solid #ced4da; text-align: center;">
-              <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Annual Plan</h3>
-              <p style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 1rem;">₹399 <span style="font-size: 0.85rem; font-weight: normal; color: #6c757d;">/ year</span></p>
-              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht8SvA726Fy1B')" style="width: 100%;">Choose Annual</button>
+            <div class="subscription-plan-card">
+              <h3>Annual Plan</h3>
+              <div class="plan-price">₹399 <span>/ year</span></div>
+              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht8SvA726Fy1B', 'Annual')">Choose Annual</button>
             </div>
           </div>
         </div>
@@ -122,26 +122,5 @@
       </div>
     </main>
   </div>
-
-  <!-- Subscription Trigger Script -->
-  <script>
-    function openRazorpaySubscription(planId) {
-        var options = {
-            "key": "rzp_live_ThtMVXdshqqxi2", // Replace with your live Key ID from the Razorpay dashboard settings
-            "plan_id": planId,
-            "name": "SafeHer",
-            "description": "Recurring Safety Subscription",
-            "handler": function (response){
-                alert("Subscription successful! Payment ID: " + response.razorpay_payment_id);
-                // You can add logic here to update user profile/status in Supabase
-            },
-            "theme": {
-                "color": "#0d6efd"
-            }
-        };
-        var rzp = new Razorpay(options);
-        rzp.open();
-    }
-  </script>
 </body>
 </html>
