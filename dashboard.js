@@ -14,8 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Populate User Profile Information in the Header
   const user = session.user;
+
+  // Populate User Profile Information in the Header
   if (user && user.email) {
     const userEmailElements = document.querySelectorAll("#userEmail, #profileEmail, .profile-email");
     userEmailElements.forEach(el => {
@@ -30,6 +31,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Check Active Subscription Status
+  const { data: subs, error: subError } = await supabase
+    .from("user_subscriptions")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("status", "active");
+
+  const hasActiveSubscription = subs && subs.length > 0;
+  const subscriptionSection = document.getElementById("subscriptionSection");
+
+  if (!hasActiveSubscription) {
+    // Show subscription section if user has not subscribed
+    if (subscriptionSection) subscriptionSection.style.display = "block";
+  }
+
   // Selectors for all feature buttons & elements
   const locationBtn = document.getElementById("locationBtn");
   const contactsBtn = document.getElementById("contactsBtn");
@@ -40,9 +56,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const logoutBtn = document.getElementById("logoutBtn");
   const locationOutput = document.getElementById("locationOutput");
 
+  // Helper function to guard features behind active subscription
+  function checkSubscriptionGate() {
+    if (!hasActiveSubscription) {
+      alert("🔒 Premium Feature Locked: Please choose a subscription plan above to unlock SafeHer features.");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+    return true;
+  }
+
   // 1. Live Location Button Logic
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
+      if (!checkSubscriptionGate()) return;
+
       if ("geolocation" in navigator) {
         locationBtn.innerText = "Locating...";
         navigator.geolocation.getCurrentPosition(
@@ -55,7 +83,6 @@ document.addEventListener("DOMContentLoaded", async () => {
               locationOutput.innerText = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
             }
 
-            // Open exact coordinates in Google Maps
             const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
             window.open(mapUrl, "_blank");
           },
@@ -75,6 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 2. Trusted Contacts Page Navigation
   if (contactsBtn) {
     contactsBtn.addEventListener("click", () => {
+      if (!checkSubscriptionGate()) return;
       window.location.href = "contacts.html";
     });
   }
@@ -82,6 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 3. Safer Routes Page Navigation
   if (routesBtn) {
     routesBtn.addEventListener("click", () => {
+      if (!checkSubscriptionGate()) return;
       window.location.href = "routes.html";
     });
   }
@@ -89,6 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 4. Nearby Help Page Navigation
   if (nearbyBtn) {
     nearbyBtn.addEventListener("click", () => {
+      if (!checkSubscriptionGate()) return;
       window.location.href = "nearby.html";
     });
   }
@@ -96,13 +126,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 5. Emergency Numbers Page Navigation
   if (emergencyBtn) {
     emergencyBtn.addEventListener("click", () => {
+      if (!checkSubscriptionGate()) return;
       window.location.href = "emergency.html";
     });
   }
 
-  // 6. Emergency SOS Button Logic (Fetches contacts & shares live location)
+  // 6. Emergency SOS Button Logic
   if (sosBtn) {
     sosBtn.addEventListener("click", async () => {
+      if (!checkSubscriptionGate()) return;
+
       const confirmSOS = confirm("🚨 EMERGENCY SOS: Are you sure you want to trigger an emergency alert? This will fetch your live location and prepare alerts for your trusted contacts.");
       if (!confirmSOS) return;
 
@@ -110,7 +143,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       sosBtn.disabled = true;
 
       try {
-        // Fetch Trusted Contacts from Supabase for this logged-in user
         const { data: contacts, error: contactError } = await supabase
           .from("trusted_contacts")
           .select("*")
@@ -123,7 +155,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           return;
         }
 
-        // Get Current GPS Location
         if (!("geolocation" in navigator)) {
           alert("Geolocation is not supported by your browser.");
           sosBtn.innerText = "Trigger SOS Alert !";
@@ -141,7 +172,6 @@ document.addEventListener("DOMContentLoaded", async () => {
               `🚨 EMERGENCY SOS! I need help immediately. My current live location is: ${mapsLink}`
             );
 
-            // Automatically open messaging/WhatsApp links for each saved contact with location attached
             contacts.forEach((contact, index) => {
               if (contact.phone) {
                 const cleanPhone = contact.phone.replace(/\D/g, '');
@@ -152,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             sosBtn.innerText = "SOS Alert Dispatched! 🚨";
-            sosBtn.style.background = "#10b981"; // Turns button green on success
+            sosBtn.style.background = "#10b981";
           },
           (error) => {
             console.error("Location error:", error);
@@ -189,7 +219,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       "name": "SafeHer",
       "description": "Recurring Safety Subscription",
       "handler": async function (response) {
-        // Save subscription to Supabase upon successful payment
         const { error: dbError } = await supabase
           .from('user_subscriptions')
           .insert([
