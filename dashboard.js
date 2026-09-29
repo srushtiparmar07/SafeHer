@@ -6,10 +6,10 @@ const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Check if user is authenticated
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    alert("Session expired. Please log in again.");
+  // Check if user is authenticated (Supabase automatically handles session persistence via localStorage)
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  
+  if (sessionError || !session) {
     window.location.href = "signin.html";
     return;
   }
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 7. Logout Logic
+  // 7. Logout Logic (Clears session only on explicit user click)
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 8. Razorpay Subscription Handler
   window.openRazorpaySubscription = async function(planId, planType) {
     var options = {
-      "key": "rzp_live_ThtMVXdshqqxi2", // Replace with your actual Razorpay Live Key ID
+      "key": "rzp_live_ThtMVXdshqqxi2", 
       "plan_id": planId,
       "name": "SafeHer",
       "description": "Recurring Safety Subscription",
