@@ -180,4 +180,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.location.href = "signin.html";
     });
   }
+
+  // 8. Razorpay Subscription Handler
+  window.openRazorpaySubscription = async function(planId, planType) {
+    var options = {
+      "key": "rzp_live_ThtMVXdshqqxi2", // Replace with your actual Razorpay Live Key ID
+      "plan_id": planId,
+      "name": "SafeHer",
+      "description": "Recurring Safety Subscription",
+      "handler": async function (response) {
+        // Save subscription to Supabase upon successful payment
+        const { error: dbError } = await supabase
+          .from('user_subscriptions')
+          .insert([
+            {
+              user_id: user.id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              plan_type: planType,
+              status: 'active'
+            }
+          ]);
+
+        if (dbError) {
+          console.error("Error saving subscription:", dbError.message);
+          alert("Payment successful, but failed to update status in database. Please contact support.");
+        } else {
+          alert("Subscription successful! Premium features unlocked.");
+          location.reload();
+        }
+      },
+      "theme": {
+        "color": "#0d6efd"
+      }
+    };
+    
+    var rzp = new Razorpay(options);
+    rzp.open();
+  };
 });
