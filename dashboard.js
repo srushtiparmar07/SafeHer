@@ -55,6 +55,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const sosBtn = document.getElementById("sosBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const locationOutput = document.getElementById("locationOutput");
+  const enableShakeBtn = document.getElementById("enableShakeBtn");
+  const shakePermissionCard = document.getElementById("shakePermissionCard");
 
   // Helper function to guard features behind active subscription
   function checkSubscriptionGate() {
@@ -131,78 +133,158 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 6. Emergency SOS Button Logic
-  if (sosBtn) {
-    sosBtn.addEventListener("click", async () => {
-      if (!checkSubscriptionGate()) return;
+  // Core SOS Execution Function (Shared by Manual Button & Shake Motion)
+  async function executeSOS(isShake = false) {
+    if (!checkSubscriptionGate()) return;
 
+    if (!isShake) {
       const confirmSOS = confirm("🚨 EMERGENCY SOS: Are you sure you want to trigger an emergency alert? This will fetch your live location and prepare alerts for your trusted contacts.");
       if (!confirmSOS) return;
+    }
 
+    if (sosBtn) {
       sosBtn.innerText = "Processing SOS...";
       sosBtn.disabled = true;
+    }
 
-      try {
-        const { data: contacts, error: contactError } = await supabase
-          .from("trusted_contacts")
-          .select("*")
-          .eq("user_id", user.id);
+    try {
+      const { data: contacts, error: contactError } = await supabase
+        .from("trusted_contacts")
+        .select("*")
+        .eq("user_id", user.id);
 
-        if (contactError || !contacts || contacts.length === 0) {
-          alert("SOS Triggered, but no trusted contacts found! Please add contacts in the Trusted Contacts section first.");
+      if (contactError || !contacts || contacts.length === 0) {
+        alert("SOS Triggered, but no trusted contacts found! Please add contacts in the Trusted Contacts section first.");
+        if (sosBtn) {
           sosBtn.innerText = "Trigger SOS Alert !";
           sosBtn.disabled = false;
-          return;
         }
+        return;
+      }
 
-        if (!("geolocation" in navigator)) {
-          alert("Geolocation is not supported by your browser.");
+      if (!("geolocation" in navigator)) {
+        alert("Geolocation is not supported by your browser.");
+        if (sosBtn) {
           sosBtn.innerText = "Trigger SOS Alert !";
           sosBtn.disabled = false;
-          return;
         }
+        return;
+      }
 
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
-            
-            const emergencyMessage = encodeURIComponent(
-              `🚨 EMERGENCY SOS! I need help immediately. My current live location is: ${mapsLink}`
-            );
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+          
+          const emergencyMessage = encodeURIComponent(
+            `🚨 EMERGENCY SOS! I need help immediately. My current live location is: ${mapsLink}`
+          );
 
-            contacts.forEach((contact, index) => {
-              if (contact.phone) {
-                const cleanPhone = contact.phone.replace(/\D/g, '');
-                setTimeout(() => {
-                  window.open(`https://wa.me/${cleanPhone}?text=${emergencyMessage}`, '_blank');
-                }, index * 500);
-              }
-            });
+          contacts.forEach((contact, index) => {
+            if (contact.phone) {
+              const cleanPhone = contact.phone.replace(/\D/g, '');
+              setTimeout(() => {
+                window.open(`https://wa.me/${cleanPhone}?text=${emergencyMessage}`, '_blank');
+              }, index * 500);
+            }
+          });
 
+          if (sosBtn) {
             sosBtn.innerText = "SOS Alert Dispatched! 🚨";
             sosBtn.style.background = "#10b981";
-          },
-          (error) => {
-            console.error("Location error:", error);
-            alert("Could not fetch your GPS location. Please check your device location permissions.");
+          }
+        },
+        (error) => {
+          console.error("Location error:", error);
+          alert("Could not fetch your GPS location. Please check your device location permissions.");
+          if (sosBtn) {
             sosBtn.innerText = "Trigger SOS Alert !";
             sosBtn.disabled = false;
-          },
-          { enableHighAccuracy: true }
-        );
+          }
+        },
+        { enableHighAccuracy: true }
+      );
 
-      } catch (err) {
-        console.error("SOS Error:", err);
-        alert("An error occurred while processing the SOS alert.");
+    } catch (err) {
+      console.error("SOS Error:", err);
+      alert("An error occurred while processing the SOS alert.");
+      if (sosBtn) {
         sosBtn.innerText = "Trigger SOS Alert !";
         sosBtn.disabled = false;
+      }
+    }
+  }
+
+  // 6. Emergency SOS Button Click Logic
+  if (sosBtn) {
+    sosBtn.addEventListener("click", () => executeSOS(false));
+  }
+
+  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC ---
+  let lastX = 0, lastY = 0, lastZ = 0;
+  let lastUpdate = 0;
+  let shakeThreshold = 25; // Sensitivity threshold
+  let isSosTriggered = false; // Cooldown flag
+
+  if (enableShakeBtn) {
+    enableShakeBtn.addEventListener("click", async () => {
+      // iOS 13+ motion permission request
+      if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        try {
+          const response = await DeviceMotionEvent.requestPermission();
+          if (response === 'granted') {
+            window.addEventListener('devicemotion', handleDeviceMotion, false);
+            alert("Shake-to-SOS is now active!");
+            if (shakePermissionCard) shakePermissionCard.style.display = 'none';
+          } else {
+            alert("Permission denied for motion sensors.");
+          }
+        } catch (err) {
+          console.error("Error requesting motion permission:", err);
+        }
+      } else {
+        // Android & standard browsers
+        window.addEventListener('devicemotion', handleDeviceMotion, false);
+        alert("Shake-to-SOS is now active!");
+        if (shakePermissionCard) shakePermissionCard.style.display = 'none';
       }
     });
   }
 
-  // 7. Logout Logic (Clears session only on explicit user click)
+  function handleDeviceMotion(e) {
+    let current = e.accelerationIncludingGravity;
+    if (!current) return;
+
+    let currentTime = Date.now();
+
+    // Check motion metrics every 100ms
+    if ((currentTime - lastUpdate) > 100) {
+      let diffTime = currentTime - lastUpdate;
+      lastUpdate = currentTime;
+
+      let speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
+
+      // If shake crosses threshold and SOS isn't already running
+      if (speed > shakeThreshold && !isSosTriggered) {
+        isSosTriggered = true;
+        
+        console.log("🚨 EMERGENCY SHAKE DETECTED!");
+        executeSOS(true); // Trigger automated SOS instantly
+        
+        // Cooldown timer for 10 seconds
+        setTimeout(() => {
+          isSosTriggered = false;
+        }, 10000);
+      }
+
+      lastX = current.x;
+      lastY = current.y;
+      lastZ = current.z;
+    }
+  }
+
+  // 8. Logout Logic (Clears session only on explicit user click)
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();
@@ -211,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 8. Razorpay Subscription Handler
+  // 9. Razorpay Subscription Handler
   window.openRazorpaySubscription = async function(planId, planType) {
     var options = {
       "key": "rzp_live_ThtMVXdshqqxi2", 
