@@ -6,6 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - SafeHer</title>
     <link rel="stylesheet" href="signin.css">
+
+    <!-- Persistent Session Guard: Redirects instantly before the page renders if already logged in -->
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+        const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function checkExistingSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                // User is already signed in, redirect straight to dashboard
+                window.location.href = "dashboard.html";
+            }
+        }
+
+        checkExistingSession();
+    </script>
 </head>
 
 <body>
@@ -109,25 +128,6 @@
         </section>
 
     </div>
-
-    <!-- Persistent Session Guard: Skip Sign-In if already authenticated -->
-    <script type="module">
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-        const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function checkExistingSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                // User is already signed in, redirect straight to dashboard
-                window.location.href = "dashboard.html";
-            }
-        }
-
-        checkExistingSession();
-    </script>
 
     <!-- Supabase Sign In Script -->
     <script type="module" src="signin.js"></script>
