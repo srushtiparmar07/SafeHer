@@ -71,8 +71,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 1. Live Location Button Logic — FREE FOR EVERYONE
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
-      // Free feature: No subscription check required!
-
       if ("geolocation" in navigator) {
         locationBtn.innerText = "Locating...";
         navigator.geolocation.getCurrentPosition(
@@ -133,9 +131,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Core SOS Execution Function (Shared by Manual Button & Shake Motion) - PREMIUM
+  // Core SOS Execution Function
   async function executeSOS(isShake = false) {
-    if (!checkSubscriptionGate()) return;
+    // If triggered via Shake, it's FREE. If triggered via manual button, it checks subscription.
+    if (!isShake && !checkSubscriptionGate()) return;
 
     if (!isShake) {
       const confirmSOS = confirm("🚨 EMERGENCY SOS: Are you sure you want to trigger an emergency alert? This will fetch your live location and prepare alerts for your trusted contacts.");
@@ -221,7 +220,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     sosBtn.addEventListener("click", () => executeSOS(false));
   }
 
-  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC (PREMIUM) ---
+  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC — FREE FOR EVERYONE ---
   let lastX = 0, lastY = 0, lastZ = 0;
   let lastUpdate = 0;
   let shakeThreshold = 25; // Sensitivity threshold
@@ -229,8 +228,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (enableShakeBtn) {
     enableShakeBtn.addEventListener("click", async () => {
-      // Check subscription before enabling shake sensors
-      if (!checkSubscriptionGate()) return;
+      // Free feature: No subscription check required for shake!
 
       // iOS 13+ motion permission request
       if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
@@ -273,7 +271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         isSosTriggered = true;
         
         console.log("🚨 EMERGENCY SHAKE DETECTED!");
-        executeSOS(true); // Trigger automated SOS instantly
+        executeSOS(true); // Trigger automated SOS instantly (Free via Shake)
         
         // Cooldown timer for 10 seconds
         setTimeout(() => {
