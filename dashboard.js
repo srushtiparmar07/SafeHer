@@ -99,10 +99,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 2. Trusted Contacts Page Navigation (PREMIUM)
+  // 2. Trusted Contacts Page Navigation — FREE FOR ALL (Limited to 4 free / 12 premium)
   if (contactsBtn) {
     contactsBtn.addEventListener("click", () => {
-      if (!checkSubscriptionGate()) return;
       window.location.href = "contacts.html";
     });
   }
