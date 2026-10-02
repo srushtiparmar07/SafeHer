@@ -71,11 +71,9 @@
   <!-- Auto-Login Session Check Script -->
   <script>
     // Initialize Supabase (Make sure these match your project credentials)
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL'; 
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const SUPABASE_URL = 'https://bswgjfguytayxffuorwy.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx';
     
-    // If you already initialize supabase in another included script file, 
-    // you can remove window.supabase.createClient here and rely on your global instance.
     const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -92,5 +90,8 @@
       }
     });
   </script>
+
+  <!-- Global Shake Listener Background Script -->
+  <script type="module" src="shake-listener.js"></script>
 </body>
 </html>
