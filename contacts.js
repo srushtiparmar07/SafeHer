@@ -1,41 +1,106 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-/* =========================================================
-   1. SUPABASE SETUP
-========================================================= */
 const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* =========================================================
-   2. MAIN APPLICATION LOGIC
-========================================================= */
-document.addEventListener("DOMContentLoaded", async function () {
-  const contactForm = document.getElementById("contactForm");
-  const contactsList = document.getElementById("contactsList");
-  const emptyState = document.getElementById("emptyState");
-  const contactCount = document.getElementById("contactCount");
-
-  let contacts = [];
-
-  /* =========================
-     CHECK AUTHENTICATION
-  ========================= */
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-  if (authError || !user) {
-    alert("Please sign in to access your trusted contacts.");
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1. Check user authentication session
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  
+  if (sessionError || !session) {
     window.location.href = "signin.html";
     return;
   }
 
-  /* =========================
-     LOAD CONTACTS FROM SUPABASE
-  ========================= */
-  async function loadContacts() {
+  const user = session.user;
+
+  // DOM Elements
+  const contactForm = document.getElementById("contactForm");
+  const contactsList = document.getElementById("contactsList");
+  const contactCount = document.getElementById("contactCount");
+  const emptyState = document.getElementById("emptyState");
+
+  // Load existing contacts on page load
+  await loadTrustedContacts();
+
+  // 2. Handle Adding a New Contact
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("contactName").value.trim();
+      const phone = document.getElementById("contactPhone").value.trim();
+      const relation = document.getElementById("contactRelation").value;
+
+      if (!name || !phone || !relation) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      try {
+        // Step A: Check current contact count for this user
+        const { data: existingContacts, error: countError } = await supabase
+          .from("trusted_contacts")
+          .select("id")
+          .eq("user_id", user.id);
+
+        if (countError) throw countError;
+
+        const currentCount = existingContacts ? existingContacts.length : 0;
+
+        // Step B: Check active subscription status to determine limits
+        const { data: subs, error: subError } = await supabase
+          .from("user_subscriptions")
+          .select("status")
+          .eq("user_id", user.id)
+          .eq("status", "active");
+
+        if (subError) throw subError;
+
+        const isPremium = subs && subs.length > 0;
+
+        // Step C: Enforce Rules (Free = max 4, Premium = max 12)
+        if (!isPremium && currentCount >= 4) {
+          alert("🔒 Free Tier Limit Reached: You can add up to 4 trusted contacts for free. Upgrade to SafeHer Premium to add up to 12 contacts!");
+          return;
+        }
+
+        if (isPremium && currentCount >= 12) {
+          alert("You have reached the maximum limit of 12 trusted contacts for your premium account.");
+          return;
+        }
+
+        // Step D: Insert new contact into Supabase
+        const { error: insertError } = await supabase
+          .from("trusted_contacts")
+          .insert([
+            {
+              user_id: user.id,
+              name: name,
+              phone: phone,
+              relation: relation
+            }
+          ]);
+
+        if (insertError) throw insertError;
+
+        alert("Trusted contact added successfully!");
+        contactForm.reset();
+        await loadTrustedContacts();
+
+      } catch (err) {
+        console.error("Error adding contact:", err);
+        alert("Failed to add contact. Please try again.");
+      }
+    });
+  }
+
+  // 3. Fetch and Render Trusted Contacts
+  async function loadTrustedContacts() {
     try {
-      const { data, error } = await supabase
+      const { data: contacts, error } = await supabase
         .from("trusted_contacts")
         .select("*")
         .eq("user_id", user.id)
@@ -43,209 +108,71 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (error) throw error;
 
-      contacts = data || [];
-      displayContacts();
-    } catch (error) {
-      console.error("Error loading contacts:", error);
-      alert("Unable to load your trusted contacts.");
+      if (!contacts || contacts.length === 0) {
+        if (contactCount) contactCount.textContent = "0 contacts";
+        if (emptyState) emptyState.style.display = "block";
+        return;
+      }
+
+      // Hide empty state and update count
+      if (emptyState) emptyState.style.display = "none";
+      if (contactCount) contactCount.textContent = `${contacts.length} contact${contacts.length > 1 ? 's' : ''}`;
+
+      // Clear list container except empty state template
+      contactsList.innerHTML = "";
+
+      contacts.forEach(contact => {
+        const contactCard = document.createElement("div");
+        contactCard.className = "contact-card"; // Make sure your contacts.css styles this class nicely
+        contactCard.innerHTML = `
+          <div class="contact-info">
+            <h4>${escapeHTML(contact.name)}</h4>
+            <p>📞 ${escapeHTML(contact.phone)}</p>
+            <span class="contact-badge">${escapeHTML(contact.relation || 'Contact')}</span>
+          </div>
+          <button class="delete-contact-btn" data-id="${contact.id}" title="Remove Contact">🗑️</button>
+        `;
+        contactsList.appendChild(contactCard);
+      });
+
+      // Attach event listeners to delete buttons
+      document.querySelectorAll(".delete-contact-btn").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          const contactId = e.target.getAttribute("data-id");
+          if (confirm("Are you sure you want to remove this contact from your emergency network?")) {
+            await deleteContact(contactId);
+          }
+        });
+      });
+
+    } catch (err) {
+      console.error("Error loading contacts:", err);
     }
   }
 
-  /* =========================
-     DISPLAY CONTACTS IN HTML
-  ========================= */
-  function displayContacts() {
-    contactsList.innerHTML = "";
-
-    if (contacts.length === 0) {
-      contactsList.appendChild(emptyState);
-      contactCount.textContent = "0 contacts";
-      return;
-    }
-
-    contacts.forEach(function (contact) {
-      const card = document.createElement("div");
-      card.className = "contact-card";
-
-      const firstLetter = contact.name ? contact.name.charAt(0).toUpperCase() : "?";
-
-      card.innerHTML = `
-        <div class="contact-avatar">
-          ${firstLetter}
-        </div>
-
-        <div class="contact-details">
-          <h3>${contact.name}</h3>
-          <p>📱 ${contact.phone}</p>
-          <p class="contact-relation">${contact.relation}</p>
-        </div>
-
-        <div class="contact-actions">
-          <button class="contact-action edit-action" data-id="${contact.id}" title="Edit contact">
-            ✏️
-          </button>
-          <button class="contact-action delete-action" data-id="${contact.id}" title="Delete contact">
-            🗑️
-          </button>
-        </div>
-      `;
-
-      contactsList.appendChild(card);
-    });
-
-    contactCount.textContent =
-      contacts.length + (contacts.length === 1 ? " contact" : " contacts");
-
-    /* EDIT BUTTON LISTENERS */
-    document.querySelectorAll(".edit-action").forEach(function (button) {
-      button.addEventListener("click", function () {
-        editContact(this.dataset.id);
-      });
-    });
-
-    /* DELETE BUTTON LISTENERS */
-    document.querySelectorAll(".delete-action").forEach(function (button) {
-      button.addEventListener("click", function () {
-        deleteContact(this.dataset.id);
-      });
-    });
-  }
-
-  /* =========================
-     ADD A NEW CONTACT
-  ========================= */
-  contactForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const name = document.getElementById("contactName").value.trim();
-    const phone = document.getElementById("contactPhone").value.trim();
-    const relation = document.getElementById("contactRelation").value;
-
-    if (!name || !phone || !relation) {
-      alert("Please fill in all contact details.");
-      return;
-    }
-
-    const phonePattern = /^\+?[0-9\s-]{10,15}$/;
-    if (!phonePattern.test(phone)) {
-      alert("Please enter a valid phone number.");
-      return;
-    }
-
-    try {
-      const { error } = await supabase.from("trusted_contacts").insert([
-        {
-          user_id: user.id,
-          name: name,
-          phone: phone,
-          relation: relation,
-        },
-      ]);
-
-      if (error) throw error;
-
-      contactForm.reset();
-      await loadContacts();
-
-      alert(name + " has been added to your trusted contacts.");
-    } catch (error) {
-      console.error("Error adding contact:", error);
-      alert("Unable to save the trusted contact.");
-    }
-  });
-
-  /* =========================
-     DELETE A CONTACT
-  ========================= */
-  async function deleteContact(id) {
-    // Fixed type comparison using String() conversion
-    const contact = contacts.find((item) => String(item.id) === String(id));
-
-    if (!contact) return;
-
-    const confirmed = confirm(`Remove ${contact.name} from your trusted contacts?`);
-    if (!confirmed) return;
-
+  // 4. Delete Contact Function
+  async function deleteContact(contactId) {
     try {
       const { error } = await supabase
         .from("trusted_contacts")
         .delete()
-        .eq("id", id)
+        .eq("id", contactId)
         .eq("user_id", user.id);
 
       if (error) throw error;
 
-      await loadContacts();
-      alert("Contact removed.");
-    } catch (error) {
-      console.error("Error deleting contact:", error);
-      alert("Unable to remove the contact.");
+      alert("Contact removed successfully.");
+      await loadTrustedContacts();
+    } catch (err) {
+      console.error("Error deleting contact:", err);
+      alert("Failed to delete contact.");
     }
   }
 
-  /* =========================
-     EDIT A CONTACT
-  ========================= */
-  async function editContact(id) {
-    // Fixed type comparison using String() conversion
-    const contact = contacts.find((item) => String(item.id) === String(id));
-
-    if (!contact) return;
-
-    const newName = prompt("Enter contact name:", contact.name);
-    if (newName === null) return;
-
-    const newPhone = prompt("Enter phone number:", contact.phone);
-    if (newPhone === null) return;
-
-    const newRelation = prompt("Enter relationship:", contact.relation);
-    if (newRelation === null) return;
-
-    if (!newName.trim() || !newPhone.trim() || !newRelation.trim()) {
-      alert("All fields are required.");
-      return;
-    }
-
-    const phonePattern = /^\+?[0-9\s-]{10,15}$/;
-    if (!phonePattern.test(newPhone.trim())) {
-      alert("Please enter a valid phone number.");
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from("trusted_contacts")
-        .update({
-          name: newName.trim(),
-          phone: newPhone.trim(),
-          relation: newRelation.trim(),
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", id)
-        .eq("user_id", user.id);
-
-      if (error) throw error;
-
-      await loadContacts();
-      alert("Contact updated successfully.");
-    } catch (error) {
-      console.error("Error updating contact:", error);
-      alert("Unable to update the contact.");
-    }
+  // Utility to prevent XSS injection
+  function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
   }
-
-  /* =========================
-     PROFILE BUTTON
-  ========================= */
-  const profileButton = document.getElementById("profileNavButton");
-  if (profileButton) {
-    profileButton.addEventListener("click", function () {
-      alert("Profile feature will be added soon.");
-    });
-  }
-
-  /* =========================
-     INITIAL LOAD
-  ========================= */
-  loadContacts();
 });
