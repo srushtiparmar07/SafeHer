@@ -58,20 +58,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   const enableShakeBtn = document.getElementById("enableShakeBtn");
   const shakePermissionCard = document.getElementById("shakePermissionCard");
 
-  // Helper function to guard features behind active subscription
+  // Helper function to guard premium features behind active subscription
   function checkSubscriptionGate() {
     if (!hasActiveSubscription) {
-      alert("🔒 Premium Feature Locked: Please choose a subscription plan above to unlock SafeHer features.");
+      alert("🔒 Premium Feature Locked: Please choose a subscription plan above to unlock SafeHer emergency features.");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return false;
     }
     return true;
   }
 
-  // 1. Live Location Button Logic
+  // 1. Live Location Button Logic — FREE FOR EVERYONE
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
-      if (!checkSubscriptionGate()) return;
+      // Free feature: No subscription check required!
 
       if ("geolocation" in navigator) {
         locationBtn.innerText = "Locating...";
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 2. Trusted Contacts Page Navigation
+  // 2. Trusted Contacts Page Navigation (PREMIUM)
   if (contactsBtn) {
     contactsBtn.addEventListener("click", () => {
       if (!checkSubscriptionGate()) return;
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 3. Safer Routes Page Navigation
+  // 3. Safer Routes Page Navigation (PREMIUM)
   if (routesBtn) {
     routesBtn.addEventListener("click", () => {
       if (!checkSubscriptionGate()) return;
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 4. Nearby Help Page Navigation
+  // 4. Nearby Help Page Navigation (PREMIUM)
   if (nearbyBtn) {
     nearbyBtn.addEventListener("click", () => {
       if (!checkSubscriptionGate()) return;
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 5. Emergency Numbers Page Navigation
+  // 5. Emergency Numbers Page Navigation (PREMIUM)
   if (emergencyBtn) {
     emergencyBtn.addEventListener("click", () => {
       if (!checkSubscriptionGate()) return;
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Core SOS Execution Function (Shared by Manual Button & Shake Motion)
+  // Core SOS Execution Function (Shared by Manual Button & Shake Motion) - PREMIUM
   async function executeSOS(isShake = false) {
     if (!checkSubscriptionGate()) return;
 
@@ -216,12 +216,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 6. Emergency SOS Button Click Logic
+  // 6. Emergency SOS Button Click Logic (PREMIUM)
   if (sosBtn) {
     sosBtn.addEventListener("click", () => executeSOS(false));
   }
 
-  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC ---
+  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC (PREMIUM) ---
   let lastX = 0, lastY = 0, lastZ = 0;
   let lastUpdate = 0;
   let shakeThreshold = 25; // Sensitivity threshold
@@ -229,6 +229,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (enableShakeBtn) {
     enableShakeBtn.addEventListener("click", async () => {
+      // Check subscription before enabling shake sensors
+      if (!checkSubscriptionGate()) return;
+
       // iOS 13+ motion permission request
       if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
         try {
