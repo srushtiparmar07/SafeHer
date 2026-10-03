@@ -10,7 +10,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
      (function(){
-        emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" }); // Replace with your EmailJS Public Key
+        emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" }); // Replace with your EmailJS Public Key if not already set elsewhere
      })();
   </script>
 
@@ -159,7 +159,7 @@
         if (planName === 'Annual') planAmount = 399;
 
         var options = {
-            "key": "rzp_live_ThtMVXdshqqxi2", // Replace with your Razorpay Key ID
+            "key": "rzp_live_ThtMVXdshqqxi2", 
             "plan_id": razorpayPlanId,     
             "name": "SafeHer Premium",
             "description": `${planName} Subscription (₹${planAmount})`,
@@ -171,15 +171,15 @@
                     return;
                 }
 
-                // 1. Update Supabase database
+                // 1. Safely Upsert to Supabase (creates profile if missing, updates if it exists)
                 const { error: dbError } = await supabase
                     .from('profiles')
-                    .update({ 
+                    .upsert({ 
+                        id: user.id,
                         is_subscribed: true, 
                         subscription_id: response.razorpay_subscription_id,
                         updated_at: new Date()
-                    })
-                    .eq('id', user.id);
+                    });
 
                 if (dbError) {
                     console.error("Supabase error:", dbError.message);
