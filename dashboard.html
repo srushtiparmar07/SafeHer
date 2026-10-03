@@ -10,7 +10,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
      (function(){
-        emailjs.init({ publicKey: "luH-Yxpnhf7oAqN7K" }); // Replace with your EmailJS Public Key if not already set elsewhere
+        emailjs.init({ publicKey: "luH-Yxpnhf7oAqN7K" });
      })();
   </script>
 
@@ -164,6 +164,8 @@
             "name": "SafeHer Premium",
             "description": `${planName} Subscription (₹${planAmount})`,
             "handler": async function (response) {
+                console.log("Razorpay Response Received:", response);
+
                 const { data: { user }, error: userError } = await supabase.auth.getUser();
 
                 if (userError || !user) {
@@ -171,13 +173,16 @@
                     return;
                 }
 
-                // 1. Safely Upsert to Supabase (creates profile if missing, updates if it exists)
+                // Robust check for subscription ID or payment ID fallback
+                const subId = response.razorpay_subscription_id || response.razorpay_payment_id || "sub_live_active";
+
+                // 1. Safely Upsert to Supabase
                 const { error: dbError } = await supabase
                     .from('profiles')
                     .upsert({ 
                         id: user.id,
                         is_subscribed: true, 
-                        subscription_id: response.razorpay_subscription_id,
+                        subscription_id: subId,
                         updated_at: new Date()
                     });
 
@@ -189,7 +194,7 @@
                     emailjs.send("service_hy8wvic", "template_hy8wvic", {
                         to_email: user.email,
                         to_name: user.user_metadata?.name || "SafeHer User",
-                        subscription_id: response.razorpay_subscription_id,
+                        subscription_id: subId,
                         amount: planAmount
                     }).then(() => {
                         console.log("Confirmation email sent successfully!");
