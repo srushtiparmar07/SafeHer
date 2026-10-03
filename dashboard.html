@@ -176,7 +176,7 @@
                 // Robust check for subscription ID or payment ID fallback
                 const subId = response.razorpay_subscription_id || response.razorpay_payment_id || "sub_live_active";
 
-                // 1. Safely Upsert to Supabase
+                // 1. Safely Upsert to Supabase with explicit conflict target
                 const { error: dbError } = await supabase
                     .from('profiles')
                     .upsert({ 
@@ -184,7 +184,7 @@
                         is_subscribed: true, 
                         subscription_id: subId,
                         updated_at: new Date()
-                    });
+                    }, { onConflict: 'id' });
 
                 if (dbError) {
                     console.error("Supabase error:", dbError.message);
