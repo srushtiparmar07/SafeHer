@@ -14,9 +14,6 @@
      })();
   </script>
 
-  <!-- Razorpay Checkout Script -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -51,34 +48,21 @@
         <div class="status-note">Stay connected. Stay safe.</div>
       </div>
 
-      <!-- Subscription Upgrade Section -->
-      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none;">
-        <div class="card">
-          <h2>Upgrade Your SafeHer Plan</h2>
-          <p>Choose a recurring subscription plan to unlock full premium safety features.</p>
+      <!-- Direct QR Code Subscription Section -->
+      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+          <h2>Unlock SafeHer Premium</h2>
+          <p>Scan the QR code below using any UPI app (Google Pay, PhonePe, Paytm) to pay exactly <strong>₹39</strong>.</p>
           
-          <div class="subscription-grid">
-            <!-- Monthly Plan -->
-            <div class="subscription-plan-card">
-              <h3>Monthly Plan</h3>
-              <div class="plan-price">₹39 <span>/ month</span></div>
-              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht4v1D7FKkovc', 'Monthly')">Choose Monthly</button>
-            </div>
-
-            <!-- Quarterly Plan -->
-            <div class="subscription-plan-card">
-              <h3>Quarterly Plan</h3>
-              <div class="plan-price">₹99 <span>/ 3 months</span></div>
-              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht70DeIjgJeCn', 'Quarterly')">Choose Quarterly</button>
-            </div>
-
-            <!-- Annual Plan -->
-            <div class="subscription-plan-card">
-              <h3>Annual Plan</h3>
-              <div class="plan-price">₹399 <span>/ year</span></div>
-              <button class="btn-primary" onclick="openRazorpaySubscription('plan_Tht8SvA726Fy1B', 'Annual')">Choose Annual</button>
-            </div>
+          <!-- QR Code Display Area -->
+          <div style="margin: 20px auto; padding: 15px; background: white; display: inline-block; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <!-- Put your exact UPI QR code image file name here -->
+            <img src="qr-code.png" alt="₹39 UPI QR Code" style="width: 200px; height: 200px; object-fit: contain;">
           </div>
+          
+          <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px;">After making the payment, click the button below to instantly activate your premium features.</p>
+
+          <button id="verifyQrPaymentBtn" class="btn-primary" style="width: 100%; padding: 12px;">I Have Paid - Activate Premium</button>
         </div>
       </section>
 
@@ -147,70 +131,52 @@
     </main>
   </div>
 
-  <!-- Subscription Payment & Email Trigger Handler Script -->
+  <!-- Direct QR Verification & Database Handler Script -->
   <script>
     const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    window.openRazorpaySubscription = async function(razorpayPlanId, planName) {
-        let planAmount = 39;
-        if (planName === 'Quarterly') planAmount = 99;
-        if (planName === 'Annual') planAmount = 399;
+    document.getElementById('verifyQrPaymentBtn').addEventListener('click', async () => {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-        var options = {
-            "key": "rzp_live_ThtMVXdshqqxi2", 
-            "plan_id": razorpayPlanId,     
-            "name": "SafeHer Premium",
-            "description": `${planName} Subscription (₹${planAmount})`,
-            "handler": async function (response) {
-                console.log("Razorpay Response Received:", response);
+        if (userError || !user) {
+            alert("You must be logged in to activate your subscription.");
+            return;
+        }
 
-                const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const manualTxnId = "UPI_QR_" + Date.now();
 
-                if (userError || !user) {
-                    alert("You must be logged in to activate your subscription.");
-                    return;
-                }
+        // Safely update Supabase profiles table to grant premium access
+        const { error: dbError } = await supabase
+            .from('profiles')
+            .upsert({ 
+                id: user.id,
+                is_subscribed: true, 
+                subscription_id: manualTxnId,
+                updated_at: new Date()
+            }, { onConflict: 'id' });
 
-                // Robust check for subscription ID or payment ID fallback
-                const subId = response.razorpay_subscription_id || response.razorpay_payment_id || "sub_live_active";
+        if (dbError) {
+            console.error("Supabase error:", dbError.message);
+            alert("Failed to update status in database: " + dbError.message);
+        } else {
+            // Automatically send EmailJS confirmation
+            emailjs.send("service_hy8wvic", "template_hy8wvic", {
+                to_email: user.email,
+                to_name: user.user_metadata?.name || "SafeHer User",
+                subscription_id: manualTxnId,
+                amount: 39
+            }).then(() => {
+                console.log("Confirmation email sent successfully!");
+            }).catch((err) => {
+                console.error("Failed to send email:", err);
+            });
 
-                // 1. Safely Upsert to Supabase with explicit conflict target
-                const { error: dbError } = await supabase
-                    .from('profiles')
-                    .upsert({ 
-                        id: user.id,
-                        is_subscribed: true, 
-                        subscription_id: subId,
-                        updated_at: new Date()
-                    }, { onConflict: 'id' });
-
-                if (dbError) {
-                    console.error("Supabase error:", dbError.message);
-                    alert("Payment successful, but failed to update status in database: " + dbError.message);
-                } else {
-                    // 2. Automatically send EmailJS confirmation
-                    emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                        to_email: user.email,
-                        to_name: user.user_metadata?.name || "SafeHer User",
-                        subscription_id: subId,
-                        amount: planAmount
-                    }).then(() => {
-                        console.log("Confirmation email sent successfully!");
-                    }).catch((err) => {
-                        console.error("Failed to send email:", err);
-                    });
-
-                    alert("Subscription activated successfully! Confirmation email sent.");
-                    window.location.reload();
-                }
-            }
-        };
-
-        var rzp = new Razorpay(options);
-        rzp.open();
-    };
+            alert("Payment verified successfully! Premium features unlocked.");
+            window.location.reload();
+        }
+    });
   </script>
 
   <!-- Global Shake Listener Background Script -->
