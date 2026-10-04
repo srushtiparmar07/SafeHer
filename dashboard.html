@@ -17,9 +17,6 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Razorpay Checkout SDK for UPI Autopay / Subscriptions -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
   <script type="module" src="dashboard.js" defer></script>
 </head>
 <body>
@@ -55,38 +52,38 @@
       <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
         <div class="card" style="max-width: 900px; margin: 0 auto;">
           <h2>Unlock SafeHer Premium</h2>
-          <p>Choose a plan below to set up your subscription.</p>
+          <p>Choose a plan below to select your preferred payment method.</p>
           
           <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
             
-            <!-- Monthly Plan -->
+            <!-- Monthly Plan (1 Month Duration) -->
             <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <h3 style="color: #1e293b; margin-bottom: 5px;">Monthly Plan</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Full access to emergency network, live tracking, and shake SOS.</p>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Full access to emergency network, live tracking, and shake SOS for 1 Month.</p>
               </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-qr="QRmonthly.jpeg" data-planid="plan_monthly_xyz" style="width: 100%; padding: 12px; cursor: pointer;">Select Monthly Plan</button>
+              <button class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-qr="QRmonthly.jpeg" data-duration-months="1" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=39&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Monthly Plan</button>
             </div>
 
-            <!-- Quarterly Plan -->
+            <!-- Quarterly Plan (3 Months Duration) -->
             <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <h3 style="color: #1e293b; margin-bottom: 5px;">Quarterly Plan</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Save more with our 3-month comprehensive safety package.</p>
               </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-qr="QRquarterly.jpeg" data-planid="plan_quarterly_xyz" style="width: 100%; padding: 12px; cursor: pointer;">Select Quarterly Plan</button>
+              <button class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-qr="QRquarterly.jpeg" data-duration-months="3" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=99&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Quarterly Plan</button>
             </div>
 
-            <!-- Annual Plan -->
+            <!-- Annual Plan (12 Months Duration) -->
             <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <h3 style="color: #1e293b; margin-bottom: 5px;">Annual Plan</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Best value! Continuous year-round safety coverage.</p>
               </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-qr="QRannual.jpeg" data-planid="plan_annual_xyz" style="width: 100%; padding: 12px; cursor: pointer;">Select Annual Plan</button>
+              <button class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-qr="QRannual.jpeg" data-duration-months="12" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=399&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Annual Plan</button>
             </div>
 
           </div>
@@ -100,10 +97,10 @@
           <h2 id="methodModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Choose Payment Method</h2>
           <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
 
-          <!-- Option 1: Setup UPI Autopay via Gateway -->
-          <button id="upiAppOptionBtn" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; cursor: pointer; border-radius: 6px; font-weight: bold; border: none;">📱 Setup UPI Autopay</button>
+          <!-- Option 1: Pay by UPI App Intent -->
+          <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
 
-          <!-- Option 2: Pay by QR Code (Fallback) -->
+          <!-- Option 2: Pay by QR Code -->
           <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
         </div>
       </div>
@@ -188,7 +185,7 @@
     </main>
   </div>
 
-  <!-- Multi-Plan Payment Flow with UPI Autopay Script -->
+  <!-- Multi-Plan Payment Flow Script with Dynamic Duration Calculation -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
@@ -199,7 +196,7 @@
           supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
 
-      let currentPlan = { name: '', amount: '', qr: '', planId: '' };
+      let currentPlan = { name: '', amount: '', qr: '', upi: '', durationMonths: 1 };
 
       const paymentMethodModal = document.getElementById('paymentMethodModal');
       const qrDisplayModal = document.getElementById('qrDisplayModal');
@@ -210,11 +207,13 @@
               currentPlan.name = e.currentTarget.getAttribute('data-plan');
               currentPlan.amount = e.currentTarget.getAttribute('data-amount');
               currentPlan.qr = e.currentTarget.getAttribute('data-qr');
-              currentPlan.planId = e.currentTarget.getAttribute('data-planid');
+              currentPlan.upi = e.currentTarget.getAttribute('data-upi');
+              currentPlan.durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
 
-              // Set modal texts
+              // Set modal texts and links
               document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
-              document.getElementById('upiAppOptionBtn').innerText = `📱 Setup UPI Autopay (₹${currentPlan.amount})`;
+              document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
+              document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
 
               if (paymentMethodModal) {
                   paymentMethodModal.style.display = 'flex';
@@ -222,84 +221,16 @@
           });
       });
 
-      // 2. When user clicks "Setup UPI Autopay"
-      const upiAppOptionBtn = document.getElementById('upiAppOptionBtn');
-      if (upiAppOptionBtn) {
-          upiAppOptionBtn.addEventListener('click', async () => {
-              if (paymentMethodModal) paymentMethodModal.style.display = 'none';
-
-              if (!supabaseClient) {
-                  alert("Supabase client not initialized.");
-                  return;
-              }
-
-              const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-              if (userError || !user) {
-                  alert("You must be logged in to set up a subscription.");
-                  return;
-              }
-
-              // Initialize Gateway Autopay Checkout
-              var options = {
-                  "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your actual Gateway key ID
-                  "subscription_id": currentPlan.planId, // Subscription plan ID from your gateway dashboard
-                  "name": "SafeHer Premium",
-                  "description": `${currentPlan.name} Safety Subscription (Autopay)`,
-                  "image": "safer-logo-transparent.png",
-                  "handler": async function (response) {
-                      // Fires automatically upon successful UPI Autopay mandate approval
-                      const subscriptionId = response.razorpay_subscription_id;
-                      
-                      const { error: dbError } = await supabaseClient
-                          .from('profiles')
-                          .upsert({ 
-                              id: user.id,
-                              is_subscribed: true, 
-                              subscription_id: subscriptionId,
-                              updated_at: new Date()
-                          }, { onConflict: 'id' });
-
-                      if (dbError) {
-                          console.error("Supabase error:", dbError.message);
-                          alert("Mandate approved, but failed to update database status: " + dbError.message);
-                      } else {
-                          if (typeof emailjs !== 'undefined') {
-                              emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                                  to_email: user.email,
-                                  to_name: user.user_metadata?.name || "SafeHer User",
-                                  subscription_id: subscriptionId,
-                                  amount: currentPlan.amount
-                              }).catch((err) => console.error("Failed to send email:", err));
-                          }
-
-                          alert(`UPI Autopay setup successful! ${currentPlan.name} subscription activated.`);
-                          window.location.reload();
-                      }
-                  },
-                  "prefill": {
-                      "email": user.email,
-                      "name": user.user_metadata?.name || ""
-                  },
-                  "theme": {
-                      "color": "#0d6efd"
-                  }
-              };
-
-              var rzp = new Razorpay(options);
-              rzp.open();
-          });
-      }
-
-      // 3. When user clicks "Pay by QR Code" option (Manual fallback)
+      // 2. When user clicks "Pay by QR Code" option
       const qrOptionBtn = document.getElementById('qrCodeOptionBtn');
       if (qrOptionBtn) {
           qrOptionBtn.addEventListener('click', () => {
-              if (paymentMethodModal) paymentMethodModal.style.display = 'none';
+              if (paymentMethodModal) paymentMethodModal.style.display = 'none'; // Close choice modal
               
               document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code`;
               document.getElementById('qrImageElement').src = currentPlan.qr;
               
-              if (qrDisplayModal) qrDisplayModal.style.display = 'flex';
+              if (qrDisplayModal) qrDisplayModal.style.display = 'flex'; // Open QR display modal
           });
       }
 
@@ -319,7 +250,7 @@
           if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
       });
 
-      // 4. When user verifies payment after scanning QR code manually
+      // 3. When user verifies payment, calculate expiry based on chosen months and activate subscription
       const verifyBtn = document.getElementById('verifyQrPaymentBtn');
       if (verifyBtn) {
           verifyBtn.addEventListener('click', async () => {
@@ -335,7 +266,11 @@
                   return;
               }
 
-              const manualTxnId = `UPI_QR_${currentPlan.name}_` + Date.now();
+              // Calculate subscription expiry date dynamically based on plan duration
+              const expiresAt = new Date();
+              expiresAt.setMonth(expiresAt.getMonth() + currentPlan.durationMonths);
+
+              const manualTxnId = `UPI_${currentPlan.name}_` + Date.now();
 
               const { error: dbError } = await supabaseClient
                   .from('profiles')
@@ -343,6 +278,8 @@
                       id: user.id,
                       is_subscribed: true, 
                       subscription_id: manualTxnId,
+                      subscription_plan: currentPlan.name,
+                      subscription_expires_at: expiresAt.toISOString(),
                       updated_at: new Date()
                   }, { onConflict: 'id' });
 
@@ -355,7 +292,8 @@
                           to_email: user.email,
                           to_name: user.user_metadata?.name || "SafeHer User",
                           subscription_id: manualTxnId,
-                          amount: currentPlan.amount
+                          amount: currentPlan.amount,
+                          plan_name: currentPlan.name
                       }).then(() => {
                           console.log("Confirmation email sent successfully!");
                       }).catch((err) => {
@@ -363,7 +301,7 @@
                       });
                   }
 
-                  alert(`${currentPlan.name} plan verified successfully! Premium features unlocked.`);
+                  alert(`${currentPlan.name} plan activated successfully for ${currentPlan.durationMonths} month(s)! Premium features unlocked.`);
                   window.location.reload();
               }
           });
