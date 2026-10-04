@@ -97,10 +97,10 @@
           <h2 id="methodModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Choose Payment Method</h2>
           <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
 
-          <!-- Option 1: Pay by UPI App Intent -->
+          <!-- Option 1: Pay by UPI App (Pre-filled Amount) -->
           <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
 
-          <!-- Option 2: Pay by QR Code -->
+          <!-- Option 2: Pay by QR Code (Exact Amount QR) -->
           <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
         </div>
       </div>
@@ -110,7 +110,7 @@
         <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
           <span id="closeQrModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
           <h2 id="qrModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Scan QR Code</h2>
-          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Scan this QR code using any UPI app.</p>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Scan this pre-filled QR code with your UPI app.</p>
           
           <div style="background: #f8fafc; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 15px; border: 1px solid #e2e8f0;">
             <img id="qrImageElement" src="" alt="Plan QR Code" style="width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto;">
@@ -185,7 +185,7 @@
     </main>
   </div>
 
-  <!-- Multi-Plan Payment Flow Script with Dynamic Duration Calculation -->
+  <!-- Script for Pre-filled UPI Intent & Exact Duration Activation -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
@@ -210,7 +210,7 @@
               currentPlan.upi = e.currentTarget.getAttribute('data-upi');
               currentPlan.durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
 
-              // Set modal texts and links
+              // Set modal texts and pre-filled UPI link
               document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
               document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
               document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
@@ -227,7 +227,7 @@
           qrOptionBtn.addEventListener('click', () => {
               if (paymentMethodModal) paymentMethodModal.style.display = 'none'; // Close choice modal
               
-              document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code`;
+              document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code (₹${currentPlan.amount})`;
               document.getElementById('qrImageElement').src = currentPlan.qr;
               
               if (qrDisplayModal) qrDisplayModal.style.display = 'flex'; // Open QR display modal
@@ -250,7 +250,7 @@
           if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
       });
 
-      // 3. When user verifies payment, calculate expiry based on chosen months and activate subscription
+      // 3. When user verifies payment, calculate exact expiration months (1, 3, or 12) and activate
       const verifyBtn = document.getElementById('verifyQrPaymentBtn');
       if (verifyBtn) {
           verifyBtn.addEventListener('click', async () => {
