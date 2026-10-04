@@ -187,88 +187,117 @@
 
   <!-- Multi-Plan Payment Flow Script -->
   <script>
-    const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    document.addEventListener("DOMContentLoaded", () => {
+      const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
+      
+      let supabaseClient = null;
+      if (window.supabase) {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
 
-    let currentPlan = { name: '', amount: '', qr: '', upi: '' };
+      let currentPlan = { name: '', amount: '', qr: '', upi: '' };
 
-    const paymentMethodModal = document.getElementById('paymentMethodModal');
-    const qrDisplayModal = document.getElementById('qrDisplayModal');
+      const paymentMethodModal = document.getElementById('paymentMethodModal');
+      const qrDisplayModal = document.getElementById('qrDisplayModal');
 
-    // 1. When user clicks "Select [Plan] Plan"
-    document.querySelectorAll('.choose-plan-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            currentPlan.name = e.target.getAttribute('data-plan');
-            currentPlan.amount = e.target.getAttribute('data-amount');
-            currentPlan.qr = e.target.getAttribute('data-qr');
-            currentPlan.upi = e.target.getAttribute('data-upi');
+      // 1. When user clicks "Select [Plan] Plan"
+      document.querySelectorAll('.choose-plan-btn').forEach(button => {
+          button.addEventListener('click', (e) => {
+              currentPlan.name = e.currentTarget.getAttribute('data-plan');
+              currentPlan.amount = e.currentTarget.getAttribute('data-amount');
+              currentPlan.qr = e.currentTarget.getAttribute('data-qr');
+              currentPlan.upi = e.currentTarget.getAttribute('data-upi');
 
-            // Set modal texts and links
-            document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
-            document.getElementById('upiAppOptionBtn').href = currentPlan.upi;
-            document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
+              // Set modal texts and links
+              document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
+              document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
+              document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
 
-            paymentMethodModal.style.display = 'flex';
-        });
-    });
+              if (paymentMethodModal) {
+                  paymentMethodModal.style.display = 'flex';
+              }
+          });
+      });
 
-    // 2. When user clicks "Pay by QR Code" option
-    document.getElementById('qrCodeOptionBtn').addEventListener('click', () => {
-        paymentMethodModal.style.display = 'none'; // Close choice modal
-        
-        document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code`;
-        document.getElementById('qrImageElement').src = currentPlan.qr;
-        
-        qrDisplayModal.style.display = 'flex'; // Open QR display modal
-    });
+      // 2. When user clicks "Pay by QR Code" option
+      const qrOptionBtn = document.getElementById('qrCodeOptionBtn');
+      if (qrOptionBtn) {
+          qrOptionBtn.addEventListener('click', () => {
+              if (paymentMethodModal) paymentMethodModal.style.display = 'none'; // Close choice modal
+              
+              document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code`;
+              document.getElementById('qrImageElement').src = currentPlan.qr;
+              
+              if (qrDisplayModal) qrDisplayModal.style.display = 'flex'; // Open QR display modal
+          });
+      }
 
-    // Close Modals
-    document.getElementById('closeMethodModal').addEventListener('click', () => { paymentMethodModal.style.display = 'none'; });
-    document.getElementById('closeQrModal').addEventListener('click', () => { qrDisplayModal.style.display = 'none'; });
-    window.addEventListener('click', (e) => {
-        if (e.target === paymentMethodModal) paymentMethodModal.style.display = 'none';
-        if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
-    });
+      // Close Modals
+      const closeMethodModal = document.getElementById('closeMethodModal');
+      const closeQrModal = document.getElementById('closeQrModal');
 
-    // 3. When user verifies payment after scanning QR code
-    document.getElementById('verifyQrPaymentBtn').addEventListener('click', async () => {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (closeMethodModal) {
+          closeMethodModal.addEventListener('click', () => { paymentMethodModal.style.display = 'none'; });
+      }
+      if (closeQrModal) {
+          closeQrModal.addEventListener('click', () => { qrDisplayModal.style.display = 'none'; });
+      }
 
-        if (userError || !user) {
-            alert("You must be logged in to activate your subscription.");
-            return;
-        }
+      window.addEventListener('click', (e) => {
+          if (e.target === paymentMethodModal) paymentMethodModal.style.display = 'none';
+          if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
+      });
 
-        const manualTxnId = `UPI_QR_${currentPlan.name}_` + Date.now();
+      // 3. When user verifies payment after scanning QR code
+      const verifyBtn = document.getElementById('verifyQrPaymentBtn');
+      if (verifyBtn) {
+          verifyBtn.addEventListener('click', async () => {
+              if (!supabaseClient) {
+                  alert("Supabase client not initialized.");
+                  return;
+              }
 
-        const { error: dbError } = await supabase
-            .from('profiles')
-            .upsert({ 
-                id: user.id,
-                is_subscribed: true, 
-                subscription_id: manualTxnId,
-                updated_at: new Date()
-            }, { onConflict: 'id' });
+              const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
-        if (dbError) {
-            console.error("Supabase error:", dbError.message);
-            alert("Failed to update status in database: " + dbError.message);
-        } else {
-            emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                to_email: user.email,
-                to_name: user.user_metadata?.name || "SafeHer User",
-                subscription_id: manualTxnId,
-                amount: currentPlan.amount
-            }).then(() => {
-                console.log("Confirmation email sent successfully!");
-            }).catch((err) => {
-                console.error("Failed to send email:", err);
-            });
+              if (userError || !user) {
+                  alert("You must be logged in to activate your subscription.");
+                  return;
+              }
 
-            alert(`${currentPlan.name} plan verified successfully! Premium features unlocked.`);
-            window.location.reload();
-        }
+              const manualTxnId = `UPI_QR_${currentPlan.name}_` + Date.now();
+
+              const { error: dbError } = await supabaseClient
+                  .from('profiles')
+                  .upsert({ 
+                      id: user.id,
+                      is_subscribed: true, 
+                      subscription_id: manualTxnId,
+                      updated_at: new Date()
+                  }, { onConflict: 'id' });
+
+              if (dbError) {
+                  console.error("Supabase error:", dbError.message);
+                  alert("Failed to update status in database: " + dbError.message);
+              } else {
+                  if (typeof emailjs !== 'undefined') {
+                      emailjs.send("service_hy8wvic", "template_hy8wvic", {
+                          to_email: user.email,
+                          to_name: user.user_metadata?.name || "SafeHer User",
+                          subscription_id: manualTxnId,
+                          amount: currentPlan.amount
+                      }).then(() => {
+                          console.log("Confirmation email sent successfully!");
+                      }).catch((err) => {
+                          console.error("Failed to send email:", err);
+                      });
+                  }
+
+                  alert(`${currentPlan.name} plan verified successfully! Premium features unlocked.`);
+                  window.location.reload();
+              }
+          });
+      }
     });
   </script>
 
