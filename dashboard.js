@@ -69,6 +69,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     return true;
   }
 
+  // Programmatic alarm sound generator (synthesizes an emergency siren without MP3 files)
+  function playEmergencyAlarm() {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      let beepCount = 0;
+      
+      const alarmInterval = setInterval(() => {
+        if (beepCount >= 8) {
+          clearInterval(alarmInterval);
+          return;
+        }
+        
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+        
+        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.3);
+        
+        beepCount++;
+      }, 400);
+    } catch (e) {
+      console.error("Audio playback error:", e);
+    }
+  }
+
   // 1. Live Location Button Logic — FREE FOR EVERYONE
   if (locationBtn) {
     locationBtn.addEventListener("click", () => {
@@ -131,14 +165,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Core SOS Execution Function
+  // Core SOS Execution Function (Handles both Button clicks & Shake triggers)
   async function executeSOS(isShake = false) {
     if (!isShake && !checkSubscriptionGate()) return;
 
     if (!isShake) {
-      const confirmSOS = confirm("🚨 EMERGENCY SOS: Are you sure you want to trigger an emergency alert? This will fetch your live location and prepare alerts for your trusted contacts.");
+      const confirmSOS = confirm("🚨 EMERGENCY SOS: Are you sure you want to trigger an emergency alert? This will play an alarm, fetch your live location, and alert your trusted contacts.");
       if (!confirmSOS) return;
     }
+
+    // Play the built-in alarm sound instantly on emergency trigger
+    playEmergencyAlarm();
 
     if (sosBtn) {
       sosBtn.innerText = "Processing SOS...";
@@ -152,7 +189,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .eq("user_id", user.id);
 
       if (contactError || !contacts || contacts.length === 0) {
-        alert("SOS Triggered, but no trusted contacts found! Please add contacts in the Trusted Contacts section first.");
+        alert("SOS Alarm played, but no trusted contacts found! Please add contacts in the Trusted Contacts section first.");
         if (sosBtn) {
           sosBtn.innerText = "Trigger SOS Alert !";
           sosBtn.disabled = false;
@@ -195,7 +232,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
         (error) => {
           console.error("Location error:", error);
-          alert("Could not fetch your GPS location. Please check your device location permissions.");
+          alert("Could not fetch your GPS location. Alarm played, but location messaging requires GPS permissions.");
           if (sosBtn) {
             sosBtn.innerText = "Trigger SOS Alert !";
             sosBtn.disabled = false;
@@ -263,7 +300,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (speed > shakeThreshold && !isSosTriggered) {
         isSosTriggered = true;
         console.log("🚨 EMERGENCY SHAKE DETECTED!");
-        executeSOS(true); 
+        executeSOS(true); // Triggers sound, location, and WhatsApp alerts automatically!
         
         setTimeout(() => {
           isSosTriggered = false;
@@ -305,7 +342,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Error saving subscription:", dbError.message);
         alert("Failed to update status in database: " + dbError.message);
       } else {
-        // Automatically send EmailJS confirmation if configured
         try {
           emailjs.send("service_hy8wvic", "template_hy8wvic", {
             to_email: user.email,
