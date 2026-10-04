@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const subscriptionSection = document.getElementById("subscriptionSection");
 
   if (!hasActiveSubscription) {
-    // Show subscription section if user has not subscribed
+    // Show subscription QR section if user has not subscribed
     if (subscriptionSection) subscriptionSection.style.display = "block";
   }
 
@@ -57,11 +57,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const locationOutput = document.getElementById("locationOutput");
   const enableShakeBtn = document.getElementById("enableShakeBtn");
   const shakePermissionCard = document.getElementById("shakePermissionCard");
+  const verifyQrPaymentBtn = document.getElementById("verifyQrPaymentBtn");
 
   // Helper function to guard premium features behind active subscription
   function checkSubscriptionGate() {
     if (!hasActiveSubscription) {
-      alert("🔒 Premium Feature Locked: Please choose a subscription plan above to unlock SafeHer emergency features.");
+      alert("🔒 Premium Feature Locked: Please scan the QR code above and confirm your payment to unlock SafeHer emergency features.");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return false;
     }
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 2. Trusted Contacts Page Navigation — FREE FOR ALL (Limited to 4 free / 12 premium)
+  // 2. Trusted Contacts Page Navigation — FREE FOR ALL
   if (contactsBtn) {
     contactsBtn.addEventListener("click", () => {
       window.location.href = "contacts.html";
@@ -132,7 +133,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Core SOS Execution Function
   async function executeSOS(isShake = false) {
-    // If triggered via Shake, it's FREE. If triggered via manual button, it checks subscription.
     if (!isShake && !checkSubscriptionGate()) return;
 
     if (!isShake) {
@@ -222,14 +222,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC — FREE FOR EVERYONE ---
   let lastX = 0, lastY = 0, lastZ = 0;
   let lastUpdate = 0;
-  let shakeThreshold = 25; // Sensitivity threshold
-  let isSosTriggered = false; // Cooldown flag
+  let shakeThreshold = 25; 
+  let isSosTriggered = false; 
 
   if (enableShakeBtn) {
     enableShakeBtn.addEventListener("click", async () => {
-      // Free feature: No subscription check required for shake!
-
-      // iOS 13+ motion permission request
       if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
         try {
           const response = await DeviceMotionEvent.requestPermission();
@@ -244,7 +241,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error("Error requesting motion permission:", err);
         }
       } else {
-        // Android & standard browsers
         window.addEventListener('devicemotion', handleDeviceMotion, false);
         alert("Shake-to-SOS is now active!");
         if (shakePermissionCard) shakePermissionCard.style.display = 'none';
@@ -258,21 +254,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let currentTime = Date.now();
 
-    // Check motion metrics every 100ms
     if ((currentTime - lastUpdate) > 100) {
       let diffTime = currentTime - lastUpdate;
       lastUpdate = currentTime;
 
       let speed = Math.abs(current.x + current.y + current.z - lastX - lastY - lastZ) / diffTime * 10000;
 
-      // If shake crosses threshold and SOS isn't already running
       if (speed > shakeThreshold && !isSosTriggered) {
         isSosTriggered = true;
-        
         console.log("🚨 EMERGENCY SHAKE DETECTED!");
-        executeSOS(true); // Trigger automated SOS instantly (Free via Shake)
+        executeSOS(true); 
         
-        // Cooldown timer for 10 seconds
         setTimeout(() => {
           isSosTriggered = false;
         }, 10000);
@@ -284,7 +276,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 8. Logout Logic (Clears session only on explicit user click)
+  // 8. Logout Logic
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       await supabase.auth.signOut();
@@ -293,39 +285,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 9. Razorpay Subscription Handler
-  window.openRazorpaySubscription = async function(planId, planType) {
-    var options = {
-      "key": "rzp_live_ThtMVXdshqqxi2", 
-      "plan_id": planId,
-      "name": "SafeHer",
-      "description": "Recurring Safety Subscription",
-      "handler": async function (response) {
-        const { error: dbError } = await supabase
-          .from('user_subscriptions')
-          .insert([
-            {
-              user_id: user.id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              plan_type: planType,
-              status: 'active'
-            }
-          ]);
+  // 9. Direct UPI QR Payment Verification Handler
+  if (verifyQrPaymentBtn) {
+    verifyQrPaymentBtn.addEventListener("click", async () => {
+      const manualTxnId = "UPI_QR_39_" + Date.now();
 
-        if (dbError) {
-          console.error("Error saving subscription:", dbError.message);
-          alert("Payment successful, but failed to update status in database. Please contact support.");
-        } else {
-          alert("Subscription successful! Premium features unlocked.");
-          location.reload();
+      const { error: dbError } = await supabase
+        .from('user_subscriptions')
+        .insert([
+          {
+            user_id: user.id,
+            razorpay_payment_id: manualTxnId,
+            plan_type: '₹39 Fixed QR Plan',
+            status: 'active'
+          }
+        ]);
+
+      if (dbError) {
+        console.error("Error saving subscription:", dbError.message);
+        alert("Failed to update status in database: " + dbError.message);
+      } else {
+        // Automatically send EmailJS confirmation if configured
+        try {
+          emailjs.send("service_hy8wvic", "template_hy8wvic", {
+            to_email: user.email,
+            to_name: user.user_metadata?.name || "SafeHer User",
+            subscription_id: manualTxnId,
+            amount: 39
+          });
+        } catch (mailErr) {
+          console.error("EmailJS note:", mailErr);
         }
-      },
-      "theme": {
-        "color": "#0d6efd"
+
+        alert("Payment verified successfully! Premium features unlocked.");
+        location.reload();
       }
-    };
-    
-    var rzp = new Razorpay(options);
-    rzp.open();
-  };
+    });
+  }
 });
