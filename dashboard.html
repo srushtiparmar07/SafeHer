@@ -52,7 +52,7 @@
       <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
         <div class="card" style="max-width: 900px; margin: 0 auto;">
           <h2>Unlock SafeHer Premium</h2>
-          <p>Scan the appropriate QR code below using any UPI app to pay and activate your plan.</p>
+          <p>Scan the QR code or click your preferred UPI app to pay and activate your plan.</p>
           
           <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
             
@@ -60,24 +60,33 @@
             <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <h3 style="color: #1e293b; margin-bottom: 5px;">Monthly Plan</h3>
               <div style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 10px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
-              <img src="QRmonthly.jpeg" alt="₹39 Monthly QR Code" style="width: 150px; height: 150px; object-fit: contain; margin: 10px 0;">
-              <button class="btn-primary verify-qr-btn" data-plan="Monthly" data-amount="39" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">Activate ₹39 Plan</button>
+              <img src="QRmonthly.jpeg" alt="₹39 Monthly QR Code" style="width: 140px; height: 140px; object-fit: contain; margin: 5px 0;">
+              
+              <!-- Direct Mobile UPI Intent Button -->
+             <a href="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=39&cu=INR" class="btn-secondary"...>Pay via UPI App (₹39)</a>
+              <button class="btn-primary verify-qr-btn" data-plan="Monthly" data-amount="39" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">I Have Paid - Activate</button>
             </div>
 
             <!-- Quarterly Plan -->
             <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <h3 style="color: #1e293b; margin-bottom: 5px;">Quarterly Plan</h3>
               <div style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 10px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
-              <img src="QRquarterly.jpeg" alt="₹99 Quarterly QR Code" style="width: 150px; height: 150px; object-fit: contain; margin: 10px 0;">
-              <button class="btn-primary verify-qr-btn" data-plan="Quarterly" data-amount="99" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">Activate ₹99 Plan</button>
+              <img src="QRquarterly.jpeg" alt="₹99 Quarterly QR Code" style="width: 140px; height: 140px; object-fit: contain; margin: 5px 0;">
+              
+              <!-- Direct Mobile UPI Intent Button -->
+              <a href="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=99&cu=INR" class="btn-secondary"...>Pay via UPI App (₹99)</a>
+              <button class="btn-primary verify-qr-btn" data-plan="Quarterly" data-amount="99" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">I Have Paid - Activate</button>
             </div>
 
             <!-- Annual Plan -->
             <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
               <h3 style="color: #1e293b; margin-bottom: 5px;">Annual Plan</h3>
               <div style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 10px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
-              <img src="QRannual.jpeg" alt="₹399 Annual QR Code" style="width: 150px; height: 150px; object-fit: contain; margin: 10px 0;">
-              <button class="btn-primary verify-qr-btn" data-plan="Annual" data-amount="399" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">Activate ₹399 Plan</button>
+              <img src="QRannual.jpeg" alt="₹399 Annual QR Code" style="width: 140px; height: 140px; object-fit: contain; margin: 5px 0;">
+              
+              <!-- Direct Mobile UPI Intent Button -->
+             <a href="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=399&cu=INR" class="btn-secondary"...>Pay via UPI App (₹399)</a>
+              <button class="btn-primary verify-qr-btn" data-plan="Annual" data-amount="399" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">I Have Paid - Activate</button>
             </div>
 
           </div>
