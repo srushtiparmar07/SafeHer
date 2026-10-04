@@ -48,21 +48,39 @@
         <div class="status-note">Stay connected. Stay safe.</div>
       </div>
 
-      <!-- Direct QR Code Subscription Section -->
+      <!-- Direct QR Code Subscription Section with 3 Plans -->
       <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
-        <div class="card" style="max-width: 500px; margin: 0 auto;">
+        <div class="card" style="max-width: 900px; margin: 0 auto;">
           <h2>Unlock SafeHer Premium</h2>
-          <p>Scan the QR code below using any UPI app (Google Pay, PhonePe, Paytm) to pay exactly <strong>₹39</strong>.</p>
+          <p>Scan the appropriate QR code below using any UPI app to pay and activate your plan.</p>
           
-          <!-- QR Code Display Area -->
-          <div style="margin: 20px auto; padding: 15px; background: white; display: inline-block; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            <!-- Put your exact UPI QR code image file name here -->
-            <img src="qr-code.png" alt="₹39 UPI QR Code" style="width: 200px; height: 200px; object-fit: contain;">
-          </div>
-          
-          <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px;">After making the payment, click the button below to instantly activate your premium features.</p>
+          <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+            
+            <!-- Monthly Plan -->
+            <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <h3 style="color: #1e293b; margin-bottom: 5px;">Monthly Plan</h3>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 10px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
+              <img src="QRmonthly.jpeg" alt="₹39 Monthly QR Code" style="width: 150px; height: 150px; object-fit: contain; margin: 10px 0;">
+              <button class="btn-primary verify-qr-btn" data-plan="Monthly" data-amount="39" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">Activate ₹39 Plan</button>
+            </div>
 
-          <button id="verifyQrPaymentBtn" class="btn-primary" style="width: 100%; padding: 12px;">I Have Paid - Activate Premium</button>
+            <!-- Quarterly Plan -->
+            <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <h3 style="color: #1e293b; margin-bottom: 5px;">Quarterly Plan</h3>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 10px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
+              <img src="QRquarterly.jpeg" alt="₹99 Quarterly QR Code" style="width: 150px; height: 150px; object-fit: contain; margin: 10px 0;">
+              <button class="btn-primary verify-qr-btn" data-plan="Quarterly" data-amount="99" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">Activate ₹99 Plan</button>
+            </div>
+
+            <!-- Annual Plan -->
+            <div style="background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <h3 style="color: #1e293b; margin-bottom: 5px;">Annual Plan</h3>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin-bottom: 10px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
+              <img src="QRannual.jpeg" alt="₹399 Annual QR Code" style="width: 150px; height: 150px; object-fit: contain; margin: 10px 0;">
+              <button class="btn-primary verify-qr-btn" data-plan="Annual" data-amount="399" style="width: 100%; padding: 10px; margin-top: 10px; cursor: pointer;">Activate ₹399 Plan</button>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -131,51 +149,56 @@
     </main>
   </div>
 
-  <!-- Direct QR Verification & Database Handler Script -->
+  <!-- Multi-Plan Direct QR Verification Handler Script -->
   <script>
     const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.getElementById('verifyQrPaymentBtn').addEventListener('click', async () => {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+    document.querySelectorAll('.verify-qr-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+            const planName = e.target.getAttribute('data-plan');
+            const planAmount = e.target.getAttribute('data-amount');
 
-        if (userError || !user) {
-            alert("You must be logged in to activate your subscription.");
-            return;
-        }
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-        const manualTxnId = "UPI_QR_" + Date.now();
+            if (userError || !user) {
+                alert("You must be logged in to activate your subscription.");
+                return;
+            }
 
-        // Safely update Supabase profiles table to grant premium access
-        const { error: dbError } = await supabase
-            .from('profiles')
-            .upsert({ 
-                id: user.id,
-                is_subscribed: true, 
-                subscription_id: manualTxnId,
-                updated_at: new Date()
-            }, { onConflict: 'id' });
+            const manualTxnId = `UPI_QR_${planName}_` + Date.now();
 
-        if (dbError) {
-            console.error("Supabase error:", dbError.message);
-            alert("Failed to update status in database: " + dbError.message);
-        } else {
-            // Automatically send EmailJS confirmation
-            emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                to_email: user.email,
-                to_name: user.user_metadata?.name || "SafeHer User",
-                subscription_id: manualTxnId,
-                amount: 39
-            }).then(() => {
-                console.log("Confirmation email sent successfully!");
-            }).catch((err) => {
-                console.error("Failed to send email:", err);
-            });
+            // Safely update Supabase profiles table to grant premium access
+            const { error: dbError } = await supabase
+                .from('profiles')
+                .upsert({ 
+                    id: user.id,
+                    is_subscribed: true, 
+                    subscription_id: manualTxnId,
+                    updated_at: new Date()
+                }, { onConflict: 'id' });
 
-            alert("Payment verified successfully! Premium features unlocked.");
-            window.location.reload();
-        }
+            if (dbError) {
+                console.error("Supabase error:", dbError.message);
+                alert("Failed to update status in database: " + dbError.message);
+            } else {
+                // Automatically send EmailJS confirmation
+                emailjs.send("service_hy8wvic", "template_hy8wvic", {
+                    to_email: user.email,
+                    to_name: user.user_metadata?.name || "SafeHer User",
+                    subscription_id: manualTxnId,
+                    amount: planAmount
+                }).then(() => {
+                    console.log("Confirmation email sent successfully!");
+                }).catch((err) => {
+                    console.error("Failed to send email:", err);
+                });
+
+                alert(`${planName} plan verified successfully! Premium features unlocked.`);
+                window.location.reload();
+            }
+        });
     });
   </script>
 
