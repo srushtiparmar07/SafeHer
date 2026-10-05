@@ -1,344 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SafeHer - Dashboard</title>
-  <link rel="stylesheet" href="dashboard.css">
-  
-  <!-- EmailJS SDK -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script type="text/javascript">
-     (function(){
-        emailjs.init({ publicKey: "luH-Yxpnhf7oAqN7K" });
-     })();
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeHer - Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+     (function(){
+        emailjs.init({ publicKey: "luH-Yxpnhf7oAqN7K" });
+     })();
+  </script>
 
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script type="module" src="dashboard.js" defer></script>
+  <script type="module" src="dashboard.js" defer></script>
 </head>
 <body>
-  <div class="dashboard-container">
-    <header class="navbar">
-      <a href="index.html" class="logo" aria-label="SafeHer home">
-        <img src="safer-logo-transparent.png" alt="SafeHer - Your safety companion" class="dashboard-brand-logo">
-      </a>
-      
-      <div class="navbar-right">
-        <!-- Clickable Profile Link directing to profile.html -->
-        <a href="profile.html" class="user-profile" style="text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer;">
-          <div class="profile-avatar" id="userAvatar"></div>
-          <span class="profile-name" id="userName">My Profile</span>
-        </a>
-        <button id="logoutBtn" class="btn-secondary">Log Out</button>
-      </div>
-    </header>
+  <div class="dashboard-container">
+    <header class="navbar">
+      <a href="index.html" class="logo" aria-label="SafeHer home">
+        <img src="safer-logo-transparent.png" alt="SafeHer - Your safety companion" class="dashboard-brand-logo">
+      </a>
+      
+      <div class="navbar-right">
+        <!-- Clickable Profile Link directing to profile.html -->
+        <a href="profile.html" class="user-profile" style="text-decoration: none; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+          <div class="profile-avatar" id="userAvatar"></div>
+          <span class="profile-name" id="userName">My Profile</span>
+        </a>
+        <button id="logoutBtn" class="btn-secondary">Log Out</button>
+      </div>
+    </header>
 
-    <main class="main-content">
-      <section class="welcome-banner">
-        <div class="dashboard-eyebrow">YOUR SAFETY COMMAND CENTER</div>
-        <h1>Emergency Action Dashboard</h1>
-        <p>Quick access to safety features and live tracking.</p>
-      </section>
+    <main class="main-content">
+      <section class="welcome-banner">
+        <div class="dashboard-eyebrow">YOUR SAFETY COMMAND CENTER</div>
+        <h1>Emergency Action Dashboard</h1>
+        <p>Quick access to safety features and live tracking.</p>
+      </section>
 
-      <div class="status-row">
-        <div class="status-pill"><span class="status-dot"></span> System protected</div>
-        <div class="status-note">Stay connected. Stay safe.</div>
-      </div>
+      <div class="status-row">
+        <div class="status-pill"><span class="status-dot"></span> System protected</div>
+        <div class="status-note">Stay connected. Stay safe.</div>
+      </div>
 
-      <!-- Subscription Section with 3 Plan Cards -->
-      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: block; text-align: center;">
-        <div class="card" style="max-width: 900px; margin: 0 auto;">
-          <h2>Unlock SafeHer Premium</h2>
-          <p>Choose a plan below to select your preferred payment method.</p>
-          
-          <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
-            
-            <!-- Monthly Plan (1 Month Duration) -->
-            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <h3 style="color: #1e293b; margin-bottom: 5px;">Monthly Plan</h3>
-                <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Full access to emergency network, live tracking, and shake SOS for 1 Month.</p>
-              </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-qr="QRmonthly.jpeg" data-duration-months="1" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=39&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Monthly Plan</button>
-            </div>
+      <!-- Subscription Section with 3 Plan Cards -->
+      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
+        <div class="card" style="max-width: 900px; margin: 0 auto;">
+          <h2>Unlock SafeHer Premium</h2>
+          <p>Choose a plan below to select your preferred payment method.</p>
+          
+          <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+            
+            <!-- Monthly Plan (1 Month Duration) -->
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 style="color: #1e293b; margin-bottom: 5px;">Monthly Plan</h3>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Full access to emergency network, live tracking, and shake SOS for 1 Month.</p>
+              </div>
+              <button class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-qr="QRmonthly.jpeg" data-duration-months="1" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=39&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Monthly Plan</button>
+            </div>
 
-            <!-- Quarterly Plan (3 Months Duration) -->
-            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <h3 style="color: #1e293b; margin-bottom: 5px;">Quarterly Plan</h3>
-                <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Save more with our 3-month comprehensive safety package.</p>
-              </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-qr="QRquarterly.jpeg" data-duration-months="3" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=99&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Quarterly Plan</button>
-            </div>
+            <!-- Quarterly Plan (3 Months Duration) -->
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 style="color: #1e293b; margin-bottom: 5px;">Quarterly Plan</h3>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Save more with our 3-month comprehensive safety package.</p>
+              </div>
+              <button class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-qr="QRquarterly.jpeg" data-duration-months="3" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=99&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Quarterly Plan</button>
+            </div>
 
-            <!-- Annual Plan (12 Months Duration) -->
-            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <h3 style="color: #1e293b; margin-bottom: 5px;">Annual Plan</h3>
-                <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
-                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Best value! Continuous year-round safety coverage.</p>
-              </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-qr="QRannual.jpeg" data-duration-months="12" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=399&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Annual Plan</button>
-            </div>
+            <!-- Annual Plan (12 Months Duration) -->
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 style="color: #1e293b; margin-bottom: 5px;">Annual Plan</h3>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Best value! Continuous year-round safety coverage.</p>
+              </div>
+              <button class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-qr="QRannual.jpeg" data-duration-months="12" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=399&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Annual Plan</button>
+            </div>
 
-          </div>
-        </div>
-      </section>
+          </div>
+        </div>
+      </section>
 
-      <!-- Payment Method Selection Modal -->
-      <div id="paymentMethodModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
-        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-          <span id="closeMethodModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
-          <h2 id="methodModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Choose Payment Method</h2>
-          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
+      <!-- Payment Method Selection Modal -->
+      <div id="paymentMethodModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
+        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+          <span id="closeMethodModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
+          <h2 id="methodModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Choose Payment Method</h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
 
-          <!-- Option 1: Pay by UPI App (Pre-filled Amount) -->
-          <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
+          <!-- Option 1: Pay by UPI App (Pre-filled Amount) -->
+          <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
 
-          <!-- Option 2: Pay by QR Code (Exact Amount QR) -->
-          <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
-        </div>
-      </div>
+          <!-- Option 2: Pay by QR Code (Exact Amount QR) -->
+          <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
+        </div>
+      </div>
 
-      <!-- QR Code Display Modal -->
-      <div id="qrDisplayModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
-        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-          <span id="closeQrModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
-          <h2 id="qrModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Scan QR Code</h2>
-          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Scan this pre-filled QR code with your UPI app.</p>
-          
-          <div style="background: #f8fafc; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 15px; border: 1px solid #e2e8f0;">
-            <img id="qrImageElement" src="" alt="Plan QR Code" style="width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto;">
-          </div>
+      <!-- QR Code Display Modal -->
+      <div id="qrDisplayModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
+        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+          <span id="closeQrModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
+          <h2 id="qrModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Scan QR Code</h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Scan this pre-filled QR code with your UPI app.</p>
+          
+          <div style="background: #f8fafc; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 15px; border: 1px solid #e2e8f0;">
+            <img id="qrImageElement" src="" alt="Plan QR Code" style="width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto;">
+          </div>
 
-          <button id="verifyQrPaymentBtn" class="btn-primary" style="width: 100%; padding: 12px; cursor: pointer; border-radius: 6px;">I Have Paid - Activate</button>
-        </div>
-      </div>
+          <button id="verifyQrPaymentBtn" class="btn-primary" style="width: 100%; padding: 12px; cursor: pointer; border-radius: 6px;">I Have Paid - Activate</button>
+        </div>
+      </div>
 
-      <!-- Shake-to-SOS Permission Activation Card -->
-      <section id="shakePermissionCard" class="card" style="margin-bottom: 2rem; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-          <div>
-            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">📱 Enable Shake-to-SOS Shortcut</h2>
-            <p style="margin: 0; font-size: 0.90rem; color: #94a3b8;">Turn on motion sensors so shaking your phone aggressively twice triggers emergency alerts instantly without opening the app.</p>
-          </div>
-          <button id="enableShakeBtn" class="btn-primary" style="white-space: nowrap;">Turn On Shake SOS</button>
-        </div>
-      </section>
+      <!-- Shake-to-SOS Permission Activation Card -->
+      <section id="shakePermissionCard" class="card" style="margin-bottom: 2rem; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+          <div>
+            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">📱 Enable Shake-to-SOS Shortcut</h2>
+            <p style="margin: 0; font-size: 0.90rem; color: #94a3b8;">Turn on motion sensors so shaking your phone aggressively twice triggers emergency alerts instantly without opening the app.</p>
+          </div>
+          <button id="enableShakeBtn" class="btn-primary" style="white-space: nowrap;">Turn On Shake SOS</button>
+        </div>
+      </section>
 
-      <div class="card-grid">
-        <!-- 1. Live Location -->
-        <article class="card location-card">
-          <div class="card-icon">📍</div>
-          <h2>Live Location</h2>
-          <p>Get your current GPS coordinates or open your position directly on Google Maps.</p>
-          <button id="locationBtn" class="btn-primary">Share Live Location <span>→</span></button>
-          <div id="locationOutput" class="location-display"></div>
-        </article>
+      <div class="card-grid">
+        <!-- 1. Live Location -->
+        <article class="card location-card">
+          <div class="card-icon">📍</div>
+          <h2>Live Location</h2>
+          <p>Get your current GPS coordinates or open your position directly on Google Maps.</p>
+          <button id="locationBtn" class="btn-primary">Share Live Location <span>→</span></button>
+          <div id="locationOutput" class="location-display"></div>
+        </article>
 
-        <!-- 2. Trusted Contacts -->
-        <article class="card contacts-card">
-          <div class="card-icon">👥</div>
-          <h2>Trusted Contacts</h2>
-          <p>Manage your emergency contacts and send instant alert notifications.</p>
-          <button id="contactsBtn" class="btn-primary">View Contacts <span>→</span></button>
-        </article>
+        <!-- 2. Trusted Contacts -->
+        <article class="card contacts-card">
+          <div class="card-icon">👥</div>
+          <h2>Trusted Contacts</h2>
+          <p>Manage your emergency contacts and send instant alert notifications.</p>
+          <button id="contactsBtn" class="btn-primary">View Contacts <span>→</span></button>
+        </article>
 
-        <!-- 3. Safer Routes -->
-        <article class="card routes-card">
-          <div class="card-icon">🗺️</div>
-          <h2>Safer Routes</h2>
-          <p>Find well-lit, secure pathways and avoid high-risk tracking areas.</p>
-          <button id="routesBtn" class="btn-primary">Explore Routes <span>→</span></button>
-        </article>
+        <!-- 3. Safer Routes -->
+        <article class="card routes-card">
+          <div class="card-icon">🗺️</div>
+          <h2>Safer Routes</h2>
+          <p>Find well-lit, secure pathways and avoid high-risk tracking areas.</p>
+          <button id="routesBtn" class="btn-primary">Explore Routes <span>→</span></button>
+        </article>
 
-        <!-- 4. Nearby Help -->
-        <article class="card nearby-card">
-          <div class="card-icon">🏥</div>
-          <h2>Nearby Help</h2>
-          <p>Locate safe zones, police stations, hospitals, and public help spots.</p>
-          <button id="nearbyBtn" class="btn-primary">Find Help Spots <span>→</span></button>
-        </article>
+        <!-- 4. Nearby Help -->
+        <article class="card nearby-card">
+          <div class="card-icon">🏥</div>
+          <h2>Nearby Help</h2>
+          <p>Locate safe zones, police stations, hospitals, and public help spots.</p>
+          <button id="nearbyBtn" class="btn-primary">Find Help Spots <span>→</span></button>
+        </article>
 
-        <!-- 5. Emergency Helplines -->
-        <article class="card emergency-card">
-          <div class="card-icon">☎️</div>
-          <h2>Emergency Helplines</h2>
-          <p>Directly access national helpline numbers and safety authorities.</p>
-          <button id="emergencyBtn" class="btn-primary">View Helplines <span>→</span></button>
-        </article>
+        <!-- 5. Emergency Helplines -->
+        <article class="card emergency-card">
+          <div class="card-icon">☎️</div>
+          <h2>Emergency Helplines</h2>
+          <p>Directly access national helpline numbers and safety authorities.</p>
+          <button id="emergencyBtn" class="btn-primary">View Helplines <span>→</span></button>
+        </article>
 
-        <!-- 6. Emergency SOS -->
-        <article class="card sos-card">
-          <div class="card-icon">🚨</div>
-          <div class="urgent-label">URGENT ACTION</div>
-          <h2>Emergency SOS</h2>
-          <p>Trigger an immediate distress signal to nearby contacts and safety networks.</p>
-          <button id="sosBtn" class="btn-danger">Trigger SOS Alert <span>!</span></button>
-        </article>
-      </div>
-    </main>
-  </div>
+        <!-- 6. Emergency SOS -->
+        <article class="card sos-card">
+          <div class="card-icon">🚨</div>
+          <div class="urgent-label">URGENT ACTION</div>
+          <h2>Emergency SOS</h2>
+          <p>Trigger an immediate distress signal to nearby contacts and safety networks.</p>
+          <button id="sosBtn" class="btn-danger">Trigger SOS Alert <span>!</span></button>
+        </article>
+      </div>
+    </main>
+  </div>
 
-  <!-- Script for Pre-filled UPI Intent & Exact Duration Activation -->
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
-      const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
-      
-      let supabaseClient = null;
-      if (window.supabase) {
-          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
+  <!-- Script for Pre-filled UPI Intent & Exact Duration Activation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
+      
+      let supabaseClient = null;
+      if (window.supabase) {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
 
-      const subSection = document.getElementById('subscriptionSection');
+      let currentPlan = { name: '', amount: '', qr: '', upi: '', durationMonths: 1 };
 
-      // Function to hide subscription section upon activation
-      function unlockDashboard() {
-          if (subSection) subSection.style.display = 'none';
-      }
+      const paymentMethodModal = document.getElementById('paymentMethodModal');
+      const qrDisplayModal = document.getElementById('qrDisplayModal');
 
-      // Check subscription status on load (Local Storage + Supabase)
-      let isSubscribed = localStorage.getItem('safeher_is_subscribed') === 'true';
+      // 1. When user clicks "Select [Plan] Plan"
+      document.querySelectorAll('.choose-plan-btn').forEach(button => {
+          button.addEventListener('click', (e) => {
+              currentPlan.name = e.currentTarget.getAttribute('data-plan');
+              currentPlan.amount = e.currentTarget.getAttribute('data-amount');
+              currentPlan.qr = e.currentTarget.getAttribute('data-qr');
+              currentPlan.upi = e.currentTarget.getAttribute('data-upi');
+              currentPlan.durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
 
-      if (supabaseClient) {
-          try {
-              const { data: { user } } = await supabaseClient.auth.getUser();
-              if (user) {
-                  const { data: profile } = await supabaseClient
-                      .from('profiles')
-                      .select('is_subscribed')
-                      .eq('id', user.id)
-                      .single();
+              // Set modal texts and pre-filled UPI link
+              document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
+              document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
+              document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
 
-                  if (profile && profile.is_subscribed) {
-                      isSubscribed = true;
-                      localStorage.setItem('safeher_is_subscribed', 'true');
-                  }
-              }
-          } catch (err) {
-              console.warn("Database check note:", err);
-          }
-      }
+              if (paymentMethodModal) {
+                  paymentMethodModal.style.display = 'flex';
+              }
+          });
+      });
 
-      if (isSubscribed) {
-          unlockDashboard();
-      } else {
-          if (subSection) subSection.style.display = 'block';
-      }
+      // 2. When user clicks "Pay by QR Code" option
+      const qrOptionBtn = document.getElementById('qrCodeOptionBtn');
+      if (qrOptionBtn) {
+          qrOptionBtn.addEventListener('click', () => {
+              if (paymentMethodModal) paymentMethodModal.style.display = 'none'; // Close choice modal
+              
+              document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code (₹${currentPlan.amount})`;
+              document.getElementById('qrImageElement').src = currentPlan.qr;
+              
+              if (qrDisplayModal) qrDisplayModal.style.display = 'flex'; // Open QR display modal
+          });
+      }
 
-      let currentPlan = { name: '', amount: '', qr: '', upi: '', durationMonths: 1 };
+      // Close Modals
+      const closeMethodModal = document.getElementById('closeMethodModal');
+      const closeQrModal = document.getElementById('closeQrModal');
 
-      const paymentMethodModal = document.getElementById('paymentMethodModal');
-      const qrDisplayModal = document.getElementById('qrDisplayModal');
+      if (closeMethodModal) {
+          closeMethodModal.addEventListener('click', () => { paymentMethodModal.style.display = 'none'; });
+      }
+      if (closeQrModal) {
+          closeQrModal.addEventListener('click', () => { qrDisplayModal.style.display = 'none'; });
+      }
 
-      // 1. When user clicks "Select [Plan] Plan"
-      document.querySelectorAll('.choose-plan-btn').forEach(button => {
-          button.addEventListener('click', (e) => {
-              currentPlan.name = e.currentTarget.getAttribute('data-plan');
-              currentPlan.amount = e.currentTarget.getAttribute('data-amount');
-              currentPlan.qr = e.currentTarget.getAttribute('data-qr');
-              currentPlan.upi = e.currentTarget.getAttribute('data-upi');
-              currentPlan.durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
+      window.addEventListener('click', (e) => {
+          if (e.target === paymentMethodModal) paymentMethodModal.style.display = 'none';
+          if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
+      });
 
-              // Set modal texts and pre-filled UPI link
-              document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
-              document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
-              document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
+      // 3. When user verifies payment, save to both LocalStorage AND Supabase to guarantee unlocking
+      const verifyBtn = document.getElementById('verifyQrPaymentBtn');
+      if (verifyBtn) {
+          verifyBtn.addEventListener('click', async () => {
+              const expiresAt = new Date();
+              expiresAt.setMonth(expiresAt.getMonth() + currentPlan.durationMonths);
+              const manualTxnId = `UPI_${currentPlan.name}_` + Date.now();
 
-              if (paymentMethodModal) {
-                  paymentMethodModal.style.display = 'flex';
-              }
-          });
-      });
+              // ALWAYS save locally first so the UI unlocks instantly regardless of network/DB policy
+              localStorage.setItem('safeher_is_subscribed', 'true');
+              localStorage.setItem('safeher_plan', currentPlan.name);
+              localStorage.setItem('safeher_expires_at', expiresAt.toISOString());
 
-      // 2. When user clicks "Pay by QR Code" option
-      const qrOptionBtn = document.getElementById('qrCodeOptionBtn');
-      if (qrOptionBtn) {
-          qrOptionBtn.addEventListener('click', () => {
-              if (paymentMethodModal) paymentMethodModal.style.display = 'none'; // Close choice modal
-              
-              document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code (₹${currentPlan.amount})`;
-              document.getElementById('qrImageElement').src = currentPlan.qr;
-              
-              if (qrDisplayModal) qrDisplayModal.style.display = 'flex'; // Open QR display modal
-          });
-      }
+              // Try to update Supabase if logged in
+              if (supabaseClient) {
+                  try {
+                      const { data: { user } } = await supabaseClient.auth.getUser();
+                      if (user) {
+                          await supabaseClient
+                              .from('profiles')
+                              .upsert({ 
+                                  id: user.id,
+                                  is_subscribed: true, 
+                                  subscription_id: manualTxnId,
+                                  subscription_plan: currentPlan.name,
+                                  subscription_expires_at: expiresAt.toISOString(),
+                                  updated_at: new Date()
+                              }, { onConflict: 'id' });
 
-      // Close Modals
-      const closeMethodModal = document.getElementById('closeMethodModal');
-      const closeQrModal = document.getElementById('closeQrModal');
+                          // Send confirmation email via EmailJS if available
+                          if (typeof emailjs !== 'undefined' && user.email) {
+                              emailjs.send("service_hy8wvic", "template_hy8wvic", {
+                                  to_email: user.email,
+                                  to_name: user.user_metadata?.name || "SafeHer User",
+                                  subscription_id: manualTxnId,
+                                  amount: currentPlan.amount,
+                                  plan_name: currentPlan.name
+                              }).catch(err => console.error("Email send note:", err));
+                          }
+                      }
+                  } catch (dbErr) {
+                      console.warn("Supabase sync note:", dbErr);
+                  }
+              }
 
-      if (closeMethodModal) {
-          closeMethodModal.addEventListener('click', () => { paymentMethodModal.style.display = 'none'; });
-      }
-      if (closeQrModal) {
-          closeQrModal.addEventListener('click', () => { qrDisplayModal.style.display = 'none'; });
-      }
+              alert(`${currentPlan.name} plan activated successfully! Premium features are now unlocked.`);
+              window.location.reload();
+          });
+      }
+    });
+  </script>
 
-      window.addEventListener('click', (e) => {
-          if (e.target === paymentMethodModal) paymentMethodModal.style.display = 'none';
-          if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
-      });
-
-      // 3. When user verifies payment, save to both LocalStorage AND Supabase to guarantee unlocking
-      const verifyBtn = document.getElementById('verifyQrPaymentBtn');
-      if (verifyBtn) {
-          verifyBtn.addEventListener('click', async () => {
-              const expiresAt = new Date();
-              expiresAt.setMonth(expiresAt.getMonth() + currentPlan.durationMonths);
-              const manualTxnId = `UPI_${currentPlan.name}_` + Date.now();
-
-              // ALWAYS save locally first so the UI unlocks instantly regardless of network/DB policy
-              localStorage.setItem('safeher_is_subscribed', 'true');
-              localStorage.setItem('safeher_plan', currentPlan.name);
-              localStorage.setItem('safeher_expires_at', expiresAt.toISOString());
-
-              // Try to update Supabase if logged in
-              if (supabaseClient) {
-                  try {
-                      const { data: { user } } = await supabaseClient.auth.getUser();
-                      if (user) {
-                          await supabaseClient
-                              .from('profiles')
-                              .upsert({ 
-                                  id: user.id,
-                                  is_subscribed: true, 
-                                  subscription_id: manualTxnId,
-                                  subscription_plan: currentPlan.name,
-                                  subscription_expires_at: expiresAt.toISOString(),
-                                  updated_at: new Date()
-                              }, { onConflict: 'id' });
-
-                          // Send confirmation email via EmailJS if available
-                          if (typeof emailjs !== 'undefined' && user.email) {
-                              emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                                  to_email: user.email,
-                                  to_name: user.user_metadata?.name || "SafeHer User",
-                                  subscription_id: manualTxnId,
-                                  amount: currentPlan.amount,
-                                  plan_name: currentPlan.name
-                              }).catch(err => console.error("Email send note:", err));
-                          }
-                      }
-                  } catch (dbErr) {
-                      console.warn("Supabase sync note:", dbErr);
-                  }
-              }
-
-              alert(`${currentPlan.name} plan activated successfully! Premium features are now unlocked.`);
-              window.location.reload();
-          });
-      }
-    });
-  </script>
-
-  <!-- Global Shake Listener Background Script -->
-  <script type="module" src="shakelistener.js"></script>
+  <!-- Global Shake Listener Background Script -->
+  <script type="module" src="shakelistener.js"></script>
 </body>
 </html>
