@@ -188,6 +188,20 @@
   <!-- Script for Pre-filled UPI Intent & Exact Duration Activation -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Automatic Instant Unlock Check on Page Load
+      const isSubscribedLocal = localStorage.getItem('safeher_is_subscribed') === 'true';
+      const subSection = document.getElementById('subscriptionSection');
+      
+      if (isSubscribedLocal) {
+          if (subSection) subSection.style.display = 'none';
+          document.querySelectorAll('.card-grid .card').forEach(card => {
+              card.style.opacity = '1';
+              card.style.pointerEvents = 'auto';
+          });
+      } else {
+          if (subSection) subSection.style.display = 'block';
+      }
+
       const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
       
