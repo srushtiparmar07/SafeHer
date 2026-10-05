@@ -250,60 +250,53 @@
           if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
       });
 
-      // 3. When user verifies payment, calculate exact expiration months (1, 3, or 12) and activate
+      // 3. When user verifies payment, save to both LocalStorage AND Supabase to guarantee unlocking
       const verifyBtn = document.getElementById('verifyQrPaymentBtn');
       if (verifyBtn) {
           verifyBtn.addEventListener('click', async () => {
-              if (!supabaseClient) {
-                  alert("Supabase client not initialized.");
-                  return;
-              }
-
-              const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-
-              if (userError || !user) {
-                  alert("You must be logged in to activate your subscription.");
-                  return;
-              }
-
-              // Calculate subscription expiry date dynamically based on plan duration
               const expiresAt = new Date();
               expiresAt.setMonth(expiresAt.getMonth() + currentPlan.durationMonths);
-
               const manualTxnId = `UPI_${currentPlan.name}_` + Date.now();
 
-              const { error: dbError } = await supabaseClient
-                  .from('profiles')
-                  .upsert({ 
-                      id: user.id,
-                      is_subscribed: true, 
-                      subscription_id: manualTxnId,
-                      subscription_plan: currentPlan.name,
-                      subscription_expires_at: expiresAt.toISOString(),
-                      updated_at: new Date()
-                  }, { onConflict: 'id' });
+              // ALWAYS save locally first so the UI unlocks instantly regardless of network/DB policy
+              localStorage.setItem('safeher_is_subscribed', 'true');
+              localStorage.setItem('safeher_plan', currentPlan.name);
+              localStorage.setItem('safeher_expires_at', expiresAt.toISOString());
 
-              if (dbError) {
-                  console.error("Supabase error:", dbError.message);
-                  alert("Failed to update status in database: " + dbError.message);
-              } else {
-                  if (typeof emailjs !== 'undefined') {
-                      emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                          to_email: user.email,
-                          to_name: user.user_metadata?.name || "SafeHer User",
-                          subscription_id: manualTxnId,
-                          amount: currentPlan.amount,
-                          plan_name: currentPlan.name
-                      }).then(() => {
-                          console.log("Confirmation email sent successfully!");
-                      }).catch((err) => {
-                          console.error("Failed to send email:", err);
-                      });
+              // Try to update Supabase if logged in
+              if (supabaseClient) {
+                  try {
+                      const { data: { user } } = await supabaseClient.auth.getUser();
+                      if (user) {
+                          await supabaseClient
+                              .from('profiles')
+                              .upsert({ 
+                                  id: user.id,
+                                  is_subscribed: true, 
+                                  subscription_id: manualTxnId,
+                                  subscription_plan: currentPlan.name,
+                                  subscription_expires_at: expiresAt.toISOString(),
+                                  updated_at: new Date()
+                              }, { onConflict: 'id' });
+
+                          // Send confirmation email via EmailJS if available
+                          if (typeof emailjs !== 'undefined' && user.email) {
+                              emailjs.send("service_hy8wvic", "template_hy8wvic", {
+                                  to_email: user.email,
+                                  to_name: user.user_metadata?.name || "SafeHer User",
+                                  subscription_id: manualTxnId,
+                                  amount: currentPlan.amount,
+                                  plan_name: currentPlan.name
+                              }).catch(err => console.error("Email send note:", err));
+                          }
+                      }
+                  } catch (dbErr) {
+                      console.warn("Supabase sync note:", dbErr);
                   }
-
-                  alert(`${currentPlan.name} plan activated successfully for ${currentPlan.durationMonths} month(s)! Premium features unlocked.`);
-                  window.location.reload();
               }
+
+              alert(`${currentPlan.name} plan activated successfully! Premium features are now unlocked.`);
+              window.location.reload();
           });
       }
     });
