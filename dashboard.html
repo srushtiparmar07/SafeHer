@@ -98,7 +98,7 @@
           <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
 
           <!-- Option 1: Pay by UPI App (Directly activates upon clicking) -->
-          <a id="upiAppOptionBtn" href="" class="btn-primary instant-activate-btn" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
+          <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
 
           <!-- Option 2: Pay by QR Code (Shows QR, activates immediately) -->
           <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
@@ -117,7 +117,7 @@
           </div>
 
           <!-- Automatically triggers instant activation when viewing QR code -->
-          <button id="qrDoneBtn" class="btn-primary instant-activate-btn" style="width: 100%; padding: 12px; cursor: pointer; border-radius: 6px;">Done / Continue</button>
+          <button id="qrDoneBtn" class="btn-primary" style="width: 100%; padding: 12px; cursor: pointer; border-radius: 6px;">Done / Continue</button>
         </div>
       </div>
 
@@ -331,16 +331,23 @@
           }
       }
 
-      // 3. Automatically trigger activation when the user clicks the UPI app button or the QR done button
-      document.querySelectorAll('.instant-activate-btn').forEach(btn => {
-          btn.addEventListener('click', async () => {
+      // 3. Automatically trigger activation and UI unlock when clicking UPI App button
+      const upiAppOptionBtn = document.getElementById('upiAppOptionBtn');
+      if (upiAppOptionBtn) {
+          upiAppOptionBtn.addEventListener('click', async (e) => {
               await triggerInstantActivation();
+              if (paymentMethodModal) paymentMethodModal.style.display = 'none';
+              unlockDashboard();
           });
-      });
+      }
 
+      // 4. Automatically trigger activation and UI unlock when clicking QR Done button
       const qrDoneBtn = document.getElementById('qrDoneBtn');
       if (qrDoneBtn) {
-          qrDoneBtn.addEventListener('click', () => {
+          qrDoneBtn.addEventListener('click', async () => {
+              await triggerInstantActivation();
+              if (qrDisplayModal) qrDisplayModal.style.display = 'none';
+              unlockDashboard();
               alert(`${currentPlan.name} plan activated successfully!`);
               window.location.reload();
           });
