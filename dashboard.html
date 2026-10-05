@@ -49,7 +49,7 @@
       </div>
 
       <!-- Subscription Section with 3 Plan Cards (Matching Screenshot Layout) -->
-      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
+      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: block; text-align: center;">
         <div class="card" style="max-width: 1000px; margin: 0 auto; background: #181926; border: 1px solid #2d2b42;">
           <h2 style="color: #fff;">Unlock SafeHer Premium</h2>
           <p style="color: #94a3b8;">Scan the QR code or pay via UPI app, then click Activate.</p>
@@ -181,21 +181,7 @@
 
   <!-- Script for Instant Unlocking & Direct Activation -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // 1. Instant Unlock Check on Page Load
-      const isSubscribedLocal = localStorage.getItem('safeher_is_subscribed') === 'true';
-      const subSection = document.getElementById('subscriptionSection');
-      
-      if (isSubscribedLocal) {
-          if (subSection) subSection.style.display = 'none';
-          document.querySelectorAll('.card-grid .card').forEach(card => {
-              card.style.opacity = '1';
-              card.style.pointerEvents = 'auto';
-          });
-      } else {
-          if (subSection) subSection.style.display = 'block';
-      }
-
+    document.addEventListener("DOMContentLoaded", async () => {
       const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
       
@@ -204,7 +190,45 @@
           supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
 
-      // 2. Handle "I Have Paid - Activate" clicks directly from each card
+      const subSection = document.getElementById('subscriptionSection');
+
+      // Helper function to unlock UI
+      function unlockDashboard() {
+          if (subSection) subSection.style.display = 'none';
+      }
+
+      // 1. Check local storage first for quick response
+      let isSubscribed = localStorage.getItem('safeher_is_subscribed') === 'true';
+
+      // 2. If Supabase is active, double-check database profile status
+      if (supabaseClient) {
+          try {
+              const { data: { user } } = await supabaseClient.auth.getUser();
+              if (user) {
+                  const { data: profile, error } = await supabaseClient
+                      .from('profiles')
+                      .select('is_subscribed')
+                      .eq('id', user.id)
+                      .single();
+
+                  if (profile && profile.is_subscribed) {
+                      isSubscribed = true;
+                      localStorage.setItem('safeher_is_subscribed', 'true');
+                    }
+              }
+          } catch (err) {
+              console.warn("Could not verify profile from database, relying on local state:", err);
+          }
+      }
+
+      // Apply visibility based on check
+      if (isSubscribed) {
+          unlockDashboard();
+      } else {
+          if (subSection) subSection.style.display = 'block';
+      }
+
+      // 3. Handle "I Have Paid - Activate" clicks directly from each card
       document.querySelectorAll('.activate-plan-btn').forEach(button => {
           button.addEventListener('click', async (e) => {
               const planName = e.currentTarget.getAttribute('data-plan');
