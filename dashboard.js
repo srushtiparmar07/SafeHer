@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let hasActiveSubscription = false;
 
   // 👉 REPLACE THIS WITH YOUR EXACT SUPABASE ACCOUNT EMAIL
-  const MY_ADMIN_EMAIL = "your-email@example.com"; 
+  const MY_ADMIN_EMAIL = "srushtiparmar013@gmail.com"; 
 
   if (user && user.email.toLowerCase() === MY_ADMIN_EMAIL.toLowerCase()) {
     // Automatically unlock everything for your connected account
