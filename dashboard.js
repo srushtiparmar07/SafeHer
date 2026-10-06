@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     if (subscriptionSection) subscriptionSection.style.display = "block";
     
-    // If returning from a UPI app, show the pending verification box so they can unlock immediately
+    // If returning from a UPI app or plan was selected, show the pending verification box
     const pendingPlan = sessionStorage.getItem("safeher_pending_plan");
     if (pendingPlan && paymentPendingBox) {
       paymentPendingBox.style.display = "block";
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. DIRECT UPI APP LINK CLICK HANDLER (Matches <a> tags in updated dashboard.html) ---
+  // --- 9. DIRECT UPI APP LINK CLICK HANDLER ---
   document.querySelectorAll('.choose-plan-btn').forEach(link => {
     link.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
@@ -345,12 +345,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         durationMonths: durationMonths
       }));
 
-      // Show the verification reminder box immediately
+      // Show the verification reminder box immediately so they can click unlock after paying
       if (paymentPendingBox) paymentPendingBox.style.display = 'block';
     });
   });
 
-  // Verify and Unlock Payment Handler (Matches your exact table schema columns)
+  // Verify and Unlock Payment Handler (Updates Supabase table & unlocks all features)
   if (verifyPaymentBtn) {
     verifyPaymentBtn.addEventListener("click", async () => {
       const rawPending = sessionStorage.getItem('safeher_pending_plan');
