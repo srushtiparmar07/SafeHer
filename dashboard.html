@@ -14,9 +14,13 @@
      })();
   </script>
 
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Core Dashboard Module -->
   <script type="module" src="dashboard.js" defer></script>
 </head>
 <body>
@@ -48,77 +52,47 @@
         <div class="status-note">Stay connected. Stay safe.</div>
       </div>
 
-      <!-- Subscription Section with 3 Plan Cards -->
-      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: block; text-align: center;">
+      <!-- Subscription Section (Hidden when active) -->
+      <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: none; text-align: center;">
         <div class="card" style="max-width: 900px; margin: 0 auto;">
           <h2>Unlock SafeHer Premium</h2>
-          <p>Choose a plan below to select your preferred payment method.</p>
+          <p>Select a plan below to activate instant protection via UPI apps or live QR code.</p>
           
           <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
             
-            <!-- Monthly Plan (1 Month Duration) -->
+            <!-- Monthly Plan -->
             <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <h3 style="color: #1e293b; margin-bottom: 5px;">Monthly Plan</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Full access to emergency network, live tracking, and shake SOS for 1 Month.</p>
               </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-qr="QRmonthly.jpeg" data-duration-months="1" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=39&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Monthly Plan</button>
+              <button class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-duration-months="1" style="width: 100%; padding: 12px; cursor: pointer;">Pay ₹39 (Monthly)</button>
             </div>
 
-            <!-- Quarterly Plan (3 Months Duration) -->
+            <!-- Quarterly Plan -->
             <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <h3 style="color: #1e293b; margin-bottom: 5px;">Quarterly Plan</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Save more with our 3-month comprehensive safety package.</p>
               </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-qr="QRquarterly.jpeg" data-duration-months="3" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=99&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Quarterly Plan</button>
+              <button class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-duration-months="3" style="width: 100%; padding: 12px; cursor: pointer;">Pay ₹99 (Quarterly)</button>
             </div>
 
-            <!-- Annual Plan (12 Months Duration) -->
+            <!-- Annual Plan -->
             <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <h3 style="color: #1e293b; margin-bottom: 5px;">Annual Plan</h3>
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Best value! Continuous year-round safety coverage.</p>
               </div>
-              <button class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-qr="QRannual.jpeg" data-duration-months="12" data-upi="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=399&cu=INR" style="width: 100%; padding: 12px; cursor: pointer;">Select Annual Plan</button>
+              <button class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-duration-months="12" style="width: 100%; padding: 12px; cursor: pointer;">Pay ₹399 (Annual)</button>
             </div>
 
           </div>
         </div>
       </section>
-
-      <!-- Payment Method Selection Modal -->
-      <div id="paymentMethodModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
-        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-          <span id="closeMethodModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
-          <h2 id="methodModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Choose Payment Method</h2>
-          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
-
-          <!-- Option 1: Pay by UPI App -->
-          <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
-
-          <!-- Option 2: Pay by QR Code -->
-          <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
-        </div>
-      </div>
-
-      <!-- QR Code Display Modal -->
-      <div id="qrDisplayModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
-        <div style="background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 380px; text-align: center; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-          <span id="closeQrModal" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</span>
-          <h2 id="qrModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Scan QR Code</h2>
-          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Scan this pre-filled QR code with your UPI app.</p>
-          
-          <div style="background: #f8fafc; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 15px; border: 1px solid #e2e8f0;">
-            <img id="qrImageElement" src="" alt="Plan QR Code" style="width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto;">
-          </div>
-
-          <button id="qrDoneBtn" class="btn-primary" style="width: 100%; padding: 12px; cursor: pointer; border-radius: 6px;">Done / Continue</button>
-        </div>
-      </div>
 
       <!-- Shake-to-SOS Permission Activation Card -->
       <section id="shakePermissionCard" class="card" style="margin-bottom: 2rem; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
@@ -184,176 +158,6 @@
       </div>
     </main>
   </div>
-
-  <!-- Script for Instant Activation on Payment Intent -->
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const SUPABASE_URL = "https://bswgjfguytayxffuorwy.supabase.co";
-      const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
-      
-      let supabaseClient = null;
-      if (window.supabase) {
-          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-
-      const subSection = document.getElementById('subscriptionSection');
-
-      function unlockDashboard() {
-          if (subSection) subSection.style.display = 'none';
-      }
-
-      let isSubscribed = localStorage.getItem('safeher_is_subscribed') === 'true';
-
-      if (supabaseClient) {
-          try {
-              const { data: { user } } = await supabaseClient.auth.getUser();
-              if (user) {
-                  const { data: profile } = await supabaseClient
-                      .from('profiles')
-                      .select('is_subscribed')
-                      .eq('id', user.id)
-                      .single();
-
-                  if (profile && profile.is_subscribed) {
-                      isSubscribed = true;
-                      localStorage.setItem('safeher_is_subscribed', 'true');
-                  }
-              }
-          } catch (err) {
-              console.warn("Database check note:", err);
-          }
-      }
-
-      if (isSubscribed) {
-          unlockDashboard();
-      } else {
-          if (subSection) subSection.style.display = 'block';
-      }
-
-      let currentPlan = { name: '', amount: '', qr: '', upi: '', durationMonths: 1 };
-
-      const paymentMethodModal = document.getElementById('paymentMethodModal');
-      const qrDisplayModal = document.getElementById('qrDisplayModal');
-
-      document.querySelectorAll('.choose-plan-btn').forEach(button => {
-          button.addEventListener('click', (e) => {
-              currentPlan.name = e.currentTarget.getAttribute('data-plan');
-              currentPlan.amount = e.currentTarget.getAttribute('data-amount');
-              currentPlan.qr = e.currentTarget.getAttribute('data-qr');
-              currentPlan.upi = e.currentTarget.getAttribute('data-upi');
-              currentPlan.durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
-
-              document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
-              document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
-              document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
-
-              if (paymentMethodModal) {
-                  paymentMethodModal.style.display = 'flex';
-              }
-          });
-      });
-
-      const qrOptionBtn = document.getElementById('qrCodeOptionBtn');
-      if (qrOptionBtn) {
-          qrOptionBtn.addEventListener('click', () => {
-              if (paymentMethodModal) paymentMethodModal.style.display = 'none';
-              
-              document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code (₹${currentPlan.amount})`;
-              document.getElementById('qrImageElement').src = currentPlan.qr;
-              
-              if (qrDisplayModal) qrDisplayModal.style.display = 'flex';
-          });
-      }
-
-      const closeMethodModal = document.getElementById('closeMethodModal');
-      const closeQrModal = document.getElementById('closeQrModal');
-
-      if (closeMethodModal) {
-          closeMethodModal.addEventListener('click', () => { paymentMethodModal.style.display = 'none'; });
-      }
-      if (closeQrModal) {
-          closeQrModal.addEventListener('click', () => { qrDisplayModal.style.display = 'none'; });
-      }
-
-      window.addEventListener('click', (e) => {
-          if (e.target === paymentMethodModal) paymentMethodModal.style.display = 'none';
-          if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
-      });
-
-      async function triggerInstantActivation() {
-          const expiresAt = new Date();
-          expiresAt.setMonth(expiresAt.getMonth() + currentPlan.durationMonths);
-          const manualTxnId = `UPI_${currentPlan.name}_` + Date.now();
-
-          localStorage.setItem('safeher_is_subscribed', 'true');
-          localStorage.setItem('safeher_plan', currentPlan.name);
-          localStorage.setItem('safeher_expires_at', expiresAt.toISOString());
-
-          if (supabaseClient) {
-              try {
-                  const { data: { user } } = await supabaseClient.auth.getUser();
-                  if (user) {
-                      // 1. Update profiles table
-                      await supabaseClient
-                          .from('profiles')
-                          .upsert({ 
-                              id: user.id,
-                              is_subscribed: true, 
-                              subscription_id: manualTxnId,
-                              subscription_plan: currentPlan.name,
-                              subscription_expires_at: expiresAt.toISOString(),
-                              updated_at: new Date()
-                          }, { onConflict: 'id' });
-
-                      // 2. Insert into user_subscriptions table to track all payments (₹39, ₹99, ₹399)
-                      await supabaseClient
-                          .from('user_subscriptions')
-                          .insert({
-                              user_id: user.id,
-                              subscription_id: manualTxnId,
-                              plan_name: currentPlan.name,
-                              amount: parseFloat(currentPlan.amount),
-                              status: 'active',
-                              expires_at: expiresAt.toISOString()
-                          });
-
-                      if (typeof emailjs !== 'undefined' && user.email) {
-                          emailjs.send("service_hy8wvic", "template_hy8wvic", {
-                              to_email: user.email,
-                              to_name: user.user_metadata?.name || "SafeHer User",
-                              subscription_id: manualTxnId,
-                              amount: currentPlan.amount,
-                              plan_name: currentPlan.name
-                          }).catch(err => console.error("Email send note:", err));
-                      }
-                  }
-              } catch (dbErr) {
-                  console.warn("Supabase sync note:", dbErr);
-              }
-          }
-      }
-
-      const upiAppOptionBtn = document.getElementById('upiAppOptionBtn');
-      if (upiAppOptionBtn) {
-          upiAppOptionBtn.addEventListener('click', async (e) => {
-              await triggerInstantActivation();
-              if (paymentMethodModal) paymentMethodModal.style.display = 'none';
-              unlockDashboard();
-          });
-      }
-
-      const qrDoneBtn = document.getElementById('qrDoneBtn');
-      if (qrDoneBtn) {
-          qrDoneBtn.addEventListener('click', async () => {
-              await triggerInstantActivation();
-              if (qrDisplayModal) qrDisplayModal.style.display = 'none';
-              unlockDashboard();
-              alert(`${currentPlan.name} plan activated successfully!`);
-              window.location.reload();
-          });
-      }
-    });
-  </script>
 
   <!-- Global Shake Listener Background Script -->
   <script type="module" src="shakelistener.js"></script>
