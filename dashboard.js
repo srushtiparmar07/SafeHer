@@ -5,6 +5,9 @@ const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// --- PASTE YOUR RAZORPAY KEY ID HERE ---
+const RAZORPAY_KEY_ID = "rzp_live_ThtMVXdshqqxi2";
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Check if user is authenticated
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -40,19 +43,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const hasActiveSubscription = subs && subs.length > 0;
   const subscriptionSection = document.getElementById("subscriptionSection");
-  const paymentPendingBox = document.getElementById("paymentPendingBox");
 
   if (hasActiveSubscription) {
     if (subscriptionSection) subscriptionSection.style.display = "none";
-    if (paymentPendingBox) paymentPendingBox.style.display = "none";
   } else {
     if (subscriptionSection) subscriptionSection.style.display = "block";
-    
-    // If a plan was clicked previously, display the verification prompt box
-    const pendingPlan = sessionStorage.getItem("safeher_pending_plan");
-    if (pendingPlan && paymentPendingBox) {
-      paymentPendingBox.style.display = "block";
-    }
   }
 
   // Selectors for all feature buttons & elements
@@ -66,12 +61,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const locationOutput = document.getElementById("locationOutput");
   const enableShakeBtn = document.getElementById("enableShakeBtn");
   const shakePermissionCard = document.getElementById("shakePermissionCard");
-  const verifyPaymentBtn = document.getElementById("verifyPaymentBtn");
 
   // Helper function to guard premium features behind active subscription
   function checkSubscriptionGate() {
     if (!hasActiveSubscription) {
-      alert("🔒 Premium Feature Locked: Please select a plan above and complete your UPI payment to unlock SafeHer emergency features.");
+      alert("🔒 Premium Feature Locked: Please select a plan above and complete your secure payment to unlock SafeHer emergency features.");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return false;
     }
@@ -330,88 +324,73 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. UPI PLAN SELECTION HANDLER ---
-  document.querySelectorAll('.choose-plan-btn').forEach(link => {
-    link.addEventListener('click', (e) => {
+  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER ---
+  document.querySelectorAll('.pay-razorpay-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
-      const amount = e.currentTarget.getAttribute('data-amount');
-      const durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
+      const amountInRupees = parseFloat(e.currentTarget.getAttribute('data-amount'));
+      const amountInPaise = amountInRupees * 100; // Razorpay expects amount in paise (e.g., ₹39 = 3900)
 
-      // Save plan details to session storage
-      sessionStorage.setItem('safeher_pending_plan', JSON.stringify({
-        name: planName,
-        amount: amount,
-        durationMonths: durationMonths
-      }));
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: amountInPaise,
+        currency: "INR",
+        name: "SafeHer Safety Companion",
+        description: `${planName} Subscription Plan`,
+        image: "safer-logo-transparent.png",
+        handler: async function (response) {
+          // Triggered automatically on successful payment!
+          const paymentId = response.razorpay_payment_id; // e.g. "pay_2N7y2SK..." which starts with "pay_" satisfying your database check constraint
+          
+          try {
+            // Save subscription record directly into Supabase
+            const { error: dbError } = await supabase
+              .from('user_subscriptions')
+              .insert([
+                {
+                  user_id: user.id,
+                  razorpay_payment_id: paymentId,
+                  plan_type: planName,
+                  status: 'active'
+                }
+              ]);
 
-      // Reveal verification box to accept UTR code
-      if (paymentPendingBox) paymentPendingBox.style.display = 'block';
+            if (dbError) throw dbError;
+
+            // Optional: Send confirmation email via EmailJS
+            try {
+              if (typeof emailjs !== 'undefined' && user.email) {
+                emailjs.send("service_hy8wvic", "template_hy8wvic", {
+                  to_email: user.email,
+                  to_name: user.user_metadata?.name || "SafeHer User",
+                  subscription_id: paymentId,
+                  amount: amountInRupees,
+                  plan_name: planName
+                });
+              }
+            } catch (mailErr) {
+              console.warn("EmailJS note:", mailErr);
+            }
+
+            alert(`Payment successful! Transaction ID: ${paymentId}. Your ${planName} plan is now active.`);
+            window.location.reload();
+
+          } catch (err) {
+            console.error("Database sync error:", err);
+            alert("Payment was successful, but there was an error updating your account subscription. Please contact support with payment ID: " + paymentId);
+          }
+        },
+        prefill: {
+          email: user.email,
+          name: user.user_metadata?.name || user.email.split("@")[0]
+        },
+        theme: {
+          color: "#0d6efd"
+        }
+      };
+
+      const rzpModal = new Razorpay(options);
+      rzpModal.open();
     });
   });
-
-  // Secure UTR Verification & Feature Unlock Handler
-  if (verifyPaymentBtn) {
-    verifyPaymentBtn.addEventListener("click", async () => {
-      const utrInput = document.getElementById("utrInput");
-      const utrValue = utrInput ? utrInput.value.trim() : "";
-
-      // Strict security check: Users cannot bypass payment without supplying a valid reference code
-      if (!utrValue || utrValue.length < 8) {
-        alert("Security Verification: Please enter a valid 12-digit UTR / UPI Transaction Reference Number from your payment receipt.");
-        if (utrInput) utrInput.focus();
-        return;
-      }
-
-      const rawPending = sessionStorage.getItem('safeher_pending_plan');
-      const planData = rawPending ? JSON.parse(rawPending) : { name: 'Monthly', amount: '39', durationMonths: 1 };
-      
-      const transactionId = `UTR_${utrValue}`;
-
-      verifyPaymentBtn.innerText = "Verifying Transaction...";
-      verifyPaymentBtn.disabled = true;
-
-      try {
-        // Insert subscription record into Supabase linked to user account
-        const { error: dbError } = await supabase
-          .from('user_subscriptions')
-          .insert([
-            {
-              user_id: user.id,
-              razorpay_payment_id: transactionId,
-              plan_type: planData.name,
-              status: 'active'
-            }
-          ]);
-
-        if (dbError) {
-          throw dbError;
-        }
-
-        // Send confirmation email via EmailJS (optional)
-        try {
-          if (typeof emailjs !== 'undefined' && user.email) {
-            emailjs.send("service_hy8wvic", "template_hy8wvic", {
-              to_email: user.email,
-              to_name: user.user_metadata?.name || "SafeHer User",
-              subscription_id: transactionId,
-              amount: planData.amount,
-              plan_name: planData.name
-            });
-          }
-        } catch (mailErr) {
-          console.warn("EmailJS note:", mailErr);
-        }
-
-        sessionStorage.removeItem('safeher_pending_plan');
-        alert(`Payment verified successfully! ${planData.name} plan activated. All safety features are now unlocked.`);
-        window.location.reload();
-
-      } catch (err) {
-        console.error("Subscription activation error:", err);
-        alert("Failed to sync subscription: " + (err.message || err));
-        verifyPaymentBtn.innerText = "Verify & Unlock Features";
-        verifyPaymentBtn.disabled = false;
-      }
-    });
-  }
 });
