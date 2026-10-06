@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER (BULLETPROOF DEMO VERSION) ---
+  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER (DB-SYNCED VERSION) ---
   document.querySelectorAll('.pay-razorpay-btn').forEach(button => {
     button.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
@@ -341,30 +341,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         handler: async function (response) {
           const paymentId = response.razorpay_payment_id;
           
-          // 1. INSTANTLY UNLOCK UI (Guarantees your demo/presentation never gets stuck)
-          alert(`🎉 Payment Successful! Transaction ID: ${paymentId}. Your ${planName} plan is now active.`);
-          
+          // Save subscription directly into Supabase user_subscriptions table
+          const { data, error } = await supabase
+            .from('user_subscriptions')
+            .insert([
+              {
+                user_id: user.id,
+                razorpay_payment_id: paymentId,
+                plan_type: planName,
+                status: 'active'
+              }
+            ]);
+
+          if (error) {
+            console.error("Supabase Insertion Error:", error);
+            alert(`Payment successful (${paymentId}), but database sync failed: ${error.message}. Please check RLS policies in Supabase.`);
+          } else {
+            console.log("Successfully saved subscription to database:", data);
+            alert(`🎉 Payment Successful! Your ${planName} plan is now active and saved.`);
+          }
+
           if (subscriptionSection) {
             subscriptionSection.style.display = "none";
           }
-          
-          // 2. Try saving to Supabase in the background (will not block user if it fails)
-          try {
-            await supabase
-              .from('user_subscriptions')
-              .insert([
-                {
-                  user_id: user.id,
-                  razorpay_payment_id: paymentId,
-                  plan_type: planName,
-                  status: 'active'
-                }
-              ]);
-          } catch (dbErr) {
-            console.warn("Background DB sync note:", dbErr);
-          }
 
-          // Reload page to reflect active subscription state
+          // Reload page to reflect active subscription state from the database
           window.location.reload();
         },
         prefill: {
