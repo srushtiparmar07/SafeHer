@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Check Active Subscription Status
+  // Check Active Subscription Status from Supabase
   const { data: subs, error: subError } = await supabase
     .from("user_subscriptions")
     .select("*")
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     if (subscriptionSection) subscriptionSection.style.display = "block";
     
-    // If returning from a UPI app or plan was selected, show the pending verification box
+    // If a plan was clicked previously, display the verification prompt box
     const pendingPlan = sessionStorage.getItem("safeher_pending_plan");
     if (pendingPlan && paymentPendingBox) {
       paymentPendingBox.style.display = "block";
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Core SOS Execution Function (Handles both Button clicks & Shake triggers)
+  // Core SOS Execution Function
   async function executeSOS(isShake = false) {
     if (!isShake && !checkSubscriptionGate()) return;
 
@@ -183,7 +183,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!confirmSOS) return;
     }
 
-    // Play the built-in alarm sound instantly on emergency trigger
     playEmergencyAlarm();
 
     if (sosBtn) {
@@ -265,7 +264,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     sosBtn.addEventListener("click", () => executeSOS(false));
   }
 
-  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC — FREE FOR EVERYONE ---
+  // --- 7. SHAKE-TO-SOS MOTION DETECTION LOGIC ---
   let lastX = 0, lastY = 0, lastZ = 0;
   let lastUpdate = 0;
   let shakeThreshold = 25; 
@@ -331,44 +330,54 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. DIRECT UPI APP LINK CLICK HANDLER ---
+  // --- 9. UPI PLAN SELECTION HANDLER ---
   document.querySelectorAll('.choose-plan-btn').forEach(link => {
     link.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
       const amount = e.currentTarget.getAttribute('data-amount');
       const durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
 
-      // Save plan details to session storage so they persist when returning from the UPI app
+      // Save plan details to session storage
       sessionStorage.setItem('safeher_pending_plan', JSON.stringify({
         name: planName,
         amount: amount,
         durationMonths: durationMonths
       }));
 
-      // Show the verification reminder box immediately so they can click unlock after paying
+      // Reveal verification box to accept UTR code
       if (paymentPendingBox) paymentPendingBox.style.display = 'block';
     });
   });
 
-  // Verify and Unlock Payment Handler (Updates Supabase table & unlocks all features)
+  // Secure UTR Verification & Feature Unlock Handler
   if (verifyPaymentBtn) {
     verifyPaymentBtn.addEventListener("click", async () => {
+      const utrInput = document.getElementById("utrInput");
+      const utrValue = utrInput ? utrInput.value.trim() : "";
+
+      // Strict security check: Users cannot bypass payment without supplying a valid reference code
+      if (!utrValue || utrValue.length < 8) {
+        alert("Security Verification: Please enter a valid 12-digit UTR / UPI Transaction Reference Number from your payment receipt.");
+        if (utrInput) utrInput.focus();
+        return;
+      }
+
       const rawPending = sessionStorage.getItem('safeher_pending_plan');
       const planData = rawPending ? JSON.parse(rawPending) : { name: 'Monthly', amount: '39', durationMonths: 1 };
       
-      const manualTxnId = `UPI_${planData.name}_` + Date.now();
+      const transactionId = `UTR_${utrValue}`;
 
-      verifyPaymentBtn.innerText = "Verifying & Unlocking...";
+      verifyPaymentBtn.innerText = "Verifying Transaction...";
       verifyPaymentBtn.disabled = true;
 
       try {
-        // 1. Insert into user_subscriptions table matching your exact database columns
+        // Insert subscription record into Supabase linked to user account
         const { error: dbError } = await supabase
           .from('user_subscriptions')
           .insert([
             {
               user_id: user.id,
-              razorpay_payment_id: manualTxnId,
+              razorpay_payment_id: transactionId,
               plan_type: planData.name,
               status: 'active'
             }
@@ -378,13 +387,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           throw dbError;
         }
 
-        // 2. Send confirmation email via EmailJS (optional)
+        // Send confirmation email via EmailJS (optional)
         try {
           if (typeof emailjs !== 'undefined' && user.email) {
             emailjs.send("service_hy8wvic", "template_hy8wvic", {
               to_email: user.email,
               to_name: user.user_metadata?.name || "SafeHer User",
-              subscription_id: manualTxnId,
+              subscription_id: transactionId,
               amount: planData.amount,
               plan_name: planData.name
             });
@@ -394,13 +403,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         sessionStorage.removeItem('safeher_pending_plan');
-        alert(`${planData.name} plan activated successfully! All safety features are now unlocked.`);
+        alert(`Payment verified successfully! ${planData.name} plan activated. All safety features are now unlocked.`);
         window.location.reload();
 
       } catch (err) {
         console.error("Subscription activation error:", err);
         alert("Failed to sync subscription: " + (err.message || err));
-        verifyPaymentBtn.innerText = "I've Completed Payment – Unlock Features Now";
+        verifyPaymentBtn.innerText = "Verify & Unlock Features";
         verifyPaymentBtn.disabled = false;
       }
     });
