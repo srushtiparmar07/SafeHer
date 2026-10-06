@@ -6,7 +6,7 @@ const SUPABASE_ANON_KEY = "sb_publishable__aEz4RacAZLZSfBvF-ByuQ_aE0GWonx";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Check if user is authenticated (Supabase automatically handles session persistence via localStorage)
+  // Check if user is authenticated
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
   
   if (sessionError || !session) {
@@ -40,10 +40,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const hasActiveSubscription = subs && subs.length > 0;
   const subscriptionSection = document.getElementById("subscriptionSection");
+  const paymentPendingBox = document.getElementById("paymentPendingBox");
 
-  if (!hasActiveSubscription) {
-    // Show subscription QR section if user has not subscribed
+  if (hasActiveSubscription) {
+    if (subscriptionSection) subscriptionSection.style.display = "none";
+    if (paymentPendingBox) paymentPendingBox.style.display = "none";
+  } else {
     if (subscriptionSection) subscriptionSection.style.display = "block";
+    
+    // If returning from a UPI app, show the pending verification box so they can unlock immediately
+    const pendingPlan = sessionStorage.getItem("safeher_pending_plan");
+    if (pendingPlan && paymentPendingBox) {
+      paymentPendingBox.style.display = "block";
+    }
   }
 
   // Selectors for all feature buttons & elements
@@ -57,12 +66,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const locationOutput = document.getElementById("locationOutput");
   const enableShakeBtn = document.getElementById("enableShakeBtn");
   const shakePermissionCard = document.getElementById("shakePermissionCard");
-  const verifyQrPaymentBtn = document.getElementById("verifyQrPaymentBtn");
+  const verifyPaymentBtn = document.getElementById("verifyPaymentBtn");
 
   // Helper function to guard premium features behind active subscription
   function checkSubscriptionGate() {
     if (!hasActiveSubscription) {
-      alert("🔒 Premium Feature Locked: Please select a plan above and confirm your payment to unlock SafeHer emergency features.");
+      alert("🔒 Premium Feature Locked: Please select a plan above and complete your UPI payment to unlock SafeHer emergency features.");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return false;
     }
@@ -300,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (speed > shakeThreshold && !isSosTriggered) {
         isSosTriggered = true;
         console.log("🚨 EMERGENCY SHAKE DETECTED!");
-        executeSOS(true); // Triggers sound, location, and WhatsApp alerts automatically!
+        executeSOS(true);
         
         setTimeout(() => {
           isSosTriggered = false;
@@ -322,40 +331,97 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 9. Direct UPI QR Payment Verification Handler (Fixed to match table schema)
-  if (verifyQrPaymentBtn) {
-    verifyQrPaymentBtn.addEventListener("click", async () => {
-      const manualTxnId = "UPI_QR_" + Date.now();
+  // --- 9. DIRECT UPI APP PAYMENT FLOW ---
+  document.querySelectorAll('.choose-plan-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const planName = e.currentTarget.getAttribute('data-plan');
+      const amount = e.currentTarget.getAttribute('data-amount');
+      const durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
+      const upiLink = e.currentTarget.getAttribute('data-upi');
 
-      const { error: dbError } = await supabase
-        .from('user_subscriptions')
-        .insert([
-          {
-            user_id: user.id,
-            subscription_id: manualTxnId,
-            plan_name: 'Monthly',
-            amount: 39,
-            status: 'active'
-          }
-        ]);
+      // Save plan details to session storage so they persist when returning from the UPI app
+      sessionStorage.setItem('safeher_pending_plan', JSON.stringify({
+        name: planName,
+        amount: amount,
+        durationMonths: durationMonths
+      }));
 
-      if (dbError) {
-        console.error("Error saving subscription:", dbError.message);
-        alert("Failed to update status in database: " + dbError.message);
-      } else {
-        try {
-          emailjs.send("service_hy8wvic", "template_hy8wvic", {
-            to_email: user.email,
-            to_name: user.user_metadata?.name || "SafeHer User",
-            subscription_id: manualTxnId,
-            amount: 39
-          });
-        } catch (mailErr) {
-          console.error("EmailJS note:", mailErr);
+      // Show the verification reminder box
+      if (paymentPendingBox) paymentPendingBox.style.display = 'block';
+
+      // Open the UPI app link
+      window.location.href = upiLink;
+    });
+  });
+
+  // Verify and Unlock Payment Handler
+  if (verifyPaymentBtn) {
+    verifyPaymentBtn.addEventListener("click", async () => {
+      const rawPending = sessionStorage.getItem('safeher_pending_plan');
+      const planData = rawPending ? JSON.parse(rawPending) : { name: 'Monthly', amount: '39', durationMonths: 1 };
+      
+      const manualTxnId = `UPI_${planData.name}_` + Date.now();
+      const expiresAt = new Date();
+      expiresAt.setMonth(expiresAt.getMonth() + planData.durationMonths);
+
+      verifyPaymentBtn.innerText = "Verifying & Unlocking...";
+      verifyPaymentBtn.disabled = true;
+
+      try {
+        // 1. Insert into user_subscriptions table
+        const { error: dbError } = await supabase
+          .from('user_subscriptions')
+          .insert([
+            {
+              user_id: user.id,
+              subscription_id: manualTxnId,
+              plan_name: planData.name,
+              amount: parseFloat(planData.amount),
+              status: 'active',
+              expires_at: expiresAt.toISOString()
+            }
+          ]);
+
+        if (dbError) {
+          throw dbError;
         }
 
-        alert("Payment verified successfully! Premium features unlocked.");
-        location.reload();
+        // 2. Upsert into profiles table
+        await supabase
+          .from('profiles')
+          .upsert({ 
+              id: user.id,
+              is_subscribed: true, 
+              subscription_id: manualTxnId,
+              subscription_plan: planData.name,
+              subscription_expires_at: expiresAt.toISOString(),
+              updated_at: new Date()
+          }, { onConflict: 'id' });
+
+        // 3. Send confirmation email via EmailJS
+        try {
+          if (typeof emailjs !== 'undefined' && user.email) {
+            emailjs.send("service_hy8wvic", "template_hy8wvic", {
+              to_email: user.email,
+              to_name: user.user_metadata?.name || "SafeHer User",
+              subscription_id: manualTxnId,
+              amount: planData.amount,
+              plan_name: planData.name
+            });
+          }
+        } catch (mailErr) {
+          console.warn("EmailJS note:", mailErr);
+        }
+
+        sessionStorage.removeItem('safeher_pending_plan');
+        alert(`${planData.name} plan activated successfully! All safety features are now unlocked.`);
+        window.location.reload();
+
+      } catch (err) {
+        console.error("Subscription activation error:", err);
+        alert("Failed to sync subscription: " + (err.message || err));
+        verifyPaymentBtn.innerText = "I've Completed Payment – Unlock Features Now";
+        verifyPaymentBtn.disabled = false;
       }
     });
   }
