@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Helper function to guard premium features behind active subscription
   function checkSubscriptionGate() {
     if (!hasActiveSubscription) {
-      alert("🔒 Premium Feature Locked: Please scan the QR code above and confirm your payment to unlock SafeHer emergency features.");
+      alert("🔒 Premium Feature Locked: Please select a plan above and confirm your payment to unlock SafeHer emergency features.");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return false;
     }
@@ -322,18 +322,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 9. Direct UPI QR Payment Verification Handler
+  // 9. Direct UPI QR Payment Verification Handler (Fixed to match table schema)
   if (verifyQrPaymentBtn) {
     verifyQrPaymentBtn.addEventListener("click", async () => {
-      const manualTxnId = "UPI_QR_39_" + Date.now();
+      const manualTxnId = "UPI_QR_" + Date.now();
 
       const { error: dbError } = await supabase
         .from('user_subscriptions')
         .insert([
           {
             user_id: user.id,
-            razorpay_payment_id: manualTxnId,
-            plan_type: '₹39 Fixed QR Plan',
+            subscription_id: manualTxnId,
+            plan_name: 'Monthly',
+            amount: 39,
             status: 'active'
           }
         ]);
