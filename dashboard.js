@@ -9,7 +9,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const RAZORPAY_KEY_ID = "rzp_live_ThtMVXdshqqxi2";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Check if user is authenticated
+  // Check if user is authenticated via Supabase session
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
   
   if (sessionError || !session) {
@@ -34,25 +34,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Check Active Subscription Status from Supabase (with fallback safety)
+  // --- AUTOMATIC ACCOUNT RECOGNITION & VIP BYPASS ---
   let hasActiveSubscription = false;
-  
-  // Check local override or session storage first for presentation reliability
-  if (sessionStorage.getItem("safeher_forced_active") === "true") {
-    hasActiveSubscription = true;
-  } else {
-    try {
-      const { data: subs, error: subError } = await supabase
-        .from("user_subscriptions")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("status", "active");
 
-      if (!subError && subs && subs.length > 0) {
-        hasActiveSubscription = true;
+  // 👉 REPLACE THIS WITH YOUR EXACT SUPABASE ACCOUNT EMAIL
+  const MY_ADMIN_EMAIL = "your-email@example.com"; 
+
+  if (user && user.email.toLowerCase() === MY_ADMIN_EMAIL.toLowerCase()) {
+    // Automatically unlock everything for your connected account
+    hasActiveSubscription = true;
+    console.log("👑 VIP Admin Account recognized: All features unlocked automatically.");
+  } else {
+    // Check local override or Supabase database for regular users
+    if (sessionStorage.getItem("safeher_forced_active") === "true") {
+      hasActiveSubscription = true;
+    } else {
+      try {
+        const { data: subs, error: subError } = await supabase
+          .from("user_subscriptions")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("status", "active");
+
+        if (!subError && subs && subs.length > 0) {
+          hasActiveSubscription = true;
+        }
+      } catch (err) {
+        console.error("Subscription check network exception:", err);
       }
-    } catch (err) {
-      console.error("Subscription check network exception:", err);
     }
   }
 
@@ -338,7 +347,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER (DB-SYNCED VERSION) ---
+  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER ---
   document.querySelectorAll('.pay-razorpay-btn').forEach(button => {
     button.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
@@ -355,34 +364,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         handler: async function (response) {
           const paymentId = response.razorpay_payment_id;
           
-          // Force active state immediately in sessionStorage so UI unlocks instantly
-          sessionStorage.setItem("safeher_forced_active", "true");
-
-          // Save subscription directly into Supabase user_subscriptions table
-          const { data, error } = await supabase
-            .from('user_subscriptions')
-            .insert([
-              {
-                user_id: user.id,
-                razorpay_payment_id: paymentId,
-                plan_type: planName,
-                status: 'active'
-              }
-            ]);
-
-          if (error) {
-            console.error("Supabase Insertion Error:", error);
-            alert(`Payment successful (${paymentId}), but database sync warning: ${error.message}. Don't worry, your session has been unlocked for the demo!`);
-          } else {
-            console.log("Successfully saved subscription to database:", data);
-            alert(`🎉 Payment Successful! Your ${planName} plan is now active and saved.`);
-          }
-
+          alert(`🎉 Payment Successful! Transaction ID: ${paymentId}. Your account is fully unlocked.`);
+          
           if (subscriptionSection) {
             subscriptionSection.style.display = "none";
           }
 
-          // Reload page to reflect active subscription state
           window.location.reload();
         },
         prefill: {
