@@ -17,6 +17,9 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <script type="module" src="dashboard.js" defer></script>
 </head>
 <body>
@@ -52,7 +55,7 @@
       <section class="subscription-section" id="subscriptionSection" style="margin-bottom: 2rem; display: block; text-align: center;">
         <div class="card" style="max-width: 900px; margin: 0 auto;">
           <h2>Unlock SafeHer Premium</h2>
-          <p>Choose a plan below and pay securely via your preferred UPI app.</p>
+          <p>Choose a plan below to pay securely via UPI apps, cards, net banking, or wallets.</p>
           
           <div class="subscription-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
             
@@ -63,7 +66,7 @@
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹39 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ month</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Full access to emergency network, live tracking, and shake SOS for 1 Month.</p>
               </div>
-              <a href="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=39&cu=INR" class="btn-primary choose-plan-btn" data-plan="Monthly" data-amount="39" data-duration-months="1" style="display: block; width: 100%; padding: 12px; text-decoration: none; text-align: center; box-sizing: border-box; cursor: pointer;">Pay ₹39 via UPI App</a>
+              <button class="btn-primary pay-razorpay-btn" data-plan="Monthly" data-amount="39" data-duration-months="1" style="width: 100%; padding: 12px; border: none; cursor: pointer;">Pay ₹39 Securely</button>
             </div>
 
             <!-- Quarterly Plan (3 Months Duration) -->
@@ -73,7 +76,7 @@
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹99 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ 3 months</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Save more with our 3-month comprehensive safety package.</p>
               </div>
-              <a href="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=99&cu=INR" class="btn-primary choose-plan-btn" data-plan="Quarterly" data-amount="99" data-duration-months="3" style="display: block; width: 100%; padding: 12px; text-decoration: none; text-align: center; box-sizing: border-box; cursor: pointer;">Pay ₹99 via UPI App</a>
+              <button class="btn-primary pay-razorpay-btn" data-plan="Quarterly" data-amount="99" data-duration-months="3" style="width: 100%; padding: 12px; border: none; cursor: pointer;">Pay ₹99 Securely</button>
             </div>
 
             <!-- Annual Plan (12 Months Duration) -->
@@ -83,27 +86,12 @@
                 <div style="font-size: 1.5rem; font-weight: bold; color: #0d6efd; margin-bottom: 15px;">₹399 <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">/ year</span></div>
                 <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Best value! Continuous year-round safety coverage.</p>
               </div>
-              <a href="upi://pay?pa=srushtiparmar013@oksbi&pn=SafeHer&am=399&cu=INR" class="btn-primary choose-plan-btn" data-plan="Annual" data-amount="399" data-duration-months="12" style="display: block; width: 100%; padding: 12px; text-decoration: none; text-align: center; box-sizing: border-box; cursor: pointer;">Pay ₹399 via UPI App</a>
+              <button class="btn-primary pay-razorpay-btn" data-plan="Annual" data-amount="399" data-duration-months="12" style="width: 100%; padding: 12px; border: none; cursor: pointer;">Pay ₹399 Securely</button>
             </div>
 
           </div>
         </div>
       </section>
-
-      <!-- Secure Payment Verification Box (Appears automatically after clicking a payment option) -->
-      <div id="paymentPendingBox" style="display: none; max-width: 900px; margin: 0 auto 2rem auto; padding: 20px; background: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; text-align: center;">
-        <h3 style="color: #92400e; margin-bottom: 8px;">🔒 Secure Payment Verification</h3>
-        <p style="color: #78350f; font-size: 0.95rem; margin-bottom: 10px;">
-          UPI ID: <strong>srushtiparmar013@oksbi</strong> 
-          <button onclick="navigator.clipboard.writeText('srushtiparmar013@oksbi'); alert('UPI ID Copied!');" style="background: #d97706; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 5px; font-size: 0.8rem;">Copy UPI ID</button>
-        </p>
-        <p style="color: #78350f; font-size: 0.9rem; margin-bottom: 15px;">To prevent unauthorized access, please enter your 12-digit UPI Transaction / UTR ID from your payment receipt:</p>
-        
-        <!-- Secure UTR Input -->
-        <input type="text" id="utrInput" placeholder="Enter 12-digit UTR / Ref Number" style="padding: 10px; width: 60%; max-width: 320px; border: 1px solid #d97706; border-radius: 6px; font-size: 1rem; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto; text-align: center;">
-        
-        <button id="verifyPaymentBtn" style="background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer;">Verify & Unlock Features</button>
-      </div>
 
       <!-- Shake-to-SOS Permission Activation Card -->
       <section id="shakePermissionCard" class="card" style="margin-bottom: 2rem; border-color: #f59e0b; background: rgba(245, 158, 11, 0.05);">
