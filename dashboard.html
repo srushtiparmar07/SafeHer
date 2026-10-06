@@ -10,7 +10,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
      (function(){
-        emailjs.init({ publicKey: "luH-Yxpnhf7oAqN7K" });
+         emailjs.init({ publicKey: "luH-Yxpnhf7oAqN7K" });
      })();
   </script>
 
@@ -97,10 +97,10 @@
           <h2 id="methodModalTitle" style="color: #1e293b; margin-bottom: 5px; font-size: 1.25rem;">Choose Payment Method</h2>
           <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px;">Select how you would like to pay.</p>
 
-          <!-- Option 1: Pay by UPI App (Directly activates upon clicking) -->
+          <!-- Option 1: Pay by UPI App -->
           <a id="upiAppOptionBtn" href="" class="btn-primary" style="display: block; width: 100%; padding: 12px; margin-bottom: 12px; text-decoration: none; box-sizing: border-box; text-align: center; border-radius: 6px; font-weight: bold;">📱 Pay by UPI App</a>
 
-          <!-- Option 2: Pay by QR Code (Shows QR, activates immediately) -->
+          <!-- Option 2: Pay by QR Code -->
           <button id="qrCodeOptionBtn" class="btn-secondary" style="display: block; width: 100%; padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 6px; font-weight: bold; background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b;">📷 Pay by QR Code</button>
         </div>
       </div>
@@ -116,7 +116,6 @@
             <img id="qrImageElement" src="" alt="Plan QR Code" style="width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto;">
           </div>
 
-          <!-- Automatically triggers instant activation when viewing QR code -->
           <button id="qrDoneBtn" class="btn-primary" style="width: 100%; padding: 12px; cursor: pointer; border-radius: 6px;">Done / Continue</button>
         </div>
       </div>
@@ -199,12 +198,10 @@
 
       const subSection = document.getElementById('subscriptionSection');
 
-      // Function to hide subscription section upon activation
       function unlockDashboard() {
           if (subSection) subSection.style.display = 'none';
       }
 
-      // Check subscription status on load (Local Storage + Supabase)
       let isSubscribed = localStorage.getItem('safeher_is_subscribed') === 'true';
 
       if (supabaseClient) {
@@ -238,7 +235,6 @@
       const paymentMethodModal = document.getElementById('paymentMethodModal');
       const qrDisplayModal = document.getElementById('qrDisplayModal');
 
-      // 1. When user clicks "Select [Plan] Plan"
       document.querySelectorAll('.choose-plan-btn').forEach(button => {
           button.addEventListener('click', (e) => {
               currentPlan.name = e.currentTarget.getAttribute('data-plan');
@@ -247,7 +243,6 @@
               currentPlan.upi = e.currentTarget.getAttribute('data-upi');
               currentPlan.durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
 
-              // Set modal texts and pre-filled UPI link
               document.getElementById('methodModalTitle').innerText = `${currentPlan.name} Plan (₹${currentPlan.amount})`;
               document.getElementById('upiAppOptionBtn').setAttribute('href', currentPlan.upi);
               document.getElementById('upiAppOptionBtn').innerText = `📱 Pay by UPI App (₹${currentPlan.amount})`;
@@ -258,20 +253,18 @@
           });
       });
 
-      // 2. When user clicks "Pay by QR Code" option
       const qrOptionBtn = document.getElementById('qrCodeOptionBtn');
       if (qrOptionBtn) {
           qrOptionBtn.addEventListener('click', () => {
-              if (paymentMethodModal) paymentMethodModal.style.display = 'none'; // Close choice modal
+              if (paymentMethodModal) paymentMethodModal.style.display = 'none';
               
               document.getElementById('qrModalTitle').innerText = `${currentPlan.name} QR Code (₹${currentPlan.amount})`;
               document.getElementById('qrImageElement').src = currentPlan.qr;
               
-              if (qrDisplayModal) qrDisplayModal.style.display = 'flex'; // Open QR display modal
+              if (qrDisplayModal) qrDisplayModal.style.display = 'flex';
           });
       }
 
-      // Close Modals
       const closeMethodModal = document.getElementById('closeMethodModal');
       const closeQrModal = document.getElementById('closeQrModal');
 
@@ -287,22 +280,20 @@
           if (e.target === qrDisplayModal) qrDisplayModal.style.display = 'none';
       });
 
-      // Core function to instantly activate and sync the subscription
       async function triggerInstantActivation() {
           const expiresAt = new Date();
           expiresAt.setMonth(expiresAt.getMonth() + currentPlan.durationMonths);
           const manualTxnId = `UPI_${currentPlan.name}_` + Date.now();
 
-          // Save locally so features unlock immediately
           localStorage.setItem('safeher_is_subscribed', 'true');
           localStorage.setItem('safeher_plan', currentPlan.name);
           localStorage.setItem('safeher_expires_at', expiresAt.toISOString());
 
-          // Try to update Supabase if logged in
           if (supabaseClient) {
               try {
                   const { data: { user } } = await supabaseClient.auth.getUser();
                   if (user) {
+                      // 1. Update profiles table
                       await supabaseClient
                           .from('profiles')
                           .upsert({ 
@@ -314,7 +305,18 @@
                               updated_at: new Date()
                           }, { onConflict: 'id' });
 
-                      // Send confirmation email via EmailJS if available
+                      // 2. Insert into user_subscriptions table to track all payments (₹39, ₹99, ₹399)
+                      await supabaseClient
+                          .from('user_subscriptions')
+                          .insert({
+                              user_id: user.id,
+                              subscription_id: manualTxnId,
+                              plan_name: currentPlan.name,
+                              amount: parseFloat(currentPlan.amount),
+                              status: 'active',
+                              expires_at: expiresAt.toISOString()
+                          });
+
                       if (typeof emailjs !== 'undefined' && user.email) {
                           emailjs.send("service_hy8wvic", "template_hy8wvic", {
                               to_email: user.email,
@@ -331,7 +333,6 @@
           }
       }
 
-      // 3. Automatically trigger activation and UI unlock when clicking UPI App button
       const upiAppOptionBtn = document.getElementById('upiAppOptionBtn');
       if (upiAppOptionBtn) {
           upiAppOptionBtn.addEventListener('click', async (e) => {
@@ -341,7 +342,6 @@
           });
       }
 
-      // 4. Automatically trigger activation and UI unlock when clicking QR Done button
       const qrDoneBtn = document.getElementById('qrDoneBtn');
       if (qrDoneBtn) {
           qrDoneBtn.addEventListener('click', async () => {
