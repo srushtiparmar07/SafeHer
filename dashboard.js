@@ -331,13 +331,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. DIRECT UPI APP PAYMENT FLOW ---
-  document.querySelectorAll('.choose-plan-btn').forEach(button => {
-    button.addEventListener('click', (e) => {
+  // --- 9. DIRECT UPI APP LINK CLICK HANDLER (Matches <a> tags in updated dashboard.html) ---
+  document.querySelectorAll('.choose-plan-btn').forEach(link => {
+    link.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
       const amount = e.currentTarget.getAttribute('data-amount');
       const durationMonths = parseInt(e.currentTarget.getAttribute('data-duration-months'), 10) || 1;
-      const upiLink = e.currentTarget.getAttribute('data-upi');
 
       // Save plan details to session storage so they persist when returning from the UPI app
       sessionStorage.setItem('safeher_pending_plan', JSON.stringify({
@@ -346,39 +345,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         durationMonths: durationMonths
       }));
 
-      // Show the verification reminder box
+      // Show the verification reminder box immediately
       if (paymentPendingBox) paymentPendingBox.style.display = 'block';
-
-      // Open the UPI app link
-      window.location.href = upiLink;
     });
   });
 
-  // Verify and Unlock Payment Handler
+  // Verify and Unlock Payment Handler (Matches your exact table schema columns)
   if (verifyPaymentBtn) {
     verifyPaymentBtn.addEventListener("click", async () => {
       const rawPending = sessionStorage.getItem('safeher_pending_plan');
       const planData = rawPending ? JSON.parse(rawPending) : { name: 'Monthly', amount: '39', durationMonths: 1 };
       
       const manualTxnId = `UPI_${planData.name}_` + Date.now();
-      const expiresAt = new Date();
-      expiresAt.setMonth(expiresAt.getMonth() + planData.durationMonths);
 
       verifyPaymentBtn.innerText = "Verifying & Unlocking...";
       verifyPaymentBtn.disabled = true;
 
       try {
-        // 1. Insert into user_subscriptions table
+        // 1. Insert into user_subscriptions table matching your exact database columns
         const { error: dbError } = await supabase
           .from('user_subscriptions')
           .insert([
             {
               user_id: user.id,
-              subscription_id: manualTxnId,
-              plan_name: planData.name,
-              amount: parseFloat(planData.amount),
-              status: 'active',
-              expires_at: expiresAt.toISOString()
+              razorpay_payment_id: manualTxnId,
+              plan_type: planData.name,
+              status: 'active'
             }
           ]);
 
@@ -386,19 +378,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           throw dbError;
         }
 
-        // 2. Upsert into profiles table
-        await supabase
-          .from('profiles')
-          .upsert({ 
-              id: user.id,
-              is_subscribed: true, 
-              subscription_id: manualTxnId,
-              subscription_plan: planData.name,
-              subscription_expires_at: expiresAt.toISOString(),
-              updated_at: new Date()
-          }, { onConflict: 'id' });
-
-        // 3. Send confirmation email via EmailJS
+        // 2. Send confirmation email via EmailJS (optional)
         try {
           if (typeof emailjs !== 'undefined' && user.email) {
             emailjs.send("service_hy8wvic", "template_hy8wvic", {
