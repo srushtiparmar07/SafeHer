@@ -34,18 +34,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- AUTOMATIC ACCOUNT RECOGNITION & VIP BYPASS ---
+  // --- AUTOMATIC ACCOUNT RECOGNITION & SUBSCRIPTION CHECK ---
   let hasActiveSubscription = false;
 
-  // 👉 REPLACE THIS WITH YOUR EXACT SUPABASE ACCOUNT EMAIL
+  // 👉 REPLACE WITH YOUR EXACT SUPABASE ACCOUNT EMAIL FOR THE VIP BYPASS
   const MY_ADMIN_EMAIL = "srushtiparmar013@gmail.com"; 
 
   if (user && user.email.toLowerCase() === MY_ADMIN_EMAIL.toLowerCase()) {
-    // Automatically unlock everything for your connected account
     hasActiveSubscription = true;
     console.log("👑 VIP Admin Account recognized: All features unlocked automatically.");
   } else {
-    // Check local override or Supabase database for regular users
+    // Check local override or query Supabase database for regular users
     if (sessionStorage.getItem("safeher_forced_active") === "true") {
       hasActiveSubscription = true;
     } else {
@@ -95,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return true;
   }
 
-  // Programmatic alarm sound generator (synthesizes an emergency siren without MP3 files)
+  // Programmatic alarm sound generator
   function playEmergencyAlarm() {
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -347,7 +346,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER ---
+  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER (DB-SYNCED) ---
   document.querySelectorAll('.pay-razorpay-btn').forEach(button => {
     button.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
@@ -364,12 +363,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         handler: async function (response) {
           const paymentId = response.razorpay_payment_id;
           
-          alert(`🎉 Payment Successful! Transaction ID: ${paymentId}. Your account is fully unlocked.`);
-          
+          // Force active state in session storage for instant UI unlock
+          sessionStorage.setItem("safeher_forced_active", "true");
+
+          // Save subscription directly into Supabase user_subscriptions table
+          const { data, error } = await supabase
+            .from('user_subscriptions')
+            .insert([
+              {
+                user_id: user.id,
+                razorpay_payment_id: paymentId,
+                plan_type: planName,
+                status: 'active'
+              }
+            ]);
+
+          if (error) {
+            console.error("Supabase Insertion Error:", error);
+            alert(`Payment successful (${paymentId}), but database sync warning: ${error.message}. Your session is still unlocked for this browser!`);
+          } else {
+            console.log("Successfully saved subscription to database:", data);
+            alert(`🎉 Payment Successful! Your ${planName} plan is now active and saved to Supabase.`);
+          }
+
           if (subscriptionSection) {
             subscriptionSection.style.display = "none";
           }
 
+          // Reload page to reflect active subscription state
           window.location.reload();
         },
         prefill: {
