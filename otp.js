@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // --- 60-SECOND RESEND OTP TIMER ---
-  const resendBtn = document.getElementById("resendOtpBtn"); // Make sure your resend link/button has this ID
+  const resendBtn = document.getElementById("resendOtpBtn");
   let timeLeft = 60;
   let timerId = null;
 
@@ -83,12 +83,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-          // Request new OTP from Supabase
           const { error } = await supabase.auth.signInWithOtp({ email: email });
           if (error) throw error;
 
           alert("A new verification code has been sent!");
-          startResendTimer(); // Restart the 60s countdown
+          startResendTimer();
         } catch (err) {
           console.error("Resend error:", err);
           alert(err.message || "Failed to resend verification code.");
@@ -110,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
       token += input.value.trim();
     });
 
-    // Check if the user entered all 6 digits
     if (token.length !== 6) {
       alert("Please enter the complete 6-digit verification code.");
       return;
@@ -123,17 +121,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     try {
-      // 3. Verify OTP with Supabase
-      const { data, error } = await supabase.auth.verifyOtp({
+      // 3. Try verifying with type 'signup' first, fallback to 'email' if needed
+      let verifyRes = await supabase.auth.verifyOtp({
         email: email,
         token: token,
-        type: "email",
+        type: "signup",
       });
 
-      if (error) throw error;
+      if (verifyRes.error) {
+        // Fallback to 'email' type if signup type fails
+        verifyRes = await supabase.auth.verifyOtp({
+          email: email,
+          token: token,
+          type: "email",
+        });
+      }
+
+      if (verifyRes.error) throw verifyRes.error;
 
       alert("Verification successful!");
-      window.location.href = "dashboard.html"; // Redirect to your app's home screen
+      window.location.href = "dashboard.html";
     } catch (error) {
       console.error("Verification error:", error);
       alert(error.message || "Invalid or expired verification code.");
