@@ -34,32 +34,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- AUTOMATIC ACCOUNT RECOGNITION & SUBSCRIPTION CHECK ---
+  // --- AUTOMATIC ACCOUNT RECOGNITION & SUBSCRIPTION CHECK (PROFILES TABLE) ---
   let hasActiveSubscription = false;
 
-  // 👉 REPLACE WITH YOUR EXACT SUPABASE ACCOUNT EMAIL FOR THE VIP BYPASS
+  // 👉 VIP ADMIN EMAIL BYPASS
   const MY_ADMIN_EMAIL = "srushtiparmar013@gmail.com"; 
 
   if (user && user.email.toLowerCase() === MY_ADMIN_EMAIL.toLowerCase()) {
     hasActiveSubscription = true;
     console.log("👑 VIP Admin Account recognized: All features unlocked automatically.");
   } else {
-    // Check local override or query Supabase database for regular users
+    // Check local override or query Supabase profiles table
     if (sessionStorage.getItem("safeher_forced_active") === "true") {
       hasActiveSubscription = true;
     } else {
       try {
-        const { data: subs, error: subError } = await supabase
-          .from("user_subscriptions")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("status", "active");
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("is_subscribed, subscription_expires_at")
+          .eq("id", user.id)
+          .single();
 
-        if (!subError && subs && subs.length > 0) {
-          hasActiveSubscription = true;
+        if (!profileError && profileData) {
+          if (profileData.is_subscribed) {
+            // Verify if subscription expiration date is still valid
+            if (!profileData.subscription_expires_at || new Date(profileData.subscription_expires_at) > new Date()) {
+              hasActiveSubscription = true;
+            }
+          }
         }
       } catch (err) {
-        console.error("Subscription check network exception:", err);
+        console.error("Profile subscription check network exception:", err);
       }
     }
   }
@@ -346,7 +351,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER (DB-SYNCED) ---
+  // --- 9. RAZORPAY CHECKOUT MODAL HANDLER (PROFILES TABLE SYNC) ---
   document.querySelectorAll('.pay-razorpay-btn').forEach(button => {
     button.addEventListener('click', (e) => {
       const planName = e.currentTarget.getAttribute('data-plan');
@@ -366,24 +371,35 @@ document.addEventListener("DOMContentLoaded", async () => {
           // Force active state in session storage for instant UI unlock
           sessionStorage.setItem("safeher_forced_active", "true");
 
-          // Save subscription directly into Supabase user_subscriptions table
-          const { data, error } = await supabase
-            .from('user_subscriptions')
-            .insert([
-              {
-                user_id: user.id,
-                razorpay_payment_id: paymentId,
-                plan_type: planName,
-                status: 'active'
-              }
-            ]);
-
-          if (error) {
-            console.error("Supabase Insertion Error:", error);
-            alert(`Payment successful (${paymentId}), but database sync warning: ${error.message}. Your session is still unlocked for this browser!`);
+          // Calculate subscription expiration date based on plan type
+          const expiresAt = new Date();
+          const lowerPlan = planName.toLowerCase();
+          if (lowerPlan.includes('annual') || lowerPlan.includes('year')) {
+            expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+          } else if (lowerPlan.includes('quarter')) {
+            expiresAt.setMonth(expiresAt.getMonth() + 3);
           } else {
-            console.log("Successfully saved subscription to database:", data);
-            alert(`🎉 Payment Successful! Your ${planName} plan is now active and saved to Supabase.`);
+            expiresAt.setMonth(expiresAt.getMonth() + 1); // Default monthly
+          }
+
+          // Directly update subscription columns in the user's profile table
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({
+              is_subscribed: true,
+              subscription_id: paymentId,
+              subscription_plan: planName,
+              subscription_expires_at: expiresAt.toISOString(),
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', user.id);
+
+          if (profileError) {
+            console.error("Supabase Profile Update Error:", profileError);
+            alert(`Payment successful (${paymentId}), but profile sync warning: ${profileError.message}. Your session is unlocked for this browser!`);
+          } else {
+            console.log("Successfully updated subscription in profiles table!");
+            alert(`🎉 Payment Successful! Your ${planName} plan is now active.`);
           }
 
           if (subscriptionSection) {
